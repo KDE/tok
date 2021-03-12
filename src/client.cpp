@@ -25,6 +25,11 @@ Client::~Client()
 {
 }
 
+void Client::sendQuery(TDApi::object_ptr<TDApi::Function> fn, std::function<void(TObject)> handler)
+{
+    d->sendQuery(std::move(fn), handler);
+}
+
 void Client::enterCode(const QString& code)
 {
     d->enterCode(code);
