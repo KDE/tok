@@ -2,7 +2,7 @@ Language: Cpp
 
 BasedOnStyle: WebKit
 TabWidth: 4
-ColumnLimit: 100
+ColumnLimit: 140
 SortIncludes: true
 BreakBeforeBraces: Linux
 PointerAlignment: Left

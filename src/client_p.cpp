@@ -4,6 +4,7 @@
 
 #include "client_p.h"
 #include "keys.h"
+#include <qstandardpaths.h>
 #include <td/telegram/td_api.h>
 
 // helper function yoinked from tdlib example
@@ -42,8 +43,7 @@ std::uint64_t Client::Private::nextQueryID()
     return ++m_queryID;
 }
 
-void Client::Private::sendQuery(TDApi::object_ptr<TDApi::Function> fn,
-    std::function<void(TObject)> handler)
+void Client::Private::sendQuery(TDApi::object_ptr<TDApi::Function> fn, std::function<void(TObject)> handler)
 {
     auto queryID = nextQueryID();
     if (handler) {
@@ -108,12 +108,15 @@ void Client::Private::handleAuthorizationStateUpdate(TDApi::updateAuthorizationS
             [this](TDApi::authorizationStateWaitEncryptionKey&) {
                 // TODO: prompt for encryption key
                 auto key = "";
-                sendQuery(TDApi::make_object<TDApi::checkDatabaseEncryptionKey>(std::move(key)),
-                    createAuthQueryHandler());
+                sendQuery(TDApi::make_object<TDApi::checkDatabaseEncryptionKey>(std::move(key)), createAuthQueryHandler());
             },
             [this](TDApi::authorizationStateWaitTdlibParameters&) {
                 auto parameters = TDApi::make_object<TDApi::tdlibParameters>();
-                parameters->database_directory_ = "tdlib";
+
+                const auto appdataLocation = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+                const auto tokLocation = QDir::cleanPath(appdataLocation + QDir::separator() + "org.kde.Tok");
+
+                parameters->database_directory_ = tokLocation.toStdString();
                 parameters->use_message_database_ = true;
                 parameters->use_secret_chats_ = false;
                 parameters->api_id_ = APP_ID;
@@ -122,8 +125,7 @@ void Client::Private::handleAuthorizationStateUpdate(TDApi::updateAuthorizationS
                 parameters->device_model_ = "Desktop";
                 parameters->application_version_ = "1.0";
                 parameters->enable_storage_optimizer_ = true;
-                sendQuery(TDApi::make_object<TDApi::setTdlibParameters>(std::move(parameters)),
-                    createAuthQueryHandler());
+                sendQuery(TDApi::make_object<TDApi::setTdlibParameters>(std::move(parameters)), createAuthQueryHandler());
             }));
 }
 
@@ -174,19 +176,15 @@ Client::Private::Private(Client* parent)
 
 void Client::Private::enterPhoneNumber(const QString& phoneNumber)
 {
-    sendQuery(
-        TDApi::make_object<TDApi::setAuthenticationPhoneNumber>(phoneNumber.toStdString(), nullptr),
-        createAuthQueryHandler());
+    sendQuery(TDApi::make_object<TDApi::setAuthenticationPhoneNumber>(phoneNumber.toStdString(), nullptr), createAuthQueryHandler());
 }
 
 void Client::Private::enterCode(const QString& code)
 {
-    sendQuery(TDApi::make_object<TDApi::checkAuthenticationCode>(code.toStdString()),
-        createAuthQueryHandler());
+    sendQuery(TDApi::make_object<TDApi::checkAuthenticationCode>(code.toStdString()), createAuthQueryHandler());
 }
 
 void Client::Private::enterPassword(const QString& password)
 {
-    sendQuery(TDApi::make_object<TDApi::checkAuthenticationPassword>(password.toStdString()),
-        createAuthQueryHandler());
+    sendQuery(TDApi::make_object<TDApi::checkAuthenticationPassword>(password.toStdString()), createAuthQueryHandler());
 }
