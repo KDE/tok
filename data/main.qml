@@ -2,38 +2,36 @@ import QtQuick 2.10
 import QtQuick.Controls 2.10 as QQC2
 import org.kde.kirigami 2.12 as Kirigami
 
-Kirigami.ApplicationWindow {
-    Connections {
+import "routes" as Routes
+import "routes/entry" as EntryRoutes
+
+Kirigami.RouterWindow {
+    id: rootWindow
+
+    property Connections conns: Connections {
         target: tClient
         function onPhoneNumberRequested() {
-            console.log(`wants phone number`)
+            rootWindow.router.navigateToRoute("Entry/PhoneNumber")
         }
         function onCodeRequested() {
-            console.log(`wants code`)
+            rootWindow.router.navigateToRoute("Entry/AuthenticationCode")
         }
         function onPasswordRequested() {
-            console.log(`wants password`)
+            rootWindow.router.navigateToRoute("Entry/Password")
         }
         function onLoggedIn() {
-            console.log(`logged in`)
+            rootWindow.router.navigateToRoute("Chats")
         }
         function onLoggedOut() {
-            console.log(`logged out`)
+            rootWindow.router.navigateToRoute("Entry/Welcome")
         }
     }
 
-    Kirigami.FormLayout {
-        QQC2.TextField {
-            onAccepted: tClient.enterPhoneNumber(text)
-            Kirigami.FormData.label: "phone number"
-        }
-        QQC2.TextField {
-            onAccepted: tClient.enterCode(text)
-            Kirigami.FormData.label: "code"
-        }
-        QQC2.TextField {
-            onAccepted: tClient.enterPassword(text)
-            Kirigami.FormData.label: "password"
-        }
-    }
+    Routes.Chats {}
+
+    EntryRoutes.AuthenticationCode {}
+    EntryRoutes.Password {}
+    EntryRoutes.PhoneNumber {}
+    EntryRoutes.Welcome {}
+
 }
