@@ -8,6 +8,8 @@ import "routes/entry" as EntryRoutes
 Kirigami.RouterWindow {
     id: rootWindow
 
+    initialRoute: ""
+
     property Connections conns: Connections {
         target: tClient
         function onPhoneNumberRequested() {
@@ -25,6 +27,11 @@ Kirigami.RouterWindow {
         function onLoggedOut() {
             rootWindow.router.navigateToRoute("Entry/Welcome")
         }
+    }
+
+    Kirigami.PageRoute {
+        name: ""
+        Kirigami.Page {}
     }
 
     Routes.Chats {}

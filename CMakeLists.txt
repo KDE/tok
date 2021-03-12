@@ -8,7 +8,7 @@ set(CMAKE_AUTOUIC OFF)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include(GNUInstallDirs)
@@ -22,8 +22,12 @@ find_package(Td 1.7.2 REQUIRED)
 
 add_executable(org.kde.Tok
   src/main.cpp
+
   src/client.cpp
   src/client_p.cpp
+
+  src/chatsmodel.cpp
+
   data/main.qrc
 )
 add_definitions(-Wall -Werror)

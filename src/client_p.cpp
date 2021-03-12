@@ -4,39 +4,9 @@
 
 #include "client_p.h"
 #include "keys.h"
+#include "overloader.h"
 #include <qstandardpaths.h>
 #include <td/telegram/td_api.h>
-
-// helper function yoinked from tdlib example
-namespace detail
-{
-template<class... Fs>
-struct overload;
-
-template<class F>
-struct overload<F> : public F {
-    explicit overload(F f)
-        : F(f)
-    {
-    }
-};
-template<class F, class... Fs>
-struct overload<F, Fs...> : public overload<F>, overload<Fs...> {
-    overload(F f, Fs... fs)
-        : overload<F>(f)
-        , overload<Fs...>(fs...)
-    {
-    }
-    using overload<F>::operator();
-    using overload<Fs...>::operator();
-};
-}
-
-template<class... F>
-auto overloaded(F... f)
-{
-    return detail::overload<F...>(f...);
-}
 
 std::uint64_t Client::Private::nextQueryID()
 {
@@ -76,9 +46,15 @@ void Client::Private::handleAuthorizationStateUpdate(TDApi::updateAuthorizationS
         overloaded(
             [this](TDApi::authorizationStateReady&) {
                 m_loggedIn = true;
+
+                m_chatsModel->fetch();
+
+                Q_EMIT q->loggedIn();
             },
             [this](TDApi::authorizationStateLoggingOut&) {
                 m_loggedIn = false;
+
+                Q_EMIT q->loggedOut();
             },
             [](TDApi::authorizationStateClosing&) {
                 qDebug() << "Closing";
@@ -135,6 +111,14 @@ void Client::Private::handleUpdate(TDApi::object_ptr<TDApi::Object> update)
         overloaded(
             [this](TDApi::updateAuthorizationState& upd_state) {
                 handleAuthorizationStateUpdate(upd_state);
+            },
+            [this, &update](TDApi::updateNewChat &update_new_chat) {
+                auto mv = TDApi::move_object_as<TDApi::Update>(update);
+                q->chatsModel()->handleUpdate(std::move(mv));
+            },
+            [this, &update](TDApi::updateChatTitle &update_chat_title) {
+                auto mv = TDApi::move_object_as<TDApi::Update>(update);
+                q->chatsModel()->handleUpdate(std::move(mv));
             },
             [](auto& update) { /* fallback */ }));
 }

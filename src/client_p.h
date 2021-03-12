@@ -4,6 +4,7 @@
 #pragma once
 
 #include "client.h"
+#include "chatsmodel.h"
 #include "defs.h"
 
 class Client::Private
@@ -21,6 +22,10 @@ class Client::Private
     bool m_loggedIn = false;
     std::uint64_t m_authQueryID = 0;
     TDApi::object_ptr<TDApi::AuthorizationState> m_authState;
+
+    // child managers
+
+    std::unique_ptr<ChatsModel> m_chatsModel;
 
     // functions
 

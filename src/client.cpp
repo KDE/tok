@@ -13,16 +13,24 @@ Client::Client()
     : d(new Private(this))
 {
 
+    d->m_chatsModel.reset(new ChatsModel(this));
+
     m_poller = new QTimer;
 
     QObject::connect(m_poller, &QTimer::timeout, m_poller, [this] {
         d->poll();
     });
-    m_poller->start(100);
+    m_poller->start(25);
+
 }
 
 Client::~Client()
 {
+}
+
+ChatsModel* Client::chatsModel() const
+{
+    return d->m_chatsModel.get();
 }
 
 void Client::sendQuery(TDApi::object_ptr<TDApi::Function> fn, std::function<void(TObject)> handler)

@@ -8,6 +8,7 @@
 
 #include <KLocalizedContext>
 
+#include "chatsmodel.h"
 #include "client.h"
 #include "keys.h"
 
@@ -21,6 +22,8 @@ int main(int argc, char* argv[])
 
     engine.rootContext()->setContextObject(new KLocalizedContext(&engine));
     engine.rootContext()->setContextProperty("tClient", new Client);
+
+    qRegisterMetaType<ChatsModel*>();
 
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(

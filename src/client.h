@@ -13,9 +13,13 @@
 
 #include "defs.h"
 
+class ChatsModel;
+
 class Client : public QObject
 {
     Q_OBJECT
+
+    Q_PROPERTY(ChatsModel* chatsModel READ chatsModel CONSTANT)
 
     class Private;
     std::unique_ptr<Private> d;
@@ -34,10 +38,18 @@ public:
         static_assert(std::is_convertible<Fn*, TDApi::Function*>::value, "Derived must be a subclass of TDApi::Function");
 
         sendQuery(TDApi::make_object<Fn>(args...), [cb](TObject t) {
+            if (t->get_id() == TDApi::error::ID) {
+                auto error = TDApi::move_object_as<TDApi::error>(t);
+                qDebug() << "Error:" << error->code_ << QString::fromStdString(error->message_);
+                return;
+            }
+
             auto object = typename Fn::ReturnType(static_cast<typename Fn::ReturnType::pointer>(t.release()));
             cb(std::move(object));
         });
     }
+
+    ChatsModel* chatsModel() const;
 
     Q_SIGNAL void loggedIn();
     Q_SIGNAL void loggedOut();
