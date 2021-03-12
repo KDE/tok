@@ -12,11 +12,17 @@ Kirigami.ScrollablePage {
         model: tClient.chatsModel
 
         delegate: Kirigami.BasicListItem {
-            text: title
-            subtitle: `${lastMessageAuthorName}: ${lastMessageContent}`
+            id: del
+
+            required property string mTitle
+            required property string mSubtitle
+            required property string mPhoto
+
+            text: mTitle
+            subtitle: mSubtitle
 
             leading: Kirigami.Avatar {
-                name: title
+                name: del.mTitle
 
                 width: height
             }
