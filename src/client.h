@@ -4,8 +4,8 @@
 
 #pragma once
 
-#include <QTimer>
 #include <QObject>
+#include <QTimer>
 
 #include <memory>
 

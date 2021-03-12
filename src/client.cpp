@@ -9,7 +9,8 @@
 #include "client_p.h"
 #include "keys.h"
 
-Client::Client() : d(new Private(this))
+Client::Client()
+    : d(new Private(this))
 {
 
     m_poller = new QTimer;
@@ -18,12 +19,10 @@ Client::Client() : d(new Private(this))
         d->poll();
     });
     m_poller->start(100);
-
 }
 
 Client::~Client()
 {
-
 }
 
 void Client::enterCode(const QString& code)
@@ -31,12 +30,12 @@ void Client::enterCode(const QString& code)
     d->enterCode(code);
 }
 
-void Client::enterPassword(const QString &password)
+void Client::enterPassword(const QString& password)
 {
     d->enterPassword(password);
 }
 
-void Client::enterPhoneNumber(const QString &phoneNumber)
+void Client::enterPhoneNumber(const QString& phoneNumber)
 {
     d->enterPhoneNumber(phoneNumber);
 }

@@ -42,7 +42,8 @@ std::uint64_t Client::Private::nextQueryID()
     return ++m_queryID;
 }
 
-void Client::Private::sendQuery(TDApi::object_ptr<TDApi::Function> fn, std::function<void(TObject)> handler)
+void Client::Private::sendQuery(TDApi::object_ptr<TDApi::Function> fn,
+    std::function<void(TObject)> handler)
 {
     auto queryID = nextQueryID();
     if (handler) {
@@ -107,7 +108,8 @@ void Client::Private::handleAuthorizationStateUpdate(TDApi::updateAuthorizationS
             [this](TDApi::authorizationStateWaitEncryptionKey&) {
                 // TODO: prompt for encryption key
                 auto key = "";
-                sendQuery(TDApi::make_object<TDApi::checkDatabaseEncryptionKey>(std::move(key)), createAuthQueryHandler());
+                sendQuery(TDApi::make_object<TDApi::checkDatabaseEncryptionKey>(std::move(key)),
+                    createAuthQueryHandler());
             },
             [this](TDApi::authorizationStateWaitTdlibParameters&) {
                 auto parameters = TDApi::make_object<TDApi::tdlibParameters>();
@@ -160,7 +162,8 @@ void Client::Private::poll()
     }
 }
 
-Client::Private::Private(Client* parent) : q(parent)
+Client::Private::Private(Client* parent)
+    : q(parent)
 {
     TD::ClientManager::execute(TDApi::make_object<TDApi::setLogVerbosityLevel>(1));
     m_clientManager = std::make_unique<TD::ClientManager>();
@@ -171,16 +174,19 @@ Client::Private::Private(Client* parent) : q(parent)
 
 void Client::Private::enterPhoneNumber(const QString& phoneNumber)
 {
-    sendQuery(TDApi::make_object<TDApi::setAuthenticationPhoneNumber>(phoneNumber.toStdString(), nullptr), createAuthQueryHandler());
+    sendQuery(
+        TDApi::make_object<TDApi::setAuthenticationPhoneNumber>(phoneNumber.toStdString(), nullptr),
+        createAuthQueryHandler());
 }
 
 void Client::Private::enterCode(const QString& code)
 {
-    sendQuery(TDApi::make_object<TDApi::checkAuthenticationCode>(code.toStdString()), createAuthQueryHandler());
+    sendQuery(TDApi::make_object<TDApi::checkAuthenticationCode>(code.toStdString()),
+        createAuthQueryHandler());
 }
 
 void Client::Private::enterPassword(const QString& password)
 {
-    sendQuery(TDApi::make_object<TDApi::checkAuthenticationPassword>(password.toStdString()), createAuthQueryHandler());
+    sendQuery(TDApi::make_object<TDApi::checkAuthenticationPassword>(password.toStdString()),
+        createAuthQueryHandler());
 }
-

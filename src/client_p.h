@@ -39,5 +39,4 @@ class Client::Private
     void enterPhoneNumber(const QString& phoneNumber);
     void enterCode(const QString& code);
     void enterPassword(const QString& password);
-
 };
