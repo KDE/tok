@@ -8,5 +8,7 @@
         <file>routes/entry/Password.qml</file>
         <file>routes/entry/PhoneNumber.qml</file>
         <file>routes/entry/Welcome.qml</file>
+
+        <file>routes/messages/View.qml</file>
     </qresource>
 </RCC>

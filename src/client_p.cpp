@@ -5,6 +5,7 @@
 #include "client_p.h"
 #include "keys.h"
 #include "overloader.h"
+#include "messagesmodel_p.h"
 #include <qstandardpaths.h>
 #include <td/telegram/td_api.h>
 

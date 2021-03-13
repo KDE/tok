@@ -7,6 +7,7 @@
 #include <QTimer>
 
 #include "client_p.h"
+#include "messagesmodel.h"
 #include "keys.h"
 
 Client::Client()
@@ -31,6 +32,17 @@ Client::~Client()
 ChatsModel* Client::chatsModel() const
 {
     return d->m_chatsModel.get();
+}
+
+MessagesModel* Client::messagesModel(quint64 ID)
+{
+    if (ID == 0) {
+        return nullptr;
+    }
+    if (!d->m_messageModels.contains(ID)) {
+        d->m_messageModels[ID] = std::make_unique<MessagesModel>(this, ID);
+    }
+    return d->m_messageModels[ID].get();
 }
 
 void Client::sendQuery(TDApi::object_ptr<TDApi::Function> fn, std::function<void(TObject)> handler)

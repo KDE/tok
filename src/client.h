@@ -14,6 +14,7 @@
 #include "defs.h"
 
 class ChatsModel;
+class MessagesModel;
 
 class Client : public QObject
 {
@@ -57,6 +58,12 @@ public:
     Q_SIGNAL void phoneNumberRequested();
     Q_SIGNAL void codeRequested();
     Q_SIGNAL void passwordRequested();
+
+    MessagesModel* messagesModel(quint64 number);
+    Q_INVOKABLE MessagesModel* messagesModel(const QString& s)
+    {
+        return messagesModel(s.toLongLong());
+    }
 
     Q_INVOKABLE void enterPhoneNumber(const QString& phoneNumber);
     Q_INVOKABLE void enterCode(const QString& code);

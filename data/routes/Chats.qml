@@ -17,6 +17,7 @@ Kirigami.ScrollablePage {
             required property string mTitle
             required property string mSubtitle
             required property string mPhoto
+            required property string mID
 
             text: mTitle
             subtitle: mSubtitle
@@ -25,6 +26,10 @@ Kirigami.ScrollablePage {
                 name: del.mTitle
 
                 width: height
+            }
+
+            onClicked: {
+                Kirigami.PageRouter.pushFromHere({ "route": "Messages/View", "chatID": del.mID })
             }
         }
 

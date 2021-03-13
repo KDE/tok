@@ -4,6 +4,7 @@ import org.kde.kirigami 2.12 as Kirigami
 
 import "routes" as Routes
 import "routes/entry" as EntryRoutes
+import "routes/messages" as MessagesRoutes
 
 Kirigami.RouterWindow {
     id: rootWindow
@@ -40,5 +41,7 @@ Kirigami.RouterWindow {
     EntryRoutes.Password {}
     EntryRoutes.PhoneNumber {}
     EntryRoutes.Welcome {}
+
+    MessagesRoutes.View {}
 
 }

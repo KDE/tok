@@ -26,6 +26,7 @@ class Client::Private
     // child managers
 
     std::unique_ptr<ChatsModel> m_chatsModel;
+    std::map<TDApi::int53, std::unique_ptr<MessagesModel>> m_messageModels;
 
     // functions
 

@@ -12,6 +12,7 @@ enum Roles {
     Title = Qt::UserRole,
     Subtitle,
     Photo,
+    ID,
 };
 
 ChatsModel::ChatsModel(Client* parent) : QAbstractListModel(parent), c(parent), d(new Private)
@@ -117,6 +118,7 @@ QHash<int,QByteArray> ChatsModel::roleNames() const
     roles[int(Roles::Title)] = "mTitle";
     roles[int(Roles::Photo)] = "mPhoto";
     roles[int(Roles::Subtitle)] = "mSubtitle";
+    roles[int(Roles::ID)] = "mID";
 
     return roles;
 }
@@ -135,6 +137,9 @@ QVariant ChatsModel::data(const QModelIndex& idx, int role) const
     auto r = Roles(role);
 
     switch (r) {
+    case Roles::ID: {
+        return QString::number(d->chatData[chatID]->id_);
+    }
     case Roles::Title: {
         return QString::fromStdString(d->chatData[chatID]->title_);
     }

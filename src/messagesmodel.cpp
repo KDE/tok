@@ -7,10 +7,22 @@ enum Roles {
 MessagesModel::MessagesModel(Client* parent, TDApi::int53 id) : QAbstractListModel(parent), c(parent), d(new Private)
 {
     d->id = id;
+
+    fetch();
 }
 
 MessagesModel::~MessagesModel()
 {
+}
+
+bool MessagesModel::canFetchMore(const QModelIndex& parent) const
+{
+    return true;
+}
+
+void MessagesModel::fetchMore(const QModelIndex& parent)
+{
+    fetch();
 }
 
 void MessagesModel::fetch()

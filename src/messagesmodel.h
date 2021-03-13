@@ -20,8 +20,8 @@ public:
     void fetch();
     // void handleUpdate(TDApi::object_ptr<TDApi::Update> u);
 
-    // bool canFetchMore(const QModelIndex& parent) const override;
-    // void fetchMore(const QModelIndex& parent) override;
+    bool canFetchMore(const QModelIndex& parent) const override;
+    void fetchMore(const QModelIndex& parent) override;
 
     QVariant data(const QModelIndex& idx, int role = Qt::DisplayRole) const override;
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
