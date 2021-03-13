@@ -98,7 +98,7 @@ void Client::Private::handleAuthorizationStateUpdate(TDApi::updateAuthorizationS
                 parameters->use_secret_chats_ = false;
                 parameters->api_id_ = APP_ID;
                 parameters->api_hash_ = API_HASH;
-                parameters->system_language_code_ = QLocale::system().language();
+                parameters->system_language_code_ = QLocale::system().name().toStdString();
                 parameters->device_model_ = "Desktop";
                 parameters->application_version_ = "1.0";
                 parameters->enable_storage_optimizer_ = true;
