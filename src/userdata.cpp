@@ -23,7 +23,7 @@ void UserData::doUpdate()
     }
 
     if (auto data = m_client->userData(m_userID)) {
-        m_name = QString::fromStdString(data->username_);
+        m_name = QString::fromStdString(data->first_name_ + " " + data->last_name_);
         Q_EMIT nameChanged();
 
         return;
@@ -43,7 +43,7 @@ void UserData::handleUpdate(qint32 ID, TDApi::user* user)
         return;
     }
 
-    auto name = QString::fromStdString(user->username_);
+    auto name = QString::fromStdString(user->first_name_ + " " + user->last_name_);
     if (name == m_name) {
         return;
     }

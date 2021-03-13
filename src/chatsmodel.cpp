@@ -10,7 +10,8 @@
 
 enum Roles {
     Title = Qt::UserRole,
-    Subtitle,
+    LastMessageContent,
+    LastMessageAuthorID,
     Photo,
     ID,
 };
@@ -104,7 +105,8 @@ QHash<int,QByteArray> ChatsModel::roleNames() const
 
     roles[int(Roles::Title)] = "mTitle";
     roles[int(Roles::Photo)] = "mPhoto";
-    roles[int(Roles::Subtitle)] = "mSubtitle";
+    roles[int(Roles::LastMessageAuthorID)] = "mLastMessageAuthorID";
+    roles[int(Roles::LastMessageContent)] = "mLastMessageContent";
     roles[int(Roles::ID)] = "mID";
 
     return roles;
@@ -134,31 +136,15 @@ QVariant ChatsModel::data(const QModelIndex& idx, int role) const
         // TODO: photo
         return QVariant();
     }
-    case Roles::Subtitle: {
+    case Roles::LastMessageContent: {
         if (!d->chatData[chatID]->last_message_) {
             return QString();
         }
 
-        auto prefix = [=, this]() {
-            switch (d->chatData[chatID]->last_message_->sender_->get_id()) {
-            case TDApi::messageSenderUser::ID: {
-                auto moved = static_cast<TDApi::messageSenderUser*>(d->chatData[chatID]->last_message_->sender_.get());
-                return QString::number(moved->user_id_) + QString(": ");
-            }
-            case TDApi::messageSenderChat::ID: {
-                return QString();
-            }
-            }
-
-            qWarning() << "unhandled author:" << QString::fromStdString(TDApi::to_string(d->chatData[chatID]->last_message_->sender_));
-
-            return QString("unsupported");
-        };
-
         switch (d->chatData[chatID]->last_message_->content_->get_id()) {
         case TDApi::messageText::ID: {
             auto moved = static_cast<TDApi::messageText*>(d->chatData[chatID]->last_message_->content_.get());
-            return prefix() + QString::fromStdString(moved->text_->text_);
+            return QString::fromStdString(moved->text_->text_);
         }
         case TDApi::messageChatAddMembers::ID: {
             auto moved = static_cast<TDApi::messageChatAddMembers*>(d->chatData[chatID]->last_message_->content_.get());
@@ -170,11 +156,36 @@ QVariant ChatsModel::data(const QModelIndex& idx, int role) const
 
             return i18np("%2 joined the chat", "%2 joined the chat", moved->member_user_ids_.size(), its.join(", "));
         }
+        case TDApi::messageDocument::ID: {
+            auto moved = static_cast<TDApi::messageDocument*>(d->chatData[chatID]->last_message_->content_.get());
+
+            return QString::fromStdString(moved->document_->file_name_);
+        }
         }
 
         qWarning() << "unhandled content:" << QString::fromStdString(TDApi::to_string(d->chatData[chatID]->last_message_->content_));
 
         return QString("unsupported");
+    }
+    case Roles::LastMessageAuthorID: {
+        if (!d->chatData[chatID]->last_message_) {
+            return QString();
+        }
+
+        switch (d->chatData[chatID]->last_message_->sender_->get_id()) {
+        case TDApi::messageSenderUser::ID: {
+            auto moved = static_cast<TDApi::messageSenderUser*>(d->chatData[chatID]->last_message_->sender_.get());
+            return QString::number(moved->user_id_);
+        }
+        case TDApi::messageSenderChat::ID: {
+            return QString();
+        }
+        }
+
+        qWarning() << "unhandled author:" << QString::fromStdString(TDApi::to_string(d->chatData[chatID]->last_message_->sender_));
+
+        return QString("unsupported");
+
     }
     }
 
