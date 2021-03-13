@@ -20,7 +20,7 @@ Kirigami.ScrollablePage {
             required property string mID
 
             text: mTitle
-            subtitle: mSubtitle
+            subtitle: mSubtitle.split('\n')[0]
 
             leading: Kirigami.Avatar {
                 name: del.mTitle

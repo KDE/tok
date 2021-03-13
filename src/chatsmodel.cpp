@@ -26,18 +26,7 @@ ChatsModel::~ChatsModel()
 void ChatsModel::fetch()
 {
     c->call<TDApi::getChats>(
-        [=, this](TDApi::getChats::ReturnType resp) {
-            beginResetModel();
-            // beginInsertRows(QModelIndex(), d->chats.size(), d->chats.size() + resp->chat_ids_.size());
-            for (auto chat : resp->chat_ids_) {
-                d->chats.push_back(chat);
-            }
-            endResetModel();
-            // endInsertRows();
-
-            if (resp->chat_ids_.size() == 0) {
-                d->atEnd = true;
-            }
+        [](TDApi::getChats::ReturnType resp) {
         },
         nullptr, std::numeric_limits<std::int64_t>::max(), 0, 20
     );
@@ -50,12 +39,22 @@ void ChatsModel::updateChat(TDApi::object_ptr<TDApi::chat> c)
     d->chatData[c->id_] = std::move(c);
 
     auto v = std::find(d->chats.begin(), d->chats.end(), id);
-    if (v == d->chats.end()) {
-        return;
-    }
+    Q_ASSERT(v != d->chats.end());
 
     auto idx = *v;
+
     Q_EMIT dataChanged(index(idx), index(idx), {});
+}
+
+void ChatsModel::newChat(TDApi::object_ptr<TDApi::chat> c)
+{
+    auto id = c->id_;
+
+    d->chatData[c->id_] = std::move(c);
+
+    beginInsertRows(QModelIndex(), d->chats.size(), d->chats.size());
+    d->chats.push_back(id);
+    endInsertRows();
 }
 
 bool ChatsModel::canFetchMore(const QModelIndex& parent) const
@@ -73,35 +72,23 @@ void ChatsModel::handleUpdate(TDApi::object_ptr<TDApi::Update> u)
     TDApi::downcast_call(*u,
         overloaded(
             [this](TDApi::updateNewChat &update_new_chat) {
-                updateChat(std::move(update_new_chat.chat_));
+                newChat(std::move(update_new_chat.chat_));
             },
             [this](TDApi::updateChatTitle &update_chat_title) {
                 auto id = update_chat_title.chat_id_;
 
-                if (d->chatData.contains(id)) {
-                    d->chatData[id]->title_ = update_chat_title.title_;
+                d->chatData[id]->title_ = update_chat_title.title_;
 
-                    auto v = d->locateChatIndex(id);
-                    if (!v.has_value()) {
-                        return;
-                    }
-
-                    Q_EMIT dataChanged(index(*v), index(*v), {Roles::Subtitle});
-                }
+                auto v = d->locateChatIndex(id);
+                Q_EMIT dataChanged(index(v), index(v), {});
             },
             [this](TDApi::updateChatLastMessage &update_chat_last_message) {
                 auto id = update_chat_last_message.chat_id_;
 
-                if (d->chatData.contains(id)) {
-                    d->chatData[id]->last_message_ = std::move(update_chat_last_message.last_message_);
+                d->chatData[id]->last_message_ = std::move(update_chat_last_message.last_message_);
 
-                    auto v = d->locateChatIndex(id);
-                    if (!v.has_value()) {
-                        return;
-                    }
-
-                    Q_EMIT dataChanged(index(*v), index(*v), {Roles::Subtitle});
-                }
+                auto v = d->locateChatIndex(id);
+                Q_EMIT dataChanged(index(v), index(v), {});
             },
             [](auto& update) { qWarning() << "unhandled chatsmodel update" << QString::fromStdString(TDApi::to_string(update)); }));
 }

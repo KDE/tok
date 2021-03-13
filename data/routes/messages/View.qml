@@ -33,6 +33,8 @@ Kirigami.ScrollablePage {
                 background: null
                 onAccepted: composeRow.send()
 
+                placeholderText: i18n("Write your message...")
+
                 Layout.fillWidth: true
             }
             QQC2.Button {
