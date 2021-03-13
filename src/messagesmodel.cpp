@@ -143,3 +143,19 @@ void MessagesModel::newMessage(TDApi::object_ptr<TDApi::message> msg)
     dataChanged(index(1), index(1), {Roles::PreviousAuthorID, Roles::NextAuthorID});
 }
 
+void MessagesModel::send(const QString& contents)
+{
+    auto send_message = TDApi::make_object<TDApi::sendMessage>();
+    send_message->chat_id_ = d->id;
+    auto message_content = TDApi::make_object<TDApi::inputMessageText>();
+    message_content->text_ = TDApi::make_object<TDApi::formattedText>();
+    message_content->text_->text_ = std::move(contents.toStdString());
+    send_message->input_message_content_ = std::move(message_content);
+
+    c->callP<TDApi::sendMessage>(
+        [=](TDApi::sendMessage::ReturnType t) {
+
+        },
+        std::move(send_message)
+    );
+}

@@ -28,4 +28,6 @@ public:
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
 
     QHash<int,QByteArray> roleNames() const override;
+
+    Q_INVOKABLE void send(const QString& contents);
 };

@@ -18,6 +18,35 @@ Kirigami.ScrollablePage {
         lView.model = tClient.messagesModel(pageRoot.chatID)
     }
 
+    footer: QQC2.ToolBar {
+        RowLayout {
+            id: composeRow
+
+            function send() {
+                lView.model.send(txtField.text)
+                txtField.text = ""
+            }
+
+            QQC2.TextField {
+                id: txtField
+
+                background: null
+                onAccepted: composeRow.send()
+
+                Layout.fillWidth: true
+            }
+            QQC2.Button {
+                icon.name: "document-send"
+                onClicked: composeRow.send()
+            }
+
+            anchors {
+                left: parent.left
+                right: parent.right
+            }
+        }
+    }
+
     ListView {
         id: lView
 
