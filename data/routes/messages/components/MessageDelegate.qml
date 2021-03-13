@@ -83,10 +83,8 @@ QQC2.Control {
         }
     }
 
-    anchors {
-        left: parent.left
-        right: parent.right
-    }
+    width: parent && parent.width > 0 ? parent.width : implicitWidth
+    Layout.fillWidth: true
 
     Tok.UserData {
         id: userData
