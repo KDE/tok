@@ -27,10 +27,16 @@ void ChatsModel::fetch()
     c->call<TDApi::getChats>(
         [=, this](TDApi::getChats::ReturnType resp) {
             beginResetModel();
+            // beginInsertRows(QModelIndex(), d->chats.size(), d->chats.size() + resp->chat_ids_.size());
             for (auto chat : resp->chat_ids_) {
                 d->chats.push_back(chat);
             }
             endResetModel();
+            // endInsertRows();
+
+            if (resp->chat_ids_.size() == 0) {
+                d->atEnd = true;
+            }
         },
         nullptr, std::numeric_limits<std::int64_t>::max(), 0, 20
     );
@@ -49,6 +55,16 @@ void ChatsModel::updateChat(TDApi::object_ptr<TDApi::chat> c)
 
     auto idx = *v;
     Q_EMIT dataChanged(index(idx), index(idx), {});
+}
+
+bool ChatsModel::canFetchMore(const QModelIndex& parent) const
+{
+    return !d->atEnd;
+}
+
+void ChatsModel::fetchMore(const QModelIndex& parent)
+{
+    fetch();
 }
 
 void ChatsModel::handleUpdate(TDApi::object_ptr<TDApi::Update> u)

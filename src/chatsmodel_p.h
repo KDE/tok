@@ -12,4 +12,6 @@ struct ChatsModel::Private
 
         return v == chats.cend() ? std::optional<int>{} : *v;
     }
+
+    bool atEnd = true;
 };
