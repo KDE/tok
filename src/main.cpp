@@ -12,6 +12,7 @@
 #include "messagesmodel.h"
 #include "client.h"
 #include "keys.h"
+#include "userdata.h"
 
 int main(int argc, char* argv[])
 {
@@ -19,13 +20,14 @@ int main(int argc, char* argv[])
 
     QApplication app(argc, argv);
 
+    qRegisterMetaType<ChatsModel*>();
+    qRegisterMetaType<MessagesModel*>();
+    qmlRegisterType<UserData>("org.kde.Tok", 1, 0, "UserData");
+
     QQmlApplicationEngine engine;
 
     engine.rootContext()->setContextObject(new KLocalizedContext(&engine));
     engine.rootContext()->setContextProperty("tClient", new Client);
-
-    qRegisterMetaType<ChatsModel*>();
-    qRegisterMetaType<MessagesModel*>();
 
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(

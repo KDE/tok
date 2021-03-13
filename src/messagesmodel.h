@@ -18,6 +18,7 @@ public:
     ~MessagesModel();
 
     void fetch();
+    void newMessage(TDApi::object_ptr<TDApi::message> msg);
     // void handleUpdate(TDApi::object_ptr<TDApi::Update> u);
 
     bool canFetchMore(const QModelIndex& parent) const override;

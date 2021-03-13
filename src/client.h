@@ -59,6 +59,9 @@ public:
     Q_SIGNAL void codeRequested();
     Q_SIGNAL void passwordRequested();
 
+    Q_SIGNAL void userDataChanged(qint32 ID, TDApi::user* user);
+    TDApi::user* userData(qint32 ID);
+
     MessagesModel* messagesModel(quint64 number);
     Q_INVOKABLE MessagesModel* messagesModel(const QString& s)
     {

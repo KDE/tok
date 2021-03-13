@@ -21,7 +21,7 @@ Client::Client()
     QObject::connect(m_poller, &QTimer::timeout, m_poller, [this] {
         d->poll();
     });
-    m_poller->start(25);
+    m_poller->start(0);
 
 }
 
@@ -63,4 +63,13 @@ void Client::enterPassword(const QString& password)
 void Client::enterPhoneNumber(const QString& phoneNumber)
 {
     d->enterPhoneNumber(phoneNumber);
+}
+
+TDApi::user* Client::userData(qint32 ID)
+{
+    if (!d->m_users.contains(ID)) {
+        return nullptr;
+    }
+
+    return d->m_users[ID].get();
 }

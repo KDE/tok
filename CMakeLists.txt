@@ -26,6 +26,8 @@ add_executable(org.kde.Tok
   src/client.cpp
   src/client_p.cpp
 
+  src/userdata.cpp
+
   src/chatsmodel.cpp
 
   src/messagesmodel.cpp
