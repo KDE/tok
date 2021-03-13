@@ -32,6 +32,8 @@ add_executable(org.kde.Tok
 
   src/messagesmodel.cpp
 
+  src/tgimageprovider.cpp
+
   data/main.qrc
 )
 add_definitions(-Wall -Werror)

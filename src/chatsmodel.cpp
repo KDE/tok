@@ -133,8 +133,10 @@ QVariant ChatsModel::data(const QModelIndex& idx, int role) const
         return QString::fromStdString(d->chatData[chatID]->title_);
     }
     case Roles::Photo: {
-        // TODO: photo
-        return QVariant();
+        if (d->chatData[chatID]->photo_ == nullptr) {
+            return QString();
+        }
+        return QString("image://telegram/%1").arg(d->chatData[chatID]->photo_->big_->id_);
     }
     case Roles::LastMessageContent: {
         if (!d->chatData[chatID]->last_message_) {

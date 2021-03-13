@@ -12,7 +12,10 @@
 #include "messagesmodel.h"
 #include "client.h"
 #include "keys.h"
+#include "tgimageprovider.h"
 #include "userdata.h"
+
+Q_DECLARE_METATYPE(QSharedPointer<TDApi::file>)
 
 int main(int argc, char* argv[])
 {
@@ -22,12 +25,16 @@ int main(int argc, char* argv[])
 
     qRegisterMetaType<ChatsModel*>();
     qRegisterMetaType<MessagesModel*>();
+    qRegisterMetaType<QSharedPointer<TDApi::file>>();
     qmlRegisterType<UserData>("org.kde.Tok", 1, 0, "UserData");
 
     QQmlApplicationEngine engine;
 
+    auto c = new Client;
+
     engine.rootContext()->setContextObject(new KLocalizedContext(&engine));
-    engine.rootContext()->setContextProperty("tClient", new Client);
+    engine.rootContext()->setContextProperty("tClient", c);
+    engine.addImageProvider("telegram", new TelegramImageProvider(c));
 
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(

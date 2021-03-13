@@ -135,6 +135,10 @@ void Client::Private::handleUpdate(TDApi::object_ptr<TDApi::Object> update)
                 }
                 m_messageModels[msg.message_->chat_id_]->newMessage(std::move(msg.message_));
             },
+            [this](TDApi::updateFile &file) {
+                auto ptr = QSharedPointer<TDApi::file>(file.file_.release());
+                Q_EMIT q->fileDataChanged(ptr->id_, ptr);
+            },
             [](auto& update) { /* qWarning() << "unhandled private client update" << QString::fromStdString(TDApi::to_string(update)); */ }));
 }
 

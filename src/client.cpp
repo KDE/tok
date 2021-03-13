@@ -10,10 +10,12 @@
 #include "messagesmodel.h"
 #include "keys.h"
 
+Client* gC = nullptr;
+
 Client::Client()
     : d(new Private(this))
 {
-
+    gC = this;
     d->m_chatsModel.reset(new ChatsModel(this));
 
     m_poller = new QTimer;

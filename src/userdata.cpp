@@ -23,9 +23,7 @@ void UserData::doUpdate()
     }
 
     if (auto data = m_client->userData(m_userID)) {
-        m_name = QString::fromStdString(data->first_name_ + " " + data->last_name_);
-        Q_EMIT nameChanged();
-
+        handleUpdate(m_userID, data);
         return;
     }
 
@@ -37,19 +35,42 @@ void UserData::doUpdate()
     );
 }
 
+#define breakable for(int i = 0; i < 1; i++)
+
 void UserData::handleUpdate(qint32 ID, TDApi::user* user)
 {
     if (ID != m_userID) {
         return;
     }
 
-    auto name = QString::fromStdString(user->first_name_ + " " + user->last_name_);
-    if (name == m_name) {
-        return;
+    breakable {
+        auto name = QString::fromStdString(user->first_name_ + " " + user->last_name_);
+        if (name == m_name) {
+            break;
+        }
+
+        m_name = name;
+        Q_EMIT nameChanged();
+    }
+    breakable {
+        if (user->profile_photo_ == nullptr) {
+            if (m_smallAvatar == "") {
+                break;
+            }
+            m_smallAvatar = "";
+            Q_EMIT smallAvatarChanged();
+            break;
+        }
+
+        auto url = QString("image://telegram/%1").arg(user->profile_photo_->small_->id_);
+        if (m_smallAvatar == url) {
+            break;
+        }
+
+        m_smallAvatar = url;
+        Q_EMIT smallAvatarChanged();
     }
 
-    m_name = name;
-    Q_EMIT nameChanged();
 }
 
 void UserData::setUserID(const QString& userID)

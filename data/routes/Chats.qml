@@ -21,6 +21,9 @@ Kirigami.ScrollablePage {
             required property string mPhoto
             required property string mID
 
+            topPadding: Kirigami.Units.largeSpacing
+            bottomPadding: Kirigami.Units.largeSpacing
+
             text: mTitle
             subtitle: {
                 const content = mLastMessageContent.split('\n')[0]
@@ -41,6 +44,7 @@ Kirigami.ScrollablePage {
 
             leading: Kirigami.Avatar {
                 name: del.mTitle
+                source: del.mPhoto
 
                 width: height
             }

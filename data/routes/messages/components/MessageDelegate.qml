@@ -30,6 +30,7 @@ QQC2.Control {
     contentItem: RowLayout {
         Kirigami.Avatar {
             name: userData.name
+            source: userData.smallAvatar
 
             implicitWidth: Kirigami.Units.gridUnit*2
             implicitHeight: Kirigami.Units.gridUnit*2

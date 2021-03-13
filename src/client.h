@@ -78,6 +78,8 @@ public:
     Q_SIGNAL void userDataChanged(qint32 ID, TDApi::user* user);
     TDApi::user* userData(qint32 ID);
 
+    Q_SIGNAL void fileDataChanged(qint32 ID, QSharedPointer<TDApi::file> file);
+
     MessagesModel* messagesModel(quint64 number);
     Q_INVOKABLE MessagesModel* messagesModel(const QString& s)
     {
