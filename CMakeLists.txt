@@ -28,6 +28,8 @@ add_executable(org.kde.Tok
 
   src/chatsmodel.cpp
 
+  src/messagesmodel.cpp
+
   data/main.qrc
 )
 add_definitions(-Wall -Werror)
