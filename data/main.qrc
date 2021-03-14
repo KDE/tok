@@ -3,6 +3,8 @@
         <file>main.qml</file>
 
         <file>components/Header.qml</file>
+        <file>components/LoaderPlus.qml</file>
+        <file>components/LoaderSwitch.qml</file>
 
         <file>routes/Chats.qml</file>
 
@@ -13,5 +15,7 @@
 
         <file>routes/messages/View.qml</file>
         <file>routes/messages/components/MessageDelegate.qml</file>
+        <file>routes/messages/components/TextMessage.qml</file>
+        <file>routes/messages/components/Unsupported.qml</file>
     </qresource>
 </RCC>

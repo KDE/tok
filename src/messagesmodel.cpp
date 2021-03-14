@@ -7,6 +7,7 @@ enum Roles {
     PreviousAuthorID,
     NextAuthorID,
     ID,
+    Kind,
 };
 
 MessagesModel::MessagesModel(Client* parent, TDApi::int53 id) : QAbstractListModel(parent), c(parent), d(new Private)
@@ -116,6 +117,54 @@ QVariant MessagesModel::data(const QModelIndex& idx, int role) const
         return idFrom(d->messageData[mNextID]->sender_.get());
     }
 
+    case Roles::Kind: {
+        switch (d->messageData[mID]->content_->get_id()) {
+        case TDApi::messageText::ID: return QString("messageText");
+        case TDApi::messageAnimation::ID: return QString("messageAnimation");
+        case TDApi::messageAudio::ID: return QString("messageAudio");
+        case TDApi::messageDocument::ID: return QString("messageDocument");
+        case TDApi::messagePhoto::ID: return QString("messagePhoto");
+        case TDApi::messageExpiredPhoto::ID: return QString("messageExpiredPhoto");
+        case TDApi::messageSticker::ID: return QString("messageSticker");
+        case TDApi::messageVideo::ID: return QString("messageVideo");
+        case TDApi::messageExpiredVideo::ID: return QString("messageExpiredVideo");
+        case TDApi::messageVideoNote::ID: return QString("messageVideoNote");
+        case TDApi::messageVoiceNote::ID: return QString("messageVoiceNote");
+        case TDApi::messageLocation::ID: return QString("messageLocation");
+        case TDApi::messageVenue::ID: return QString("messageVenue");
+        case TDApi::messageContact::ID: return QString("messageContact");
+        case TDApi::messageDice::ID: return QString("messageDice");
+        case TDApi::messageGame::ID: return QString("messageGame");
+        case TDApi::messagePoll::ID: return QString("messagePoll");
+        case TDApi::messageInvoice::ID: return QString("messageInvoice");
+        case TDApi::messageCall::ID: return QString("messageCall");
+        case TDApi::messageVoiceChatStarted::ID: return QString("messageVoiceChatStarted");
+        case TDApi::messageVoiceChatEnded::ID: return QString("messageVoiceChatEnded");
+        case TDApi::messageInviteVoiceChatParticipants::ID: return QString("messageInviteVoiceChatParticipants");
+        case TDApi::messageBasicGroupChatCreate::ID: return QString("messageBasicGroupChatCreate");
+        case TDApi::messageSupergroupChatCreate::ID: return QString("messageSupergroupChatCreate");
+        case TDApi::messageChatChangeTitle::ID: return QString("messageChatChangeTitle");
+        case TDApi::messageChatChangePhoto::ID: return QString("messageChatChangePhoto");
+        case TDApi::messageChatDeletePhoto::ID: return QString("messageChatDeletePhoto");
+        case TDApi::messageChatAddMembers::ID: return QString("messageChatAddMembers");
+        case TDApi::messageChatJoinByLink::ID: return QString("messageChatJoinByLink");
+        case TDApi::messageChatDeleteMember::ID: return QString("messageChatDeleteMember");
+        case TDApi::messageChatUpgradeTo::ID: return QString("messageChatUpgradeTo");
+        case TDApi::messageChatUpgradeFrom::ID: return QString("messageChatUpgradeFrom");
+        case TDApi::messagePinMessage::ID: return QString("messagePinMessage");
+        case TDApi::messageScreenshotTaken::ID: return QString("messageScreenshotTaken");
+        case TDApi::messageChatSetTtl::ID: return QString("messageChatSetTtl");
+        case TDApi::messageCustomServiceAction::ID: return QString("messageCustomServiceAction");
+        case TDApi::messageGameScore::ID: return QString("messageGameScore");
+        case TDApi::messagePaymentSuccessful::ID: return QString("messagePaymentSuccessful");
+        case TDApi::messageContactRegistered::ID: return QString("messageContactRegistered");
+        case TDApi::messageWebsiteConnected::ID: return QString("messageWebsiteConnected");
+        case TDApi::messagePassportDataSent::ID: return QString("messagePassportDataSent");
+        case TDApi::messageProximityAlertTriggered::ID: return QString("messageProximityAlertTriggered");
+        case TDApi::messageUnsupported::ID: return QString("messageUnsupported");
+        }
+    }
+
     }
 
     return QVariant();
@@ -135,6 +184,7 @@ QHash<int,QByteArray> MessagesModel::roleNames() const
     roles[Roles::PreviousAuthorID] = "mPreviousAuthorID";
     roles[Roles::NextAuthorID] = "mNextAuthorID";
     roles[Roles::ID] = "mID";
+    roles[Roles::Kind] = "mKind";
 
     return roles;
 }
