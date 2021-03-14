@@ -14,6 +14,7 @@ enum Roles {
     LastMessageAuthorID,
     Photo,
     ID,
+    UnreadCount,
 };
 
 ChatsModel::ChatsModel(Client* parent) : QAbstractListModel(parent), c(parent), d(new Private)
@@ -108,6 +109,7 @@ QHash<int,QByteArray> ChatsModel::roleNames() const
     roles[int(Roles::LastMessageAuthorID)] = "mLastMessageAuthorID";
     roles[int(Roles::LastMessageContent)] = "mLastMessageContent";
     roles[int(Roles::ID)] = "mID";
+    roles[int(Roles::UnreadCount)] = "mUnreadCount";
 
     return roles;
 }
@@ -188,6 +190,9 @@ QVariant ChatsModel::data(const QModelIndex& idx, int role) const
 
         return QString("unsupported");
 
+    }
+    case Roles::UnreadCount: {
+        return d->chatData[chatID]->unread_count_;
     }
     }
 
