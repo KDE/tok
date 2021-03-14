@@ -2,15 +2,34 @@ import QtQuick 2.10
 import QtQuick.Layouts 1.10
 import QtQuick.Controls 2.12 as QQC2
 import org.kde.kirigami 2.14 as Kirigami
+import org.kde.kitemmodels 1.0
 import org.kde.Tok 1.0 as Tok
+import "qrc:/components" as Components
 
 Kirigami.PageRoute {
 
 name: "Chats"
 
 Kirigami.ScrollablePage {
+    header: Components.Header {
+        RowLayout {
+            Layout.margins: Kirigami.Units.largeSpacing
+            Layout.fillWidth: true
+
+            Kirigami.SearchField {
+                id: searchField
+
+                Layout.fillWidth: true
+            }
+        }
+    }
+
     ListView {
-        model: tClient.chatsModel
+        model: KSortFilterProxyModel {
+            sourceModel: tClient.chatsModel
+            filterString: searchField.text
+            filterRole: "mTitle"
+        }
 
         delegate: Kirigami.BasicListItem {
             id: del

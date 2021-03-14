@@ -11,6 +11,8 @@ Kirigami.RouterWindow {
 
     initialRoute: ""
 
+    pageStack.globalToolBar.style: Kirigami.ApplicationHeaderStyle.None
+
     property Connections conns: Connections {
         target: tClient
         function onPhoneNumberRequested() {

@@ -5,6 +5,7 @@ import org.kde.kirigami 2.14 as Kirigami
 import org.kde.Tok 1.0 as Tok
 
 import "components" as Components
+import "qrc:/components" as GlobalComponents
 
 Kirigami.PageRoute {
 
@@ -16,6 +17,17 @@ Kirigami.ScrollablePage {
     property string chatID
     onChatIDChanged: {
         lView.model = tClient.messagesModel(pageRoot.chatID)
+    }
+
+    header: GlobalComponents.Header {
+        Kirigami.Heading {
+            level: 4
+            text: pageRoot.chatID
+
+            verticalAlignment: Text.AlignVCenter
+            Layout.fillHeight: true
+            Layout.margins: Kirigami.Units.largeSpacing
+        }
     }
 
     footer: QQC2.ToolBar {

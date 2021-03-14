@@ -2,6 +2,8 @@
     <qresource prefix="/">
         <file>main.qml</file>
 
+        <file>components/Header.qml</file>
+
         <file>routes/Chats.qml</file>
 
         <file>routes/entry/AuthenticationCode.qml</file>
