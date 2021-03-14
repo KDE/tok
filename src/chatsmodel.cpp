@@ -92,6 +92,15 @@ void ChatsModel::handleUpdate(TDApi::object_ptr<TDApi::Update> u)
                 auto v = d->locateChatIndex(id);
                 Q_EMIT dataChanged(index(v), index(v), {});
             },
+            [this](TDApi::updateChatReadInbox &update_chat_read_inbox) {
+                auto id = update_chat_read_inbox.chat_id_;
+
+                d->chatData[id]->last_read_inbox_message_id_ = update_chat_read_inbox.last_read_inbox_message_id_;
+                d->chatData[id]->unread_count_ = update_chat_read_inbox.unread_count_;
+
+                auto v = d->locateChatIndex(id);
+                Q_EMIT dataChanged(index(v), index(v), {});
+            },
             [](auto& update) { qWarning() << "unhandled chatsmodel update" << QString::fromStdString(TDApi::to_string(update)); }));
 }
 

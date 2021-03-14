@@ -6,8 +6,8 @@
 
 struct MessagesModel::Private
 {
-    std::deque<std::int32_t> messages;
-    std::map<std::int32_t, TDApi::object_ptr<TDApi::message>> messageData;
+    std::deque<TDApi::int53> messages;
+    std::map<TDApi::int53, TDApi::object_ptr<TDApi::message>> messageData;
 
     TDApi::int53 id;
 };
