@@ -25,7 +25,12 @@ Kirigami.RouterWindow {
             rootWindow.router.navigateToRoute("Entry/Password")
         }
         function onLoggedIn() {
-            rootWindow.router.navigateToRoute("Chats")
+            console.log(rootWindow.wideScreen)
+            if (rootWindow.wideScreen) {
+                rootWindow.router.navigateToRoute(["Chats", "Messages/NoView"])
+            } else {
+                rootWindow.router.navigateToRoute("Chats")
+            }
         }
         function onLoggedOut() {
             rootWindow.router.navigateToRoute("Entry/Welcome")
@@ -45,5 +50,6 @@ Kirigami.RouterWindow {
     EntryRoutes.Welcome {}
 
     MessagesRoutes.View {}
+    MessagesRoutes.NoView {}
 
 }
