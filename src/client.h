@@ -38,7 +38,7 @@ public:
     void call(std::function<void(typename Fn::ReturnType)> cb, Args ... args) {
         static_assert(std::is_convertible<Fn*, TDApi::Function*>::value, "Derived must be a subclass of TDApi::Function");
 
-        sendQuery(TDApi::make_object<Fn>(args...), [cb](TObject t) {
+        sendQuery(TDApi::make_object<Fn>(std::forward<Args>(args)...), [cb](TObject t) {
             if (t->get_id() == TDApi::error::ID) {
                 auto error = TDApi::move_object_as<TDApi::error>(t);
                 qDebug() << "Error:" << error->code_ << QString::fromStdString(error->message_);

@@ -30,4 +30,5 @@ public:
     QHash<int,QByteArray> roleNames() const override;
 
     Q_INVOKABLE void send(const QString& contents);
+    Q_INVOKABLE void messagesInView(QVariantList list);
 };

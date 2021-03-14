@@ -11,6 +11,7 @@ QQC2.Control {
     required property string mAuthorID
     required property string mPreviousAuthorID
     required property string mNextAuthorID
+    required property string mID
 
     readonly property bool showAvatar: mNextAuthorID != mAuthorID
     readonly property bool separateFromPrevious: mPreviousAuthorID != mAuthorID

@@ -5,6 +5,7 @@ enum Roles {
     AuthorID,
     PreviousAuthorID,
     NextAuthorID,
+    ID,
 };
 
 MessagesModel::MessagesModel(Client* parent, TDApi::int53 id) : QAbstractListModel(parent), c(parent), d(new Private)
@@ -72,6 +73,9 @@ QVariant MessagesModel::data(const QModelIndex& idx, int role) const
     };
 
     switch (r) {
+    case Roles::ID: {
+        return QString::number(mID);
+    }
     case Roles::Content: {
         switch (d->messageData[mID]->content_->get_id()) {
         case TDApi::messageText::ID: {
@@ -129,6 +133,7 @@ QHash<int,QByteArray> MessagesModel::roleNames() const
     roles[Roles::AuthorID] = "mAuthorID";
     roles[Roles::PreviousAuthorID] = "mPreviousAuthorID";
     roles[Roles::NextAuthorID] = "mNextAuthorID";
+    roles[Roles::ID] = "mID";
 
     return roles;
 }
@@ -143,13 +148,27 @@ void MessagesModel::newMessage(TDApi::object_ptr<TDApi::message> msg)
     dataChanged(index(1), index(1), {Roles::PreviousAuthorID, Roles::NextAuthorID});
 }
 
+void MessagesModel::messagesInView(QVariantList list)
+{
+    TDApi::array<TDApi::int53> ids;
+    for (auto item : list) {
+        ids.push_back(item.toString().toLongLong());
+    }
+    qDebug() << ids;
+
+    c->call<TDApi::viewMessages>(
+        [](TDApi::viewMessages::ReturnType) {},
+        d->id, 0, ids, false
+    );
+}
+
 void MessagesModel::send(const QString& contents)
 {
     auto send_message = TDApi::make_object<TDApi::sendMessage>();
     send_message->chat_id_ = d->id;
     auto message_content = TDApi::make_object<TDApi::inputMessageText>();
     message_content->text_ = TDApi::make_object<TDApi::formattedText>();
-    message_content->text_->text_ = std::move(contents.toStdString());
+    message_content->text_->text_ = contents.toStdString();
     send_message->input_message_content_ = std::move(message_content);
 
     c->callP<TDApi::sendMessage>(

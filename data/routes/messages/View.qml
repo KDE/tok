@@ -67,7 +67,26 @@ Kirigami.ScrollablePage {
         reuseItems: true
         verticalLayoutDirection: ListView.BottomToTop
 
-        delegate: Components.MessageDelegate {}
+        property var visibleItems: []
+
+        onVisibleItemsChanged: {
+            lView.model.messagesInView(visibleItems)
+        }
+
+        delegate: Components.MessageDelegate {
+            function add() {
+                lView.visibleItems = [...lView.visibleItems, this.mID]
+            }
+            function remove() {
+                lView.visibleItems = lView.visibleItems.filter(it => it != this.mID)
+            }
+
+            Component.onCompleted: add()
+            ListView.onReused: add()
+
+            Component.onDestruction: remove()
+            ListView.onPooled: remove()
+        }
     }
 }
 

@@ -39,6 +39,7 @@ Kirigami.ScrollablePage {
             required property string mLastMessageContent
             required property string mPhoto
             required property string mID
+            required property int    mUnreadCount
 
             topPadding: Kirigami.Units.largeSpacing
             bottomPadding: Kirigami.Units.largeSpacing
@@ -66,6 +67,22 @@ Kirigami.ScrollablePage {
                 source: del.mPhoto
 
                 width: height
+            }
+            trailing: RowLayout {
+                QQC2.Label {
+                    text: del.mUnreadCount
+                    visible: del.mUnreadCount > 0
+                    padding: Kirigami.Units.smallSpacing
+
+                    horizontalAlignment: Qt.AlignHCenter
+
+                    Layout.preferredWidth: implicitHeight
+
+                    background: Rectangle {
+                        color: Kirigami.Theme.focusColor
+                        radius: height / 2
+                    }
+                }
             }
 
             onClicked: {
