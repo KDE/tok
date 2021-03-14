@@ -55,6 +55,10 @@ Kirigami.ScrollablePage {
                 return content
             }
 
+            checked: Kirigami.PageRouter.router.params.chatID === del.mID
+            checkable: Kirigami.PageRouter.router.params.chatID === del.mID
+            highlighted: false
+
             Tok.UserData {
                 id: userData
 
@@ -86,6 +90,10 @@ Kirigami.ScrollablePage {
             }
 
             onClicked: {
+                if (Kirigami.PageRouter.router.params.chatID !== undefined) {
+                    tClient.messagesModel(Kirigami.PageRouter.router.params.chatID).comingOut()
+                }
+                tClient.messagesModel(del.mID).comingIn()
                 Kirigami.PageRouter.pushFromHere({ "route": "Messages/View", "chatID": del.mID })
             }
         }

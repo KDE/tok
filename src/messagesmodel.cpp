@@ -1,4 +1,5 @@
 #include "messagesmodel_p.h"
+#include "src/client.h"
 
 enum Roles {
     Content = Qt::UserRole,
@@ -154,7 +155,6 @@ void MessagesModel::messagesInView(QVariantList list)
     for (auto item : list) {
         ids.push_back(item.toString().toLongLong());
     }
-    qDebug() << ids;
 
     c->call<TDApi::viewMessages>(
         [](TDApi::viewMessages::ReturnType) {},
@@ -177,4 +177,14 @@ void MessagesModel::send(const QString& contents)
         },
         std::move(send_message)
     );
+}
+
+void MessagesModel::comingIn()
+{
+    c->call<TDApi::openChat>([](TDApi::openChat::ReturnType) {}, d->id);
+}
+
+void MessagesModel::comingOut()
+{
+    c->call<TDApi::closeChat>([](TDApi::openChat::ReturnType) {}, d->id);
 }
