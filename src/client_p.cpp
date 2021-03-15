@@ -98,7 +98,7 @@ void Client::Private::handleAuthorizationStateUpdate(TDApi::updateAuthorizationS
 
                 parameters->database_directory_ = tokLocation.toStdString();
                 parameters->use_message_database_ = true;
-                parameters->use_secret_chats_ = false;
+                parameters->use_secret_chats_ = true;
                 parameters->api_id_ = APP_ID;
                 parameters->api_hash_ = API_HASH;
                 parameters->system_language_code_ = QLocale::system().name().toStdString();
