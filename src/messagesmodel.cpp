@@ -7,6 +7,7 @@ enum Roles {
     NextAuthorID,
     ID,
     Kind,
+    Timestamp,
     // Text messages
     Content,
     // Photo messages
@@ -23,6 +24,7 @@ QHash<int,QByteArray> MessagesModel::roleNames() const
     roles[Roles::NextAuthorID] = "mNextAuthorID";
     roles[Roles::ID] = "mID";
     roles[Roles::Kind] = "mKind";
+    roles[Roles::Timestamp] = "mTimestamp";
 
     roles[Roles::Content] = "mContent";
 
@@ -101,6 +103,9 @@ QVariant MessagesModel::data(const QModelIndex& idx, int role) const
     };
 
     switch (r) {
+    case Roles::Timestamp: {
+        return QDateTime::fromTime_t(d->messageData[mID]->date_).toString("hh:mm");
+    }
     case Roles::ID: {
         return QString::number(mID);
     }

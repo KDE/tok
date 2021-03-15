@@ -14,6 +14,7 @@ QQC2.Control {
     required property string mNextAuthorID
     required property string mID
     required property string mKind
+    required property string mTimestamp
 
     required property string mContent
 

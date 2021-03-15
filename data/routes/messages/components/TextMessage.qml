@@ -13,6 +13,24 @@ QQC2.Control {
     background: Rectangle {
         radius: 4
         color: Kirigami.Theme.backgroundColor
+
+        QQC2.Label {
+            id: dummy
+            text: " "
+        }
+        QQC2.Label {
+            id: timestamp
+            text: del.mTimestamp
+            opacity: 0.5
+
+            font.pointSize: -1
+            font.pixelSize: Kirigami.Units.gridUnit * (2/3)
+            anchors {
+                bottom: parent.bottom
+                right: parent.right
+                margins: Kirigami.Units.smallSpacing
+            }
+        }
     }
     contentItem: ColumnLayout {
         QQC2.Label {
@@ -26,7 +44,10 @@ QQC2.Control {
             Layout.fillWidth: true
         }
         TextEdit {
-            text: del.mContent
+            id: textEdit
+            text: del.mContent + paddingT
+
+            readonly property string paddingT: " ".repeat(Math.ceil(timestamp.implicitWidth / dummy.implicitWidth))
 
             readOnly: true
             selectByMouse: true
@@ -35,6 +56,20 @@ QQC2.Control {
             color: Kirigami.Theme.textColor
             selectedTextColor: Kirigami.Theme.highlightedTextColor
             selectionColor: Kirigami.Theme.highlightColor
+
+            function clamp() {
+                const l = length - paddingT.length
+                if (selectionEnd >= l && selectionStart >= l) {
+                    select(0, 0)
+                } else if (selectionEnd >= l) {
+                    select(selectionStart, l)
+                } else if (selectionStart >= l) {
+                    select(l, selectionEnd)
+                }
+            }
+
+            onSelectionStartChanged: clamp()
+            onSelectionEndChanged: clamp()
 
             Layout.fillWidth: true
         }
