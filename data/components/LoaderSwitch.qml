@@ -1,3 +1,5 @@
+import QtQuick 2.10
+
 LoaderPlus {
     property var cases: {}
     property var defaultCase: ""
@@ -9,4 +11,5 @@ LoaderPlus {
         }
         return this.cases[this.value]
     }
+    onStatusChanged: if (this.status == Loader.Error) Qt.quit()
 }

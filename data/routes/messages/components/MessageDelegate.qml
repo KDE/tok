@@ -9,12 +9,18 @@ import "qrc:/components" as GlobalComponents
 QQC2.Control {
     id: del
 
-    required property string mContent
     required property string mAuthorID
     required property string mPreviousAuthorID
     required property string mNextAuthorID
     required property string mID
     required property string mKind
+
+    required property string mContent
+
+    required property string mImageURL
+    required property string mImageCaption
+
+    readonly property int recommendedSize: (applicationWindow().wideScreen ? Math.max(del.width / 3, Kirigami.Units.gridUnit * 15) : (del.width * 0.8))
 
     readonly property bool isOwnMessage: mAuthorID === tClient.ownID
     readonly property bool showAvatar: (mNextAuthorID != mAuthorID) && (!(Kirigami.Settings.isMobile && isOwnMessage))
@@ -53,7 +59,8 @@ QQC2.Control {
         GlobalComponents.LoaderSwitch {
             value: del.mKind
             cases: {
-                "messageText": Qt.resolvedUrl("TextMessage.qml")
+                "messageText": Qt.resolvedUrl("TextMessage.qml"),
+                "messagePhoto": Qt.resolvedUrl("PhotoMessage.qml"),
             }
             defaultCase: Qt.resolvedUrl("Unsupported.qml")
         }

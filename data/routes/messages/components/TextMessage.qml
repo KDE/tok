@@ -40,5 +40,5 @@ QQC2.Control {
         }
     }
 
-    Layout.maximumWidth: (applicationWindow().wideScreen ? Math.max(del.width / 3, Kirigami.Units.gridUnit * 15) : (del.width * 0.8))
+    Layout.maximumWidth: del.recommendedSize
 }

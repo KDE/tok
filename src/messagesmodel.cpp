@@ -2,13 +2,35 @@
 #include "src/client.h"
 
 enum Roles {
-    Content = Qt::UserRole,
-    AuthorID,
+    AuthorID = Qt::UserRole,
     PreviousAuthorID,
     NextAuthorID,
     ID,
     Kind,
+    // Text messages
+    Content,
+    // Photo messages
+    ImageURL,
+    ImageCaption,
 };
+
+QHash<int,QByteArray> MessagesModel::roleNames() const
+{
+    QHash<int,QByteArray> roles;
+
+    roles[Roles::AuthorID] = "mAuthorID";
+    roles[Roles::PreviousAuthorID] = "mPreviousAuthorID";
+    roles[Roles::NextAuthorID] = "mNextAuthorID";
+    roles[Roles::ID] = "mID";
+    roles[Roles::Kind] = "mKind";
+
+    roles[Roles::Content] = "mContent";
+
+    roles[Roles::ImageURL] = "mImageURL";
+    roles[Roles::ImageCaption] = "mImageCaption";
+
+    return roles;
+}
 
 MessagesModel::MessagesModel(Client* parent, TDApi::int53 id) : QAbstractListModel(parent), c(parent), d(new Private)
 {
@@ -79,12 +101,43 @@ QVariant MessagesModel::data(const QModelIndex& idx, int role) const
         return QString::number(mID);
     }
     case Roles::Content: {
-        switch (d->messageData[mID]->content_->get_id()) {
-        case TDApi::messageText::ID: {
-            auto moved = static_cast<TDApi::messageText*>(d->messageData[mID]->content_.get());
-            return QString::fromStdString(moved->text_->text_);
+        auto content = d->messageData[mID]->content_.get();
+        if (content->get_id() != TDApi::messageText::ID) {
+            return QString();
         }
+
+        return QString::fromStdString(static_cast<TDApi::messageText*>(content)->text_->text_);
+    }
+    case Roles::ImageURL: {
+        auto content = d->messageData[mID]->content_.get();
+        if (content->get_id() != TDApi::messagePhoto::ID) {
+            return QString();
         }
+        auto image = static_cast<TDApi::messagePhoto*>(content);
+        int sz = 0;
+        int trueI = -1;
+        int i = 0;
+        for (auto& size : image->photo_->sizes_) {
+            auto thisSz = size->height_ * size->width_;
+            if (sz < thisSz) {
+                sz = thisSz;
+                trueI = i;
+            }
+            i++;
+        }
+        return QString("image://telegram/%1").arg(image->photo_->sizes_[trueI]->photo_->id_);
+    }
+    case Roles::ImageCaption: {
+        auto content = d->messageData[mID]->content_.get();
+        if (content->get_id() != TDApi::messagePhoto::ID) {
+            return QString();
+        }
+
+        auto image = static_cast<TDApi::messagePhoto*>(content);
+        if (image->caption_ == nullptr) {
+            return QString();
+        }
+        return QString::fromStdString(image->caption_->text_);
     }
 
     case Roles::AuthorID: {
@@ -173,20 +226,6 @@ QVariant MessagesModel::data(const QModelIndex& idx, int role) const
 int MessagesModel::rowCount(const QModelIndex& parent) const
 {
     return d->messages.size();
-}
-
-QHash<int,QByteArray> MessagesModel::roleNames() const
-{
-    QHash<int,QByteArray> roles;
-
-    roles[Roles::Content] = "mContent";
-    roles[Roles::AuthorID] = "mAuthorID";
-    roles[Roles::PreviousAuthorID] = "mPreviousAuthorID";
-    roles[Roles::NextAuthorID] = "mNextAuthorID";
-    roles[Roles::ID] = "mID";
-    roles[Roles::Kind] = "mKind";
-
-    return roles;
 }
 
 void MessagesModel::newMessage(TDApi::object_ptr<TDApi::message> msg)

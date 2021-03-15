@@ -25,7 +25,6 @@ Kirigami.RouterWindow {
             rootWindow.router.navigateToRoute("Entry/Password")
         }
         function onLoggedIn() {
-            console.log(rootWindow.wideScreen)
             if (rootWindow.wideScreen) {
                 rootWindow.router.navigateToRoute(["Chats", "Messages/NoView"])
             } else {

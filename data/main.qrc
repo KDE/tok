@@ -16,7 +16,9 @@
         <file>routes/messages/View.qml</file>
         <file>routes/messages/NoView.qml</file>
         <file>routes/messages/components/MessageDelegate.qml</file>
-        <file>routes/messages/components/TextMessage.qml</file>
         <file>routes/messages/components/Unsupported.qml</file>
+
+        <file>routes/messages/components/TextMessage.qml</file>
+        <file>routes/messages/components/PhotoMessage.qml</file>
     </qresource>
 </RCC>
