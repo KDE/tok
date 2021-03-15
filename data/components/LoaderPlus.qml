@@ -4,8 +4,6 @@ import QtQuick.Layouts 1.10
 Loader {
     id: loader
 
-    Binding { target: loader; property: "implicitWidth"; when: loader.item !== null; value: (loader.item || {}).implicitWidth }
-    Binding { target: loader; property: "implicitHeight"; when: loader.item !== null; value: (loader.item || {}).implicitHeight }
     Binding { target: loader; property: "Layout.alignment"; when: loader.item !== null; value: ((loader.item || {}).Layout || {}).alignment }
     Binding { target: loader; property: "Layout.bottomMargin"; when: loader.item !== null; value: ((loader.item || {}).Layout || {}).bottomMargin }
     Binding { target: loader; property: "Layout.column"; when: loader.item !== null; value: ((loader.item || {}).Layout || {}).column }
