@@ -35,6 +35,9 @@ add_executable(org.kde.Tok
   src/tgimageprovider.cpp
 
   data/main.qrc
+
+  src/internallib/qabstractrelationalmodel.cpp
+  src/internallib/qquickrelationallistener.cpp
 )
 add_definitions(-Wall -Werror)
 
