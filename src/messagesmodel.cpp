@@ -59,6 +59,10 @@ void MessagesModel::fetch()
         [=, this](TDApi::getChatHistory::ReturnType resp) {
             beginInsertRows(QModelIndex(), d->messages.size(), d->messages.size()+resp->messages_.size()-1);
             for (auto& msg : resp->messages_) {
+                if (std::find(d->messages.cbegin(), d->messages.cend(), msg->id_) != d->messages.cend()) {
+                    continue;
+                }
+
                 d->messages.push_back(msg->id_);
                 d->messageData[msg->id_] = std::move(msg);
             }
@@ -230,6 +234,10 @@ int MessagesModel::rowCount(const QModelIndex& parent) const
 
 void MessagesModel::newMessage(TDApi::object_ptr<TDApi::message> msg)
 {
+    if (std::find(d->messages.cbegin(), d->messages.cend(), msg->id_) != d->messages.cend()) {
+        return;
+    }
+
     beginInsertRows(QModelIndex(), 0, 0);
     d->messages.push_front(msg->id_);
     d->messageData[msg->id_] = std::move(msg);
