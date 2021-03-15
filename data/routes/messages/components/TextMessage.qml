@@ -19,7 +19,7 @@ QQC2.Control {
             text: userData.name
             color: Kirigami.NameUtils.colorsFromString(text)
 
-            visible: del.separateFromPrevious
+            visible: del.separateFromPrevious && !(del.isOwnMessage && Kirigami.Settings.isMobile)
 
             wrapMode: Text.Wrap
 
@@ -40,5 +40,5 @@ QQC2.Control {
         }
     }
 
-    Layout.maximumWidth: (applicationWindow().wideScreen ? Math.max(del.width / 3, Kirigami.Units.gridUnit * 15) : (del.width * 0.9))
+    Layout.maximumWidth: (applicationWindow().wideScreen ? Math.max(del.width / 3, Kirigami.Units.gridUnit * 15) : (del.width * 0.8))
 }

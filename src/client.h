@@ -21,6 +21,7 @@ class Client : public QObject
     Q_OBJECT
 
     Q_PROPERTY(ChatsModel* chatsModel READ chatsModel CONSTANT)
+    Q_PROPERTY(QString ownID READ ownID CONSTANT)
 
     class Private;
     std::unique_ptr<Private> d;
@@ -67,6 +68,7 @@ public:
     }
 
     ChatsModel* chatsModel() const;
+    QString ownID() const;
 
     Q_SIGNAL void loggedIn();
     Q_SIGNAL void loggedOut();

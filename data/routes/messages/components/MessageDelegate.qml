@@ -16,7 +16,8 @@ QQC2.Control {
     required property string mID
     required property string mKind
 
-    readonly property bool showAvatar: mNextAuthorID != mAuthorID
+    readonly property bool isOwnMessage: mAuthorID === tClient.ownID
+    readonly property bool showAvatar: (mNextAuthorID != mAuthorID) && (!(Kirigami.Settings.isMobile && isOwnMessage))
     readonly property bool separateFromPrevious: mPreviousAuthorID != mAuthorID
 
     topPadding: del.separateFromPrevious ? Kirigami.Units.largeSpacing : Kirigami.Units.smallSpacing
@@ -45,6 +46,10 @@ QQC2.Control {
             Layout.alignment: Qt.AlignBottom
         }
 
+        Item {
+            Layout.fillWidth: (del.isOwnMessage && Kirigami.Settings.isMobile)
+        }
+
         GlobalComponents.LoaderSwitch {
             value: del.mKind
             cases: {
@@ -54,7 +59,7 @@ QQC2.Control {
         }
 
         Item {
-            Layout.fillWidth: true
+            Layout.fillWidth: !(del.isOwnMessage && Kirigami.Settings.isMobile)
         }
     }
 

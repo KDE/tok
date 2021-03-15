@@ -14,6 +14,7 @@ class Client::Private
 
     // members
 
+    TDApi::int53 m_ownID;
     std::unique_ptr<TD::ClientManager> m_clientManager = nullptr;
     std::int32_t m_clientID = 0;
     std::uint64_t m_queryID = 0;

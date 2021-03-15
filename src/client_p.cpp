@@ -45,12 +45,15 @@ void Client::Private::handleAuthorizationStateUpdate(TDApi::updateAuthorizationS
     m_authState = std::move(upd_state.authorization_state_);
     TDApi::downcast_call(*m_authState,
         overloaded(
-            [this](TDApi::authorizationStateReady&) {
+            [this](TDApi::authorizationStateReady& ready) {
                 m_loggedIn = true;
 
                 m_chatsModel->fetch();
+                q->call<TDApi::getOption>([this](TDApi::getOption::ReturnType ret) {
+                    m_ownID = static_cast<TDApi::optionValueInteger*>(ret.get())->value_;
 
-                Q_EMIT q->loggedIn();
+                    Q_EMIT q->loggedIn();
+                }, "my_id");
             },
             [this](TDApi::authorizationStateLoggingOut&) {
                 m_loggedIn = false;

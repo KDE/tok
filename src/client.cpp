@@ -67,6 +67,11 @@ void Client::enterPhoneNumber(const QString& phoneNumber)
     d->enterPhoneNumber(phoneNumber);
 }
 
+QString Client::ownID() const
+{
+    return QString::number(d->m_ownID);
+}
+
 TDApi::user* Client::userData(qint32 ID)
 {
     if (!d->m_users.contains(ID)) {
