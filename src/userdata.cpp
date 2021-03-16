@@ -1,98 +1,91 @@
+#include "client.h"
+#include "defs.h"
+#include "overloader.h"
+
 #include "userdata.h"
 
-#include "client.h"
+enum Roles {
+    Name = Qt::UserRole,
+    SmallAvatar,
+};
 
-UserData::UserData(QObject* parent)
+UserDataModel::UserDataModel(Client* parent) : QAbstractRelationalModel(parent), c(parent)
 {
 
 }
 
-UserData::~UserData()
+UserDataModel::~UserDataModel()
 {
 
 }
 
-void UserData::componentComplete()
+QVariant UserDataModel::data(const QVariant& key, int role)
 {
-}
-
-void UserData::doUpdate()
-{
-    if (!m_client) {
-        return;
+    if (!checkKey(key)) {
+        return QVariant();
     }
 
-    if (auto data = m_client->userData(m_userID)) {
-        handleUpdate(m_userID, data);
-        return;
+    auto id = key.toString().toLong();
+
+    switch (Roles(role)) {
+    case Roles::Name:
+        return QString::fromStdString(m_userData[id]->first_name_ + " " + m_userData[id]->last_name_);
+    case Roles::SmallAvatar:
+        if (m_userData[id]->profile_photo_ == nullptr) {
+            return QVariant();
+        }
+        return QString("image://telegram/%1").arg(m_userData[id]->profile_photo_->small_->id_);
     }
 
-    m_client->call<TDApi::getUser>(
-        [this](TDApi::getUser::ReturnType t) {
-            handleUpdate(t->id_, t.get());
+    Q_UNREACHABLE();
+}
+
+bool UserDataModel::checkKey(const QVariant& key)
+{
+    return m_userData.contains(key.toString().toLong());
+}
+
+bool UserDataModel::canFetchKey(const QVariant& key)
+{
+    Q_UNUSED(key)
+
+    return true;
+}
+
+void UserDataModel::fetchKey(const QVariant& key)
+{
+    c->call<TDApi::getUser>(
+        [this, key](TDApi::getUser::ReturnType t) {
+            m_userData[key.toString().toLong()] = std::move(t);
+            keyAdded(key);
         },
-        m_userID
+        key.toString().toLong()
     );
 }
 
-#define breakable for(int i = 0; i < 1; i++)
-
-void UserData::handleUpdate(qint32 ID, TDApi::user* user)
+QHash<int, QByteArray> UserDataModel::roleNames()
 {
-    if (ID != m_userID) {
-        return;
-    }
+    QHash<int,QByteArray> ret;
 
-    breakable {
-        auto name = QString::fromStdString(user->first_name_ + " " + user->last_name_);
-        if (name == m_name) {
-            break;
-        }
+    ret[Roles::Name] = "name";
+    ret[Roles::SmallAvatar] = "smallAvatar";
 
-        m_name = name;
-        Q_EMIT nameChanged();
-    }
-    breakable {
-        if (user->profile_photo_ == nullptr) {
-            if (m_smallAvatar == "") {
-                break;
-            }
-            m_smallAvatar = "";
-            Q_EMIT smallAvatarChanged();
-            break;
-        }
-
-        auto url = QString("image://telegram/%1").arg(user->profile_photo_->small_->id_);
-        if (m_smallAvatar == url) {
-            break;
-        }
-
-        m_smallAvatar = url;
-        Q_EMIT smallAvatarChanged();
-    }
-
+    return ret;
 }
 
-void UserData::setUserID(const QString& userID)
+void UserDataModel::handleUpdate(TDApi::object_ptr<TDApi::Update> u)
 {
-    m_userID = userID.toLong();
-    Q_EMIT userIDChanged();
-    doUpdate();
-}
-
-void UserData::setClient(Client* client)
-{
-    if (m_client == client) {
-        return;
-    }
-
-    if (m_client != nullptr) {
-        disconnect(m_client, &Client::userDataChanged, this, &UserData::handleUpdate);
-    }
-
-    m_client = client;
-    Q_EMIT clientChanged();
-
-    connect(m_client, &Client::userDataChanged, this, &UserData::handleUpdate);
-    doUpdate();
+    TDApi::downcast_call(*u,
+        overloaded(
+            [this](TDApi::updateUser &update_user) {
+                auto id = update_user.user_->id_;
+                auto contained = m_userData.contains(id);
+                m_userData[id] = std::move(update_user.user_);
+                if (contained) {
+                    Q_EMIT keyDataChanged(QString::number(id), {});
+                } else {
+                    Q_EMIT keyAdded(QString::number(id));
+                }
+            },
+            [](auto& update) { qWarning() << "unhandled userdatamodel update" << QString::fromStdString(TDApi::to_string(update)); }));
 }

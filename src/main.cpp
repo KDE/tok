@@ -15,6 +15,8 @@
 #include "tgimageprovider.h"
 #include "userdata.h"
 
+#include "internallib/qquickrelationallistener.h"
+
 Q_DECLARE_METATYPE(QSharedPointer<TDApi::file>)
 
 int main(int argc, char* argv[])
@@ -25,8 +27,9 @@ int main(int argc, char* argv[])
 
     qRegisterMetaType<ChatsModel*>();
     qRegisterMetaType<MessagesModel*>();
+    qRegisterMetaType<UserDataModel*>();
     qRegisterMetaType<QSharedPointer<TDApi::file>>();
-    qmlRegisterType<UserData>("org.kde.Tok", 1, 0, "UserData");
+    qmlRegisterType<QQmlRelationalListener>("org.kde.Tok", 1, 0, "RelationalListener");
 
     QQmlApplicationEngine engine;
 

@@ -9,6 +9,7 @@
 #include "client_p.h"
 #include "messagesmodel.h"
 #include "keys.h"
+#include "userdata.h"
 
 Client* gC = nullptr;
 
@@ -17,6 +18,7 @@ Client::Client()
 {
     gC = this;
     d->m_chatsModel.reset(new ChatsModel(this));
+    d->m_userDataModel.reset(new UserDataModel(this));
 
     m_poller = new QTimer;
 
@@ -72,11 +74,7 @@ QString Client::ownID() const
     return QString::number(d->m_ownID);
 }
 
-TDApi::user* Client::userData(qint32 ID)
+UserDataModel* Client::userDataModel() const
 {
-    if (!d->m_users.contains(ID)) {
-        return nullptr;
-    }
-
-    return d->m_users[ID].get();
+    return d->m_userDataModel.get();
 }

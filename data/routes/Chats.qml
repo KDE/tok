@@ -49,7 +49,7 @@ Kirigami.ScrollablePage {
                 const content = mLastMessageContent.split('\n')[0]
 
                 if (mLastMessageAuthorID !== "") {
-                    return `${userData.name}: ${content}`
+                    return `${userData.data.name}: ${content}`
                 }
 
                 return content
@@ -59,11 +59,15 @@ Kirigami.ScrollablePage {
             checkable: Kirigami.PageRouter.router.params.chatID === del.mID
             highlighted: false
 
-            Tok.UserData {
+            Tok.RelationalListener {
                 id: userData
 
-                userID: del.mLastMessageAuthorID
-                client: tClient
+                model: tClient.userDataModel
+                key: del.mLastMessageAuthorID
+                shape: QtObject {
+                    required property string name
+                    required property string smallAvatar
+                }
             }
 
             leading: Kirigami.Avatar {

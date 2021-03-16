@@ -41,8 +41,8 @@ QQC2.Control {
 
     contentItem: RowLayout {
         Kirigami.Avatar {
-            name: userData.name
-            source: userData.smallAvatar
+            name: userData.data.name
+            source: userData.data.smallAvatar
 
             implicitWidth: Kirigami.Units.gridUnit*2
             implicitHeight: Kirigami.Units.gridUnit*2
@@ -74,10 +74,14 @@ QQC2.Control {
     width: parent && parent.width > 0 ? parent.width : implicitWidth
     Layout.fillWidth: true
 
-    Tok.UserData {
+    Tok.RelationalListener {
         id: userData
 
-        userID: del.mAuthorID
-        client: tClient
+        model: tClient.userDataModel
+        key: del.mAuthorID
+        shape: QtObject {
+            required property string name
+            required property string smallAvatar
+        }
     }
 }

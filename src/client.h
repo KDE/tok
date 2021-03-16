@@ -15,12 +15,14 @@
 
 class ChatsModel;
 class MessagesModel;
+class UserDataModel;
 
 class Client : public QObject
 {
     Q_OBJECT
 
     Q_PROPERTY(ChatsModel* chatsModel READ chatsModel CONSTANT)
+    Q_PROPERTY(UserDataModel* userDataModel READ userDataModel CONSTANT)
     Q_PROPERTY(QString ownID READ ownID CONSTANT)
 
     class Private;
@@ -68,6 +70,7 @@ public:
     }
 
     ChatsModel* chatsModel() const;
+    UserDataModel* userDataModel() const;
     QString ownID() const;
 
     Q_SIGNAL void loggedIn();
@@ -76,9 +79,6 @@ public:
     Q_SIGNAL void phoneNumberRequested();
     Q_SIGNAL void codeRequested();
     Q_SIGNAL void passwordRequested();
-
-    Q_SIGNAL void userDataChanged(qint32 ID, TDApi::user* user);
-    TDApi::user* userData(qint32 ID);
 
     Q_SIGNAL void fileDataChanged(qint32 ID, QSharedPointer<TDApi::file> file);
 

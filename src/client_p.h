@@ -5,6 +5,7 @@
 
 #include "client.h"
 #include "chatsmodel.h"
+#include "userdata.h"
 #include "defs.h"
 
 class Client::Private
@@ -24,11 +25,10 @@ class Client::Private
     std::uint64_t m_authQueryID = 0;
     TDApi::object_ptr<TDApi::AuthorizationState> m_authState;
 
-    std::map<std::int32_t, TDApi::object_ptr<TDApi::user>> m_users;
-
     // child managers
 
     std::unique_ptr<ChatsModel> m_chatsModel;
+    std::unique_ptr<UserDataModel> m_userDataModel;
     std::map<TDApi::int53, std::unique_ptr<MessagesModel>> m_messageModels;
 
     // functions

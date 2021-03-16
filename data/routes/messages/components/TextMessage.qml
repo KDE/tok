@@ -34,7 +34,7 @@ QQC2.Control {
     }
     contentItem: ColumnLayout {
         QQC2.Label {
-            text: userData.name
+            text: userData.data.name
             color: Kirigami.NameUtils.colorsFromString(text)
 
             visible: del.separateFromPrevious && !(del.isOwnMessage && Kirigami.Settings.isMobile)
