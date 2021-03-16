@@ -16,6 +16,7 @@
 class ChatsModel;
 class MessagesModel;
 class UserDataModel;
+class MessagesStore;
 
 class Client : public QObject
 {
@@ -23,6 +24,7 @@ class Client : public QObject
 
     Q_PROPERTY(ChatsModel* chatsModel READ chatsModel CONSTANT)
     Q_PROPERTY(UserDataModel* userDataModel READ userDataModel CONSTANT)
+    Q_PROPERTY(MessagesStore* messagesStore READ messagesStore CONSTANT)
     Q_PROPERTY(QString ownID READ ownID CONSTANT)
 
     class Private;
@@ -71,6 +73,7 @@ public:
 
     ChatsModel* chatsModel() const;
     UserDataModel* userDataModel() const;
+    MessagesStore* messagesStore() const;
     QString ownID() const;
 
     Q_SIGNAL void loggedIn();

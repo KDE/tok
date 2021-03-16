@@ -4,15 +4,26 @@ import QtQuick.Controls 2.12 as QQC2
 import org.kde.kirigami 2.12 as Kirigami
 
 Image {
-    source: del.mImageURL
+    source: imageData.data.imageURL
 
     readonly property real ratio: width / implicitWidth
 
     smooth: true
     mipmap: true
 
+    Tok.RelationalListener {
+        id: imageData
+
+        model: tClient.messagesStore
+        key: [del.mChatID, del.mID]
+        shape: QtObject {
+            required property string imageURL
+            required property string imageCaption
+        }
+    }
+
     QQC2.Label {
-        text: del.mTimestamp
+        text: messageData.data.timestamp
 
         Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
         Kirigami.Theme.inherit: false

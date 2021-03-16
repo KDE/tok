@@ -19,6 +19,7 @@ Client::Client()
     gC = this;
     d->m_chatsModel.reset(new ChatsModel(this));
     d->m_userDataModel.reset(new UserDataModel(this));
+    d->m_messagesStore.reset(new MessagesStore(this));
 
     m_poller = new QTimer;
 
@@ -77,4 +78,9 @@ QString Client::ownID() const
 UserDataModel* Client::userDataModel() const
 {
     return d->m_userDataModel.get();
+}
+
+MessagesStore* Client::messagesStore() const
+{
+    return d->m_messagesStore.get();
 }

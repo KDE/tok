@@ -136,7 +136,8 @@ void Client::Private::handleUpdate(TDApi::object_ptr<TDApi::Object> update)
                 if (!m_messageModels.contains(msg.message_->chat_id_)) {
                     return;
                 }
-                m_messageModels[msg.message_->chat_id_]->newMessage(std::move(msg.message_));
+                m_messageModels[msg.message_->chat_id_]->newMessage(msg.message_->id_);
+                m_messagesStore->newMessage(std::move(msg.message_));
             },
             [this](TDApi::updateFile &file) {
                 auto ptr = QSharedPointer<TDApi::file>(file.file_.release());

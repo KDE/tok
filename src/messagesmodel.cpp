@@ -2,34 +2,20 @@
 #include "src/client.h"
 
 enum Roles {
-    AuthorID = Qt::UserRole,
-    PreviousAuthorID,
-    NextAuthorID,
+    NextID,
     ID,
-    Kind,
-    Timestamp,
-    // Text messages
-    Content,
-    // Photo messages
-    ImageURL,
-    ImageCaption,
+    ChatID,
+    PreviousID,
 };
 
 QHash<int,QByteArray> MessagesModel::roleNames() const
 {
     QHash<int,QByteArray> roles;
 
-    roles[Roles::AuthorID] = "mAuthorID";
-    roles[Roles::PreviousAuthorID] = "mPreviousAuthorID";
-    roles[Roles::NextAuthorID] = "mNextAuthorID";
+    roles[Roles::NextID] = "mNextID";
     roles[Roles::ID] = "mID";
-    roles[Roles::Kind] = "mKind";
-    roles[Roles::Timestamp] = "mTimestamp";
-
-    roles[Roles::Content] = "mContent";
-
-    roles[Roles::ImageURL] = "mImageURL";
-    roles[Roles::ImageCaption] = "mImageCaption";
+    roles[Roles::ChatID] = "mChatID";
+    roles[Roles::PreviousID] = "mPreviousID";
 
     return roles;
 }
@@ -66,12 +52,12 @@ void MessagesModel::fetch()
                 }
 
                 d->messages.push_back(msg->id_);
-                d->messageData[msg->id_] = std::move(msg);
+                c->messagesStore()->newMessage(std::move(msg));
             }
             endInsertRows();
-            dataChanged(index(0), index(0), {Roles::PreviousAuthorID, Roles::NextAuthorID});
+            dataChanged(index(0), index(0), {Roles::PreviousID, Roles::NextID});
         },
-        d->id, d->messages.empty() ? 0 : d->messageData[d->messages[d->messages.size()-1]]->id_, 0, 50, false
+        d->id, d->messages.empty() ? 0 : d->messages[d->messages.size()-1], 0, 50, false
     );
 }
 
@@ -82,149 +68,33 @@ QVariant MessagesModel::data(const QModelIndex& idx, int role) const
     }
 
     auto mID = d->messages[idx.row()];
-    if (!d->messageData.contains(mID)) {
-        return QVariant();
-    }
 
     Roles r = Roles(role);
 
-    auto idFrom = [](TDApi::MessageSender* s) {
-        switch (s->get_id()) {
-        case TDApi::messageSenderUser::ID: {
-            auto moved = static_cast<TDApi::messageSenderUser*>(s);
-            return QString::number(moved->user_id_);
-        }
-        case TDApi::messageSenderChat::ID: {
-            return QString();
-        }
-        }
-
-        return QString();
-    };
-
     switch (r) {
-    case Roles::Timestamp: {
-        return QDateTime::fromTime_t(d->messageData[mID]->date_).toString("hh:mm");
-    }
+
     case Roles::ID: {
         return QString::number(mID);
     }
-    case Roles::Content: {
-        auto content = d->messageData[mID]->content_.get();
-        if (content->get_id() != TDApi::messageText::ID) {
-            return QString();
-        }
 
-        return QString::fromStdString(static_cast<TDApi::messageText*>(content)->text_->text_);
-    }
-    case Roles::ImageURL: {
-        auto content = d->messageData[mID]->content_.get();
-        if (content->get_id() != TDApi::messagePhoto::ID) {
-            return QString();
-        }
-        auto image = static_cast<TDApi::messagePhoto*>(content);
-        int sz = 0;
-        int trueI = -1;
-        int i = 0;
-        for (auto& size : image->photo_->sizes_) {
-            auto thisSz = size->height_ * size->width_;
-            if (sz < thisSz) {
-                sz = thisSz;
-                trueI = i;
-            }
-            i++;
-        }
-        return QString("image://telegram/%1").arg(image->photo_->sizes_[trueI]->photo_->id_);
-    }
-    case Roles::ImageCaption: {
-        auto content = d->messageData[mID]->content_.get();
-        if (content->get_id() != TDApi::messagePhoto::ID) {
-            return QString();
-        }
-
-        auto image = static_cast<TDApi::messagePhoto*>(content);
-        if (image->caption_ == nullptr) {
-            return QString();
-        }
-        return QString::fromStdString(image->caption_->text_);
-    }
-
-    case Roles::AuthorID: {
-        return idFrom(d->messageData[mID]->sender_.get());
-    }
-
-    case Roles::PreviousAuthorID: {
+    case Roles::PreviousID: {
         if (!(int(d->messages.size()) > idx.row()+1)) {
             return QString();
         }
 
-        auto mPrevID = d->messages[idx.row()+1];
-        if (!d->messageData.contains(mPrevID)) {
-            return QString();
-        }
-
-        return idFrom(d->messageData[mPrevID]->sender_.get());
+        return QString::number(d->messages[idx.row()+1]);
     }
 
-    case Roles::NextAuthorID: {
+    case Roles::NextID: {
         if (idx.row() - 1 < 0) {
             return QString();
         }
 
-        auto mNextID = d->messages[idx.row()-1];
-        if (!d->messageData.contains(mNextID)) {
-            return QString();
-        }
-
-        return idFrom(d->messageData[mNextID]->sender_.get());
+        return QString::number(d->messages[idx.row()-1]);
     }
 
-    case Roles::Kind: {
-        switch (d->messageData[mID]->content_->get_id()) {
-        case TDApi::messageText::ID: return QString("messageText");
-        case TDApi::messageAnimation::ID: return QString("messageAnimation");
-        case TDApi::messageAudio::ID: return QString("messageAudio");
-        case TDApi::messageDocument::ID: return QString("messageDocument");
-        case TDApi::messagePhoto::ID: return QString("messagePhoto");
-        case TDApi::messageExpiredPhoto::ID: return QString("messageExpiredPhoto");
-        case TDApi::messageSticker::ID: return QString("messageSticker");
-        case TDApi::messageVideo::ID: return QString("messageVideo");
-        case TDApi::messageExpiredVideo::ID: return QString("messageExpiredVideo");
-        case TDApi::messageVideoNote::ID: return QString("messageVideoNote");
-        case TDApi::messageVoiceNote::ID: return QString("messageVoiceNote");
-        case TDApi::messageLocation::ID: return QString("messageLocation");
-        case TDApi::messageVenue::ID: return QString("messageVenue");
-        case TDApi::messageContact::ID: return QString("messageContact");
-        case TDApi::messageDice::ID: return QString("messageDice");
-        case TDApi::messageGame::ID: return QString("messageGame");
-        case TDApi::messagePoll::ID: return QString("messagePoll");
-        case TDApi::messageInvoice::ID: return QString("messageInvoice");
-        case TDApi::messageCall::ID: return QString("messageCall");
-        case TDApi::messageVoiceChatStarted::ID: return QString("messageVoiceChatStarted");
-        case TDApi::messageVoiceChatEnded::ID: return QString("messageVoiceChatEnded");
-        case TDApi::messageInviteVoiceChatParticipants::ID: return QString("messageInviteVoiceChatParticipants");
-        case TDApi::messageBasicGroupChatCreate::ID: return QString("messageBasicGroupChatCreate");
-        case TDApi::messageSupergroupChatCreate::ID: return QString("messageSupergroupChatCreate");
-        case TDApi::messageChatChangeTitle::ID: return QString("messageChatChangeTitle");
-        case TDApi::messageChatChangePhoto::ID: return QString("messageChatChangePhoto");
-        case TDApi::messageChatDeletePhoto::ID: return QString("messageChatDeletePhoto");
-        case TDApi::messageChatAddMembers::ID: return QString("messageChatAddMembers");
-        case TDApi::messageChatJoinByLink::ID: return QString("messageChatJoinByLink");
-        case TDApi::messageChatDeleteMember::ID: return QString("messageChatDeleteMember");
-        case TDApi::messageChatUpgradeTo::ID: return QString("messageChatUpgradeTo");
-        case TDApi::messageChatUpgradeFrom::ID: return QString("messageChatUpgradeFrom");
-        case TDApi::messagePinMessage::ID: return QString("messagePinMessage");
-        case TDApi::messageScreenshotTaken::ID: return QString("messageScreenshotTaken");
-        case TDApi::messageChatSetTtl::ID: return QString("messageChatSetTtl");
-        case TDApi::messageCustomServiceAction::ID: return QString("messageCustomServiceAction");
-        case TDApi::messageGameScore::ID: return QString("messageGameScore");
-        case TDApi::messagePaymentSuccessful::ID: return QString("messagePaymentSuccessful");
-        case TDApi::messageContactRegistered::ID: return QString("messageContactRegistered");
-        case TDApi::messageWebsiteConnected::ID: return QString("messageWebsiteConnected");
-        case TDApi::messagePassportDataSent::ID: return QString("messagePassportDataSent");
-        case TDApi::messageProximityAlertTriggered::ID: return QString("messageProximityAlertTriggered");
-        case TDApi::messageUnsupported::ID: return QString("messageUnsupported");
-        }
+    case Roles::ChatID: {
+        return QString::number(d->id);
     }
 
     }
@@ -237,18 +107,17 @@ int MessagesModel::rowCount(const QModelIndex& parent) const
     return d->messages.size();
 }
 
-void MessagesModel::newMessage(TDApi::object_ptr<TDApi::message> msg)
+void MessagesModel::newMessage(TDApi::int53 msg)
 {
-    if (std::find(d->messages.cbegin(), d->messages.cend(), msg->id_) != d->messages.cend()) {
+    if (std::find(d->messages.cbegin(), d->messages.cend(), msg) != d->messages.cend()) {
         return;
     }
 
     beginInsertRows(QModelIndex(), 0, 0);
-    d->messages.push_front(msg->id_);
-    d->messageData[msg->id_] = std::move(msg);
+    d->messages.push_front(msg);
     endInsertRows();
 
-    dataChanged(index(1), index(1), {Roles::PreviousAuthorID, Roles::NextAuthorID});
+    dataChanged(index(1), index(1), {Roles::PreviousID, Roles::NextID});
 }
 
 void MessagesModel::messagesInView(QVariantList list)

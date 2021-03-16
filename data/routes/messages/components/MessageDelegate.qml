@@ -9,23 +9,16 @@ import "qrc:/components" as GlobalComponents
 QQC2.Control {
     id: del
 
-    required property string mAuthorID
-    required property string mPreviousAuthorID
-    required property string mNextAuthorID
     required property string mID
-    required property string mKind
-    required property string mTimestamp
-
-    required property string mContent
-
-    required property string mImageURL
-    required property string mImageCaption
+    required property string mChatID
+    required property string mNextID
+    required property string mPreviousID
 
     readonly property int recommendedSize: (applicationWindow().wideScreen ? Math.max(del.width / 3, Kirigami.Units.gridUnit * 15) : (del.width * 0.8))
 
-    readonly property bool isOwnMessage: mAuthorID === tClient.ownID
-    readonly property bool showAvatar: (mNextAuthorID != mAuthorID) && (!(Kirigami.Settings.isMobile && isOwnMessage))
-    readonly property bool separateFromPrevious: mPreviousAuthorID != mAuthorID
+    readonly property bool isOwnMessage: messageData.data.authorID === tClient.ownID
+    readonly property bool showAvatar: (nextData.data.authorID != messageData.data.authorID) && (!(Kirigami.Settings.isMobile && isOwnMessage))
+    readonly property bool separateFromPrevious: previousData.data.authorID != messageData.data.authorID
 
     topPadding: del.separateFromPrevious ? Kirigami.Units.largeSpacing : Kirigami.Units.smallSpacing
     bottomPadding: 0
@@ -58,7 +51,7 @@ QQC2.Control {
         }
 
         GlobalComponents.LoaderSwitch {
-            value: del.mKind
+            value: messageData.data.kind
             cases: {
                 "messageText": Qt.resolvedUrl("TextMessage.qml"),
                 "messagePhoto": Qt.resolvedUrl("PhotoMessage.qml"),
@@ -75,10 +68,39 @@ QQC2.Control {
     Layout.fillWidth: true
 
     Tok.RelationalListener {
+        id: messageData
+
+        model: tClient.messagesStore
+        key: [del.mChatID, del.mID]
+        shape: QtObject {
+            required property string authorID
+            required property string kind
+            required property string timestamp
+        }
+    }
+    Tok.RelationalListener {
+        id: previousData
+
+        model: tClient.messagesStore
+        key: [del.mChatID, del.mPreviousID]
+        shape: QtObject {
+            required property string authorID
+        }
+    }
+    Tok.RelationalListener {
+        id: nextData
+
+        model: tClient.messagesStore
+        key: [del.mChatID, del.mNextID]
+        shape: QtObject {
+            required property string authorID
+        }
+    }
+    Tok.RelationalListener {
         id: userData
 
         model: tClient.userDataModel
-        key: del.mAuthorID
+        key: messageData.data.authorID
         shape: QtObject {
             required property string name
             required property string smallAvatar

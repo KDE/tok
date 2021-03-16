@@ -27,6 +27,7 @@ int main(int argc, char* argv[])
 
     qRegisterMetaType<ChatsModel*>();
     qRegisterMetaType<MessagesModel*>();
+    qRegisterMetaType<MessagesStore*>();
     qRegisterMetaType<UserDataModel*>();
     qRegisterMetaType<QSharedPointer<TDApi::file>>();
     qmlRegisterType<QQmlRelationalListener>("org.kde.Tok", 1, 0, "RelationalListener");

@@ -7,6 +7,7 @@
 #include "chatsmodel.h"
 #include "userdata.h"
 #include "defs.h"
+#include "messagesmodel.h"
 
 class Client::Private
 {
@@ -29,6 +30,7 @@ class Client::Private
 
     std::unique_ptr<ChatsModel> m_chatsModel;
     std::unique_ptr<UserDataModel> m_userDataModel;
+    std::unique_ptr<MessagesStore> m_messagesStore;
     std::map<TDApi::int53, std::unique_ptr<MessagesModel>> m_messageModels;
 
     // functions

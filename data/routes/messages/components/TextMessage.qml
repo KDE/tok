@@ -10,6 +10,16 @@ QQC2.Control {
     leftPadding: Kirigami.Units.largeSpacing
     rightPadding: Kirigami.Units.largeSpacing
 
+    Tok.RelationalListener {
+        id: textData
+
+        model: tClient.messagesStore
+        key: [del.mChatID, del.mID]
+        shape: QtObject {
+            required property string content
+        }
+    }
+
     background: Rectangle {
         radius: 4
         color: Kirigami.Theme.backgroundColor
@@ -20,7 +30,7 @@ QQC2.Control {
         }
         QQC2.Label {
             id: timestamp
-            text: del.mTimestamp
+            text: messageData.data.timestamp
             opacity: 0.5
 
             font.pointSize: -1
@@ -45,7 +55,7 @@ QQC2.Control {
         }
         TextEdit {
             id: textEdit
-            text: del.mContent + paddingT
+            text: textData.data.content + paddingT
 
             readonly property string paddingT: " ".repeat(Math.ceil(timestamp.implicitWidth / dummy.implicitWidth))
 

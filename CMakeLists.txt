@@ -31,6 +31,7 @@ add_executable(org.kde.Tok
   src/chatsmodel.cpp
 
   src/messagesmodel.cpp
+  src/messagesstore.cpp
 
   src/tgimageprovider.cpp
 
