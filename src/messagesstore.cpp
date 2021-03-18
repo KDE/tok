@@ -28,7 +28,6 @@ MessagesStore::~MessagesStore()
 std::pair<TDApi::int53, TDApi::int53> fromVariant(const QVariant& hi)
 {
     const auto js = hi.value<QJSValue>();
-    qDebug() << js.property(0).toString().toLongLong() << js.property(1).toString().toLongLong();
     return std::make_pair(js.property(0).toString().toLongLong(), js.property(1).toString().toLongLong());
 }
 
