@@ -13,21 +13,25 @@ QQC2.Control {
     required property string mChatID
     required property string mNextID
     required property string mPreviousID
+    required property var index
 
     readonly property int recommendedSize: (applicationWindow().wideScreen ? Math.max(del.width / 3, Kirigami.Units.gridUnit * 15) : (del.width * 0.8))
 
     readonly property bool isOwnMessage: messageData.data.authorID === tClient.ownID
     readonly property bool showAvatar: (nextData.data.authorID != messageData.data.authorID) && (!(Kirigami.Settings.isMobile && isOwnMessage))
     readonly property bool separateFromPrevious: previousData.data.authorID != messageData.data.authorID
+    readonly property bool selected: {
+        return Array.from(messagesSelectionModel.selectedIndexes).includes(lView.model.index(del.index, 0))
+    }
 
     topPadding: del.separateFromPrevious ? Kirigami.Units.largeSpacing : Kirigami.Units.smallSpacing
     bottomPadding: 0
 
     Kirigami.Theme.colorSet: {
+        if (del.selected) {
+            return Kirigami.Theme.Selection
+        }
         return Kirigami.Theme.Button
-        // if (Array.from(messagesSelectionModel.selectedIndexes).includes(modelIndex)) {
-        //     return Kirigami.Theme.Selection
-        // }
         // return messagesRoute.model.userID() == authorID ? Kirigami.Theme.Button : Kirigami.Theme.Window
     }
     Kirigami.Theme.inherit: false

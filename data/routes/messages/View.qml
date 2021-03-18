@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Layouts 1.10
 import QtQuick.Controls 2.12 as QQC2
 import org.kde.kirigami 2.14 as Kirigami
+import QtQml.Models 2.15
 import org.kde.Tok 1.0 as Tok
 
 import "components" as Components
@@ -71,6 +72,33 @@ Kirigami.ScrollablePage {
 
         onVisibleItemsChanged: {
             lView.model.messagesInView(visibleItems)
+        }
+
+        ItemSelectionModel {
+            id: messagesSelectionModel
+            model: lView.model
+        }
+
+        MouseArea {
+            parent: lView.parent
+            anchors.fill: lView
+
+            property var from
+            property var to
+
+            property var previous: {}
+
+            onPressed: (mouse) => {
+                from = lView.indexAt(mouse.x, mouse.y + lView.contentY)
+            }
+            onReleased: (mouse) => {
+                to = lView.indexAt(mouse.x, mouse.y + lView.contentY)
+                let pair = [from, to]
+                pair.sort((a, b) => a-b)
+                for (let i = pair[0]; i <= pair[1]; i++) {
+                    messagesSelectionModel.select(lView.model.index(i, 0), ItemSelectionModel.Toggle)
+                }
+            }
         }
 
         delegate: Components.MessageDelegate {
