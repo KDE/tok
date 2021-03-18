@@ -5,10 +5,14 @@ import org.kde.kirigami 2.14 as Kirigami
 import org.kde.Tok 1.0 as Tok
 
 QQC2.Control {
+    id: textMessageRoot
+
     topPadding: Kirigami.Units.largeSpacing
     bottomPadding: Kirigami.Units.largeSpacing
-    leftPadding: Kirigami.Units.largeSpacing
+    leftPadding: Kirigami.Units.largeSpacing+tailSize
     rightPadding: Kirigami.Units.largeSpacing
+
+    readonly property int tailSize: Kirigami.Units.largeSpacing
 
     Tok.RelationalListener {
         id: textData
@@ -20,10 +24,50 @@ QQC2.Control {
         }
     }
 
-    background: Rectangle {
-        radius: 4
-        color: Kirigami.Theme.backgroundColor
+    background: Item {
+        clip: true
 
+        Rectangle {
+            color: Kirigami.Theme.backgroundColor
+            anchors.fill: tail
+            anchors.topMargin: 4
+            anchors.rightMargin: -textMessageRoot.tailSize
+            visible: del.showAvatar
+        }
+        Kirigami.ShadowedRectangle {
+            id: tail
+
+            visible: del.showAvatar
+            anchors {
+                top: parent.top
+                bottom: parent.bottom
+                left: parent.left
+                leftMargin: -textMessageRoot.tailSize*2
+            }
+            width: textMessageRoot.tailSize*3
+            color: Kirigami.Theme.backgroundColor
+
+            corners {
+                topLeftRadius: 0
+                topRightRadius: 0
+                bottomRightRadius: textMessageRoot.tailSize*10
+                bottomLeftRadius: 0
+            }
+
+            Kirigami.Theme.colorSet: Kirigami.Theme.View
+            Kirigami.Theme.inherit: false
+        }
+        Kirigami.ShadowedRectangle {
+            corners {
+                topLeftRadius: 4
+                topRightRadius: 4
+                bottomRightRadius: 4
+                bottomLeftRadius: 4
+            }
+            color: Kirigami.Theme.backgroundColor
+            anchors.fill: parent
+            anchors.leftMargin: textMessageRoot.tailSize
+        }
         QQC2.Label {
             id: dummy
             text: " "
