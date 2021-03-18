@@ -97,6 +97,7 @@ QQC2.Control {
 
             Layout.fillWidth: true
         }
+        ReplyBlock {}
         TextEdit {
             id: textEdit
             text: textData.data.content + paddingT
