@@ -5,7 +5,7 @@
 #include "client.h"
 #include "internallib/qabstractrelationalmodel.h"
 
-class MessagesStore : public QAbstractRelationalModel
+class MessagesStore : public TokAbstractRelationalModel
 {
     Q_OBJECT
 

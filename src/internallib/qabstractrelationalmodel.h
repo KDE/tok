@@ -3,23 +3,23 @@
 #include <QHash>
 #include <QObject>
 
-class QAbstractRelationalModel : public QObject
+class TokAbstractRelationalModel : public QObject
 {
 
     Q_OBJECT
 
 public:
-    explicit QAbstractRelationalModel(QObject* parent = nullptr)
+    explicit TokAbstractRelationalModel(QObject* parent = nullptr)
         : QObject(parent)
     {
-        connect(this, &QAbstractRelationalModel::keyAdded, this, [this](const QVariant& key) {
+        connect(this, &TokAbstractRelationalModel::keyAdded, this, [this](const QVariant& key) {
             Q_EMIT(keyDataChanged(key, {}));
         });
-        connect(this, &QAbstractRelationalModel::keyRemoved, this, [this](const QVariant& key) {
+        connect(this, &TokAbstractRelationalModel::keyRemoved, this, [this](const QVariant& key) {
             Q_EMIT(keyDataChanged(key, {}));
         });
     }
-    virtual ~QAbstractRelationalModel() {};
+    virtual ~TokAbstractRelationalModel() {};
 
     virtual QVariant data(const QVariant& key, int role = Qt::DisplayRole) = 0;
 

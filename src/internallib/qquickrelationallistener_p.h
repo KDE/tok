@@ -2,18 +2,18 @@
 
 #include "qquickrelationallistener.h"
 
-class QQmlRelationalListenerPrivate
+class TokQmlRelationalListenerPrivate
 {
-    Q_DECLARE_PUBLIC(QQmlRelationalListener)
-    QQmlRelationalListener* q_ptr;
+    Q_DECLARE_PUBLIC(TokQmlRelationalListener)
+    TokQmlRelationalListener* q_ptr;
 
 public:
-    QQmlRelationalListenerPrivate(QQmlRelationalListener* ptr)
+    TokQmlRelationalListenerPrivate(TokQmlRelationalListener* ptr)
         : q_ptr(ptr)
     {
     }
 
-    QPointer<QAbstractRelationalModel> relationalModel = nullptr;
+    QPointer<TokAbstractRelationalModel> relationalModel = nullptr;
     QPointer<QQmlComponent> shape = nullptr;
     QVariant key = QVariant();
     QObject* dataObject = nullptr;

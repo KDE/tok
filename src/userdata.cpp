@@ -9,7 +9,7 @@ enum Roles {
     SmallAvatar,
 };
 
-UserDataModel::UserDataModel(Client* parent) : QAbstractRelationalModel(parent), c(parent)
+UserDataModel::UserDataModel(Client* parent) : TokAbstractRelationalModel(parent), c(parent)
 {
 
 }

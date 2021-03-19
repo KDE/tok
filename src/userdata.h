@@ -9,7 +9,7 @@
 
 class Client;
 
-class UserDataModel : public QAbstractRelationalModel
+class UserDataModel : public TokAbstractRelationalModel
 {
     Q_OBJECT
 

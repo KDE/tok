@@ -2,24 +2,24 @@
 
 #include "qquickrelationallistener_p.h"
 
-QQmlRelationalListener::QQmlRelationalListener(QObject* parent)
+TokQmlRelationalListener::TokQmlRelationalListener(QObject* parent)
     : QObject(parent)
     , QQmlParserStatus()
-    , d_ptr(new QQmlRelationalListenerPrivate(this))
+    , d_ptr(new TokQmlRelationalListenerPrivate(this))
 {
 }
 
-QQmlRelationalListener::~QQmlRelationalListener()
+TokQmlRelationalListener::~TokQmlRelationalListener()
 {
 
 }
 
-void QQmlRelationalListener::componentComplete()
+void TokQmlRelationalListener::componentComplete()
 {
     Q_ASSERT(!d_ptr->shape.isNull());
     Q_ASSERT(d_ptr->shape->isReady());
 
-    connect(d_ptr->relationalModel, &QAbstractRelationalModel::keyDataChanged, this, [this](const QVariant& key, const QVector<int>& roles) {
+    connect(d_ptr->relationalModel, &TokAbstractRelationalModel::keyDataChanged, this, [this](const QVariant& key, const QVector<int>& roles) {
         if (d_ptr->key != key) {
             return;
         }
@@ -32,7 +32,7 @@ void QQmlRelationalListener::componentComplete()
     d_ptr->complete = true;
 }
 
-void QQmlRelationalListener::checkKey()
+void TokQmlRelationalListener::checkKey()
 {
     if (!d_ptr->relationalModel->checkKey(d_ptr->key)) {
         if (d_ptr->relationalModel->canFetchKey(d_ptr->key)) {
@@ -43,7 +43,7 @@ void QQmlRelationalListener::checkKey()
     }
 }
 
-void QQmlRelationalListener::applyChanged(const QVector<int>& roles)
+void TokQmlRelationalListener::applyChanged(const QVector<int>& roles)
 {
     const auto roleNames = d_ptr->relationalModel->roleNames();
     QHash<QByteArray,int> invertedRoleNames;
@@ -89,12 +89,12 @@ void QQmlRelationalListener::applyChanged(const QVector<int>& roles)
     }
 }
 
-QAbstractRelationalModel* QQmlRelationalListener::model() const
+TokAbstractRelationalModel* TokQmlRelationalListener::model() const
 {
     return d_ptr->relationalModel;
 }
 
-void QQmlRelationalListener::setModel(QAbstractRelationalModel* setModel)
+void TokQmlRelationalListener::setModel(TokAbstractRelationalModel* setModel)
 {
     if (setModel == d_ptr->relationalModel) {
         return;
@@ -104,17 +104,17 @@ void QQmlRelationalListener::setModel(QAbstractRelationalModel* setModel)
     Q_EMIT modelChanged();
 }
 
-void QQmlRelationalListener::resetModel()
+void TokQmlRelationalListener::resetModel()
 {
     setModel(nullptr);
 }
 
-QVariant QQmlRelationalListener::key() const
+QVariant TokQmlRelationalListener::key() const
 {
     return d_ptr->key;
 }
 
-void QQmlRelationalListener::setKey(const QVariant& key)
+void TokQmlRelationalListener::setKey(const QVariant& key)
 {
     if (key == d_ptr->key) {
         return;
@@ -127,17 +127,17 @@ void QQmlRelationalListener::setKey(const QVariant& key)
     }
 }
 
-void QQmlRelationalListener::resetKey()
+void TokQmlRelationalListener::resetKey()
 {
     setKey(QVariant());
 }
 
-QQmlComponent* QQmlRelationalListener::shape() const
+QQmlComponent* TokQmlRelationalListener::shape() const
 {
     return d_ptr->shape;
 }
 
-void QQmlRelationalListener::setShape(QQmlComponent* shape)
+void TokQmlRelationalListener::setShape(QQmlComponent* shape)
 {
     if (shape == d_ptr->shape) {
         return;
@@ -147,7 +147,7 @@ void QQmlRelationalListener::setShape(QQmlComponent* shape)
     Q_EMIT shapeChanged();
 }
 
-QObject* QQmlRelationalListener::data() const
+QObject* TokQmlRelationalListener::data() const
 {
     return d_ptr->dataObject;
 }
