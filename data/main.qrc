@@ -3,6 +3,7 @@
         <file>main.qml</file>
 
         <file>components/Header.qml</file>
+        <file>components/PlaintextMessage.qml</file>
         <file>components/LoaderPlus.qml</file>
         <file>components/LoaderSwitch.qml</file>
 

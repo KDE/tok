@@ -35,8 +35,7 @@ Kirigami.ScrollablePage {
             id: del
 
             required property string mTitle
-            required property string mLastMessageAuthorID
-            required property string mLastMessageContent
+            required property string mLastMessageID
             required property string mPhoto
             required property string mID
             required property int    mUnreadCount
@@ -45,30 +44,21 @@ Kirigami.ScrollablePage {
             bottomPadding: Kirigami.Units.largeSpacing
 
             text: mTitle
-            subtitle: {
-                const content = mLastMessageContent.split('\n')[0]
+            subtitle: `${plaintext.hasAuthor ? plaintext.authorName + ": " : ""}${plaintext.onelinePlaintext}`
 
-                if (mLastMessageAuthorID !== "") {
-                    return `${userData.data.name}: ${content}`
-                }
+            Components.PlaintextMessage {
+                id: plaintext
 
-                return content
+                messagesModel: tClient.messagesStore
+                userModel: tClient.userDataModel
+
+                chatID: del.mID
+                messageID: del.mLastMessageID
             }
 
             checked: Kirigami.PageRouter.router.params.chatID === del.mID
             checkable: Kirigami.PageRouter.router.params.chatID === del.mID
             highlighted: false
-
-            Tok.RelationalListener {
-                id: userData
-
-                model: tClient.userDataModel
-                key: del.mLastMessageAuthorID
-                shape: QtObject {
-                    required property string name
-                    required property string smallAvatar
-                }
-            }
 
             leading: Kirigami.Avatar {
                 name: del.mTitle
