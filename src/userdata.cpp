@@ -29,7 +29,7 @@ QVariant UserDataModel::data(const QVariant& key, int role)
 
     switch (Roles(role)) {
     case Roles::Name:
-        return QString::fromStdString(m_userData[id]->first_name_ + " " + m_userData[id]->last_name_);
+        return QString::fromStdString(m_userData[id]->first_name_ + " " + m_userData[id]->last_name_).trimmed();
     case Roles::SmallAvatar:
         if (m_userData[id]->profile_photo_ == nullptr) {
             return QVariant();
