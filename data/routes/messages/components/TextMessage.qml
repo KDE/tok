@@ -102,7 +102,7 @@ QQC2.Control {
             id: textEdit
             text: textData.data.content + paddingT
 
-            readonly property string paddingT: " ".repeat(Math.ceil(timestamp.implicitWidth / dummy.implicitWidth))
+            readonly property string paddingT: " ".repeat(Math.ceil(timestamp.implicitWidth / dummy.implicitWidth)) + "⠀"
 
             readOnly: true
             selectByMouse: true
