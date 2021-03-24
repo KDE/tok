@@ -86,6 +86,10 @@ void ChatsModel::handleUpdate(TDApi::object_ptr<TDApi::Update> u)
                 Q_EMIT dataChanged(index(v), index(v), {});
             },
             [this](TDApi::updateChatLastMessage &update_chat_last_message) {
+                if (!update_chat_last_message.last_message_.get()) {
+                    return;
+                }
+
                 auto id = update_chat_last_message.chat_id_;
 
                 d->chatData[id]->last_message_ = TD::make_tl_object<TDApi::message>();

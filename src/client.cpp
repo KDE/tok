@@ -20,6 +20,7 @@ Client::Client()
     d->m_chatsModel.reset(new ChatsModel(this));
     d->m_userDataModel.reset(new UserDataModel(this));
     d->m_messagesStore.reset(new MessagesStore(this));
+    d->m_notificationManager.reset(new NotificationManager(this));
 
     m_poller = new QTimer;
 

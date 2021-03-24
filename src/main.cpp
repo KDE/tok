@@ -22,8 +22,11 @@ Q_DECLARE_METATYPE(QSharedPointer<TDApi::file>)
 int main(int argc, char* argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    QCoreApplication::setApplicationName("org.kde.Tok");
+    QCoreApplication::setOrganizationName("KDE");
 
     QApplication app(argc, argv);
+    app.setDesktopFileName("org.kde.Tok.desktop");
 
     qRegisterMetaType<ChatsModel*>();
     qRegisterMetaType<MessagesModel*>();
