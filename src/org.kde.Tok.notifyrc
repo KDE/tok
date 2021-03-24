@@ -1,0 +1,11 @@
+[Global]
+IconName=org.kde.Tok
+Name=Tok
+Comment=Telegram Client
+DesktopEntry=org.kde.Tok.desktop
+
+[Event/newMessage]
+Name=New Message
+Comment=You received a message
+Action=Popup
+Urgency=Low

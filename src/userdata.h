@@ -14,11 +14,12 @@ class UserDataModel : public TokAbstractRelationalModel
     Q_OBJECT
 
     Client* c;
-    std::map<std::int32_t,TDApi::object_ptr<TDApi::user>> m_userData;
 
 public:
     UserDataModel(Client* parent);
     ~UserDataModel();
+
+    std::map<std::int32_t,TDApi::object_ptr<TDApi::user>> userData;
 
     void handleUpdate(TDApi::object_ptr<TDApi::Update> u);
 

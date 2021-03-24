@@ -20,6 +20,7 @@ Client::Client()
     d->m_chatsModel.reset(new ChatsModel(this));
     d->m_userDataModel.reset(new UserDataModel(this));
     d->m_messagesStore.reset(new MessagesStore(this));
+    d->m_notificationManager.reset(new NotificationManager(this));
 
     m_poller = new QTimer;
 
@@ -83,4 +84,15 @@ UserDataModel* Client::userDataModel() const
 MessagesStore* Client::messagesStore() const
 {
     return d->m_messagesStore.get();
+}
+
+bool Client::online() const
+{
+    return d->online;
+}
+
+void Client::setOnline(bool online)
+{
+    d->online = online;
+    call<TDApi::setOption>([](TDApi::setOption::ReturnType) {}, "online", TDApi::make_object<TDApi::optionValueBoolean>(online));
 }

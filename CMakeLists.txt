@@ -18,6 +18,7 @@ set(REQUIRED_QT_VERSION 5.15.0)
 find_package(Qt5 COMPONENTS Core Quick Widgets Concurrent REQUIRED)
 find_package(KF5Kirigami2 REQUIRED)
 find_package(KF5I18n REQUIRED)
+find_package(KF5Notifications REQUIRED)
 find_package(Td 1.7.2 REQUIRED)
 
 add_executable(org.kde.Tok
@@ -32,6 +33,9 @@ add_executable(org.kde.Tok
 
   src/messagesmodel.cpp
   src/messagesstore.cpp
+
+  src/extractinator.cpp
+  src/notificationmanager.cpp
 
   src/tgimageprovider.cpp
 
@@ -48,8 +52,10 @@ target_compile_definitions(org.kde.Tok
 target_link_libraries(org.kde.Tok
   PRIVATE
     Qt5::Core Qt5::Widgets Qt5::Quick Qt5::Concurrent
-    KF5::Kirigami2 KF5::I18n
+    KF5::Kirigami2 KF5::I18n KF5::Notifications
     Td::TdStatic
 )
 
 install(TARGETS org.kde.Tok DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(FILES src/org.kde.Tok.notifyrc DESTINATION ${CMAKE_INSTALL_DATADIR}/knotifications5)
+install(FILES src/org.kde.Tok.desktop DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)

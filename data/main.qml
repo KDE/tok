@@ -13,6 +13,12 @@ Kirigami.RouterWindow {
 
     pageStack.globalToolBar.style: Kirigami.ApplicationHeaderStyle.None
 
+    property Binding binding: Binding {
+        target: tClient
+        property: "online"
+        value: rootWindow.active
+    }
+
     property Connections conns: Connections {
         target: tClient
         function onPhoneNumberRequested() {

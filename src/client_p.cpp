@@ -96,6 +96,9 @@ void Client::Private::handleAuthorizationStateUpdate(TDApi::updateAuthorizationS
                 const auto appdataLocation = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
                 const auto tokLocation = QDir::cleanPath(appdataLocation + QDir::separator() + "org.kde.Tok");
 
+                q->call<TDApi::setOption>([](TDApi::setOption::ReturnType) {}, "notification_group_count_max", TDApi::make_object<TDApi::optionValueInteger>(5));
+                q->call<TDApi::setOption>([](TDApi::setOption::ReturnType) {}, "notification_group_size_max", TDApi::make_object<TDApi::optionValueInteger>(10));
+
                 parameters->database_directory_ = tokLocation.toStdString();
                 parameters->use_message_database_ = true;
                 parameters->use_secret_chats_ = true;
@@ -113,6 +116,22 @@ void Client::Private::handleUpdate(TDApi::object_ptr<TDApi::Object> update)
 {
     TDApi::downcast_call(*update,
         overloaded(
+            [this, &update](TDApi::updateActiveNotifications& upd) {
+                auto mv = TDApi::move_object_as<TDApi::updateActiveNotifications>(update);
+                m_notificationManager->handleUpdateActiveNotifications(std::move(mv));
+            },
+            [this, &update](TDApi::updateNotificationGroup& upd) {
+                auto mv = TDApi::move_object_as<TDApi::updateNotificationGroup>(update);
+                m_notificationManager->handleUpdateNotificationGroup(std::move(mv));
+            },
+            [this, &update](TDApi::updateNotification& upd) {
+                auto mv = TDApi::move_object_as<TDApi::updateNotification>(update);
+                m_notificationManager->handleUpdateNotification(std::move(mv));
+            },
+            [this, &update](TDApi::updateHavePendingNotifications& upd) {
+                auto mv = TDApi::move_object_as<TDApi::updateHavePendingNotifications>(update);
+                m_notificationManager->handleUpdateHavePendingNotifications(std::move(mv));
+            },
             [this](TDApi::updateAuthorizationState& upd_state) {
                 handleAuthorizationStateUpdate(upd_state);
             },

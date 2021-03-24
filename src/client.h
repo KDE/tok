@@ -25,6 +25,7 @@ class Client : public QObject
     Q_PROPERTY(ChatsModel* chatsModel READ chatsModel CONSTANT)
     Q_PROPERTY(UserDataModel* userDataModel READ userDataModel CONSTANT)
     Q_PROPERTY(MessagesStore* messagesStore READ messagesStore CONSTANT)
+    Q_PROPERTY(bool online READ online WRITE setOnline NOTIFY onlineChanged)
     Q_PROPERTY(QString ownID READ ownID CONSTANT)
 
     class Private;
@@ -75,6 +76,10 @@ public:
     UserDataModel* userDataModel() const;
     MessagesStore* messagesStore() const;
     QString ownID() const;
+
+    bool online() const;
+    void setOnline(bool online);
+    Q_SIGNAL void onlineChanged();
 
     Q_SIGNAL void loggedIn();
     Q_SIGNAL void loggedOut();

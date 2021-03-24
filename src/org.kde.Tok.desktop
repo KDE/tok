@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Tok
+Exec=org.kde.Tok
+Comment=Telegram client
+Categories=Network
+GenericName=Instant Messaging
+Icon=org.kde.Tok
