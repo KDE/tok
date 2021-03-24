@@ -102,6 +102,16 @@ QQC2.Control {
             id: textEdit
             text: textData.data.content + paddingT
 
+            Connections {
+                id: conns
+
+                target: textData.data
+                function onContentChanged() {
+                    textData.model.format(textData.key, textEdit.textDocument)
+                }
+            }
+            Component.onCompleted: conns.onContentChanged()
+
             readonly property string paddingT: " ".repeat(Math.ceil(timestamp.implicitWidth / dummy.implicitWidth)) + "⠀"
 
             readOnly: true

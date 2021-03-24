@@ -1,4 +1,8 @@
+#include <QTextCursor>
+#include <QTextDocument>
+#include <QTextDocumentFragment>
 #include <QJSValue>
+#include <QQuickTextDocument>
 
 #include "messagesmodel_p.h"
 
@@ -38,6 +42,57 @@ void MessagesStore::newMessage(TDApi::object_ptr<TDApi::message> msg)
     mu << QString::number(msg->chat_id_) << QString::number(msg->id_);
     d->messageData[std::make_pair(msg->chat_id_, msg->id_)] = std::move(msg);
     Q_EMIT keyAdded(mu);
+}
+
+void MessagesStore::format(const QVariant &key, QQuickTextDocument* doc)
+{
+    if (!checkKey(key)) {
+        return;
+    }
+
+    auto mID = fromVariant(key);
+
+    auto content = d->messageData[mID]->content_.get();
+    if (content->get_id() != TDApi::messageText::ID) {
+        return;
+    }
+
+    auto format = static_cast<TDApi::messageText*>(content)->text_.get();
+
+    auto doku = doc->textDocument();
+    QTextCursor curs(doku);
+
+    qDebug() << QString::fromStdString(format->text_);
+
+    for (const auto& ent : format->entities_) {
+        curs.setPosition(ent->offset_, QTextCursor::MoveAnchor);
+        curs.setPosition(ent->offset_ + ent->length_, QTextCursor::KeepAnchor);
+
+        using namespace TDApi;
+
+        switch (ent->type_->get_id()) {
+        case textEntityTypeBold::ID: {
+            QTextCharFormat format;
+            format.setFontWeight(QFont::Bold);
+            curs.setCharFormat(format);
+            break;
+        }
+        case textEntityTypeUnderline::ID: {
+            QTextCharFormat format;
+            format.setFontUnderline(true);
+            curs.setCharFormat(format);
+            break;
+        }
+        case textEntityTypeItalic::ID: {
+            QTextCharFormat format;
+            format.setFontItalic(true);
+            curs.setCharFormat(format);
+            break;
+        }
+        }
+    }
+
+    return;
 }
 
 QVariant MessagesStore::data(const QVariant& key, int role)
