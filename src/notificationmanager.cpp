@@ -33,7 +33,6 @@ void NotificationManager::handleUpdateNotificationGroup(TDApi::object_ptr<TDApi:
                 auto [title, body] = Extractinator::extract(c, msg->message_.get());
                 notif->setTitle(title);
                 notif->setText(body);
-                // notif->setHint("resident", true);
 
                 auto reply = std::make_unique<KNotificationReplyAction>(i18n("Reply"));
                 reply->setPlaceholderText(i18n("Reply to %1...", title));
@@ -49,7 +48,7 @@ void NotificationManager::handleUpdateNotificationGroup(TDApi::object_ptr<TDApi:
 
                     c->callP<TDApi::sendMessage>( [=](TDApi::sendMessage::ReturnType t) {}, std::move(send_message) );
                 });
-                // notif->setReplyAction(std::move(reply));
+                notif->setReplyAction(std::move(reply));
 
             endhandle
         endmatch
