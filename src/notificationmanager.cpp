@@ -1,5 +1,8 @@
 #include <KNotification>
+#include <KNotificationReplyAction>
+#include <KLocalizedString>
 
+#include "extractinator.h"
 #include "notificationmanager_p.h"
 
 NotificationManager::NotificationManager(Client* c) : c(c), d(new Private)
@@ -12,12 +15,6 @@ NotificationManager::~NotificationManager()
 
 }
 
-#define match(n) { auto& _matchIt = n; switch(n->get_id()) {
-#define endmatch } }
-
-#define handle(c, v) case c::ID: { auto v = static_cast<c*>(_matchIt.get());
-#define endhandle }
-
 void NotificationManager::handleUpdateActiveNotifications(TDApi::object_ptr<TDApi::updateActiveNotifications> activeNotifications)
 {
 }
@@ -27,19 +24,39 @@ void NotificationManager::handleUpdateNotificationGroup(TDApi::object_ptr<TDApi:
     for (auto& n : notificationGroup->added_notifications_) {
         using namespace TDApi;
 
+        KNotification *notif = nullptr;
+
         match (n->type_)
-            handle (notificationTypeNewMessage, msg)
-                match (msg->message_->content_)
-                    handle (messageText, tmsg)
-                        auto notif = new KNotification("newMessage");
-                        notif->setText(QString::fromStdString(tmsg->text_->text_));
-                        notif->setHint("resident", true);
-                        notif->sendEvent();
-                    endhandle
-                endmatch
+            handleCase (notificationTypeNewMessage, msg)
+
+                notif = new KNotification("newMessage");
+                auto [title, body] = Extractinator::extract(c, msg->message_.get());
+                notif->setTitle(title);
+                notif->setText(body);
+                // notif->setHint("resident", true);
+
+                auto reply = std::make_unique<KNotificationReplyAction>(i18n("Reply"));
+                reply->setPlaceholderText(i18n("Reply to %1...", title));
+                QObject::connect(reply.get(), &KNotificationReplyAction::replied, c, [this, chatID = msg->message_->chat_id_](const QString& reply) {
+                    qDebug() << "replied!";
+
+                    auto send_message = TDApi::make_object<TDApi::sendMessage>();
+                    send_message->chat_id_ = chatID;
+                    auto message_content = TDApi::make_object<TDApi::inputMessageText>();
+                    message_content->text_ = TDApi::make_object<TDApi::formattedText>();
+                    message_content->text_->text_ = reply.toStdString();
+                    send_message->input_message_content_ = std::move(message_content);
+
+                    c->callP<TDApi::sendMessage>( [=](TDApi::sendMessage::ReturnType t) {}, std::move(send_message) );
+                });
+                // notif->setReplyAction(std::move(reply));
+
             endhandle
         endmatch
 
+        if (notif != nullptr) {
+            notif->sendEvent();
+        }
     }
 }
 

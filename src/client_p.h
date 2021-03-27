@@ -15,6 +15,8 @@ class Client::Private
     friend class Client;
     Client* q;
 
+    bool online;
+
     // members
 
     TDApi::int53 m_ownID;

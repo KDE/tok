@@ -85,3 +85,14 @@ MessagesStore* Client::messagesStore() const
 {
     return d->m_messagesStore.get();
 }
+
+bool Client::online() const
+{
+    return d->online;
+}
+
+void Client::setOnline(bool online)
+{
+    d->online = online;
+    call<TDApi::setOption>([](TDApi::setOption::ReturnType) {}, "online", TDApi::make_object<TDApi::optionValueBoolean>(online));
+}

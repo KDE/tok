@@ -29,12 +29,12 @@ QVariant UserDataModel::data(const QVariant& key, int role)
 
     switch (Roles(role)) {
     case Roles::Name:
-        return QString::fromStdString(m_userData[id]->first_name_ + " " + m_userData[id]->last_name_).trimmed();
+        return QString::fromStdString(userData[id]->first_name_ + " " + userData[id]->last_name_).trimmed();
     case Roles::SmallAvatar:
-        if (m_userData[id]->profile_photo_ == nullptr) {
+        if (userData[id]->profile_photo_ == nullptr) {
             return QVariant();
         }
-        return QString("image://telegram/%1").arg(m_userData[id]->profile_photo_->small_->id_);
+        return QString("image://telegram/%1").arg(userData[id]->profile_photo_->small_->id_);
     }
 
     Q_UNREACHABLE();
@@ -42,7 +42,7 @@ QVariant UserDataModel::data(const QVariant& key, int role)
 
 bool UserDataModel::checkKey(const QVariant& key)
 {
-    return m_userData.contains(key.toString().toLong());
+    return userData.contains(key.toString().toLong());
 }
 
 bool UserDataModel::canFetchKey(const QVariant& key)
@@ -56,7 +56,7 @@ void UserDataModel::fetchKey(const QVariant& key)
 {
     c->call<TDApi::getUser>(
         [this, key](TDApi::getUser::ReturnType t) {
-            m_userData[key.toString().toLong()] = std::move(t);
+            userData[key.toString().toLong()] = std::move(t);
             keyAdded(key);
         },
         key.toString().toLong()
@@ -79,8 +79,8 @@ void UserDataModel::handleUpdate(TDApi::object_ptr<TDApi::Update> u)
         overloaded(
             [this](TDApi::updateUser &update_user) {
                 auto id = update_user.user_->id_;
-                auto contained = m_userData.contains(id);
-                m_userData[id] = std::move(update_user.user_);
+                auto contained = userData.contains(id);
+                userData[id] = std::move(update_user.user_);
                 if (contained) {
                     Q_EMIT keyDataChanged(QString::number(id), {});
                 } else {

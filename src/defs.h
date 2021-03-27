@@ -19,3 +19,11 @@ namespace TD = td;
 namespace TDApi = TD::td_api;
 
 using TObject = TDApi::object_ptr<TDApi::Object>;
+
+#define match(n) { auto& _matchIt = n; switch(n->get_id()) {
+#define endmatch } }
+
+#define handleCase(c, v) case c::ID: { auto v = static_cast<c*>(_matchIt.get());
+#define endhandle break; }
+
+#define getOrRet(var, thing, retValue) auto var = thing.get(); if (!var) { return retValue; };
