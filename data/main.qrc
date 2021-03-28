@@ -6,6 +6,7 @@
         <file>components/PlaintextMessage.qml</file>
         <file>components/LoaderPlus.qml</file>
         <file>components/LoaderSwitch.qml</file>
+        <file>components/ImagePopup.qml</file>
 
         <file>routes/Chats.qml</file>
 

@@ -11,5 +11,5 @@ LoaderPlus {
         }
         return this.cases[this.value]
     }
-    onStatusChanged: if (this.status == Loader.Error) Qt.quit()
+    onStatusChanged: if (this.status == Loader.Error) Qt.quit(1)
 }

@@ -1,9 +1,11 @@
-import QtQuick 2.10
+import QtQuick 2.15
 import QtQuick.Layouts 1.10
 import QtGraphicalEffects 1.15
 import QtQuick.Controls 2.12 as QQC2
 import org.kde.kirigami 2.12 as Kirigami
 import org.kde.Tok 1.0 as Tok
+
+import "qrc:/components" as Components
 
 Image {
     id: image
@@ -14,6 +16,18 @@ Image {
 
     smooth: true
     mipmap: true
+
+    HoverHandler {
+        cursorShape: Qt.PointingHandCursor
+    }
+    TapHandler {
+        onTapped: imagePopup.open()
+    }
+
+    Components.ImagePopup {
+        id: imagePopup
+        source: image.source
+    }
 
     Tok.RelationalListener {
         id: imageData
