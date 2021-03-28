@@ -1,3 +1,8 @@
+#include <QQmlEngine>
+#include <QJsonValue>
+#include <QJsonArray>
+#include <QJSValue>
+
 #include <cstring>
 
 #include "qquickrelationallistener_p.h"
@@ -14,13 +19,26 @@ TokQmlRelationalListener::~TokQmlRelationalListener()
 
 }
 
+auto normaliseVariant(const QVariant& variant) -> QVariant
+{
+    if (variant.canConvert<QJSValue>()) {
+        return variant.value<QJSValue>().toVariant();
+    } else if (variant.canConvert<QJsonArray>()) {
+        return variant.value<QJsonArray>().toVariantList();
+    } else if (variant.canConvert<QJsonValue>()) {
+        return variant.value<QJsonValue>().toVariant();
+    } else {
+        return variant;
+    }
+}
+
 void TokQmlRelationalListener::componentComplete()
 {
     Q_ASSERT(!d_ptr->shape.isNull());
     Q_ASSERT(d_ptr->shape->isReady());
 
     connect(d_ptr->relationalModel, &TokAbstractRelationalModel::keyDataChanged, this, [this](const QVariant& key, const QVector<int>& roles) {
-        if (d_ptr->key != key) {
+        if (d_ptr->key != normaliseVariant(key)) {
             return;
         }
 
@@ -120,7 +138,7 @@ void TokQmlRelationalListener::setKey(const QVariant& key)
         return;
     }
 
-    d_ptr->key = key;
+    d_ptr->key = normaliseVariant(key);
     Q_EMIT keyChanged();
     if (d_ptr->complete) {
         checkKey();
