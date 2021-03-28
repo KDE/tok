@@ -1,5 +1,5 @@
 # Pressing Todo
 
-- Metadata (desktop files, appdata, etc.)
-- Being able to send/receive messages
+- Sending media
+- Implementing delegates for all the message types
 - App icon
