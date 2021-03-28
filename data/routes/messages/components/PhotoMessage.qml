@@ -1,10 +1,13 @@
 import QtQuick 2.10
 import QtQuick.Layouts 1.10
+import QtGraphicalEffects 1.15
 import QtQuick.Controls 2.12 as QQC2
 import org.kde.kirigami 2.12 as Kirigami
 import org.kde.Tok 1.0 as Tok
 
 Image {
+    id: image
+
     source: imageData.data.imageURL
 
     readonly property real ratio: width / implicitWidth
@@ -48,6 +51,17 @@ Image {
         }
     }
 
+    layer.enabled: true
+    layer.effect: OpacityMask {
+        maskSource: Rectangle {
+            color: "red"
+            radius: 4
+            width: image.width
+            height: image.height
+        }
+    }
+
     Layout.preferredHeight: implicitHeight * ratio
     Layout.maximumWidth: del.recommendedSize
+    Layout.leftMargin: Kirigami.Units.largeSpacing
 }
