@@ -1,22 +1,25 @@
 #include "client.h"
 #include "defs.h"
 #include "overloader.h"
+#include <KLocalizedString>
+#include <td/telegram/td_api.h>
 
 #include "userdata.h"
 
 enum Roles {
     Name = Qt::UserRole,
     SmallAvatar,
+    Bio,
 };
 
-UserDataModel::UserDataModel(Client* parent) : TokAbstractRelationalModel(parent), c(parent)
+UserDataModel::UserDataModel(Client* parent)
+    : TokAbstractRelationalModel(parent)
+    , c(parent)
 {
-
 }
 
 UserDataModel::~UserDataModel()
 {
-
 }
 
 QVariant UserDataModel::data(const QVariant& key, int role)
@@ -27,7 +30,20 @@ QVariant UserDataModel::data(const QVariant& key, int role)
 
     auto id = key.toString().toLong();
 
+    using namespace TDApi;
+
     switch (Roles(role)) {
+    case Roles::Bio:
+        if (!fullUserData.contains(id)) {
+            c->call<getUserFullInfo>(
+                [this, id = id](getUserFullInfo::ReturnType ret) {
+                    fullUserData[id] = std::move(ret);
+                    Q_EMIT keyAdded(QString::number(id));
+                },
+                id);
+            return i18n("Loading...");
+        }
+        return QString::fromStdString(fullUserData[id]->bio_);
     case Roles::Name:
         return QString::fromStdString(userData[id]->first_name_ + " " + userData[id]->last_name_).trimmed();
     case Roles::SmallAvatar:
@@ -59,16 +75,16 @@ void UserDataModel::fetchKey(const QVariant& key)
             userData[key.toString().toLong()] = std::move(t);
             keyAdded(key);
         },
-        key.toString().toLong()
-    );
+        key.toString().toLong());
 }
 
 QHash<int, QByteArray> UserDataModel::roleNames()
 {
-    QHash<int,QByteArray> ret;
+    QHash<int, QByteArray> ret;
 
     ret[Roles::Name] = "name";
     ret[Roles::SmallAvatar] = "smallAvatar";
+    ret[Roles::Bio] = "bio";
 
     return ret;
 }
@@ -77,7 +93,7 @@ void UserDataModel::handleUpdate(TDApi::object_ptr<TDApi::Update> u)
 {
     TDApi::downcast_call(*u,
         overloaded(
-            [this](TDApi::updateUser &update_user) {
+            [this](TDApi::updateUser& update_user) {
                 auto id = update_user.user_->id_;
                 auto contained = userData.contains(id);
                 userData[id] = std::move(update_user.user_);
@@ -87,5 +103,17 @@ void UserDataModel::handleUpdate(TDApi::object_ptr<TDApi::Update> u)
                     Q_EMIT keyAdded(QString::number(id));
                 }
             },
-            [](auto& update) { qWarning() << "unhandled userdatamodel update" << QString::fromStdString(TDApi::to_string(update)); }));
+            [this](TDApi::updateUserFullInfo& update_user_full_info) {
+                auto id = update_user_full_info.user_id_;
+                auto contained = userData.contains(id);
+                fullUserData[id] = std::move(update_user_full_info.user_full_info_);
+                if (contained) {
+                    Q_EMIT keyDataChanged(QString::number(id), {});
+                } else {
+                    Q_EMIT keyAdded(QString::number(id));
+                }
+            },
+            [](auto& update) {
+                qWarning() << "unhandled userdatamodel update" << QString::fromStdString(TDApi::to_string(update));
+            }));
 }

@@ -7,6 +7,7 @@
         <file>components/LoaderPlus.qml</file>
         <file>components/LoaderSwitch.qml</file>
         <file>components/ImagePopup.qml</file>
+        <file>components/UserDataSheet.qml</file>
 
         <file>routes/Chats.qml</file>
 

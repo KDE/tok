@@ -2,6 +2,7 @@
 
 #include <QObject>
 #include <QQmlParserStatus>
+#include <td/telegram/td_api.h>
 
 #include "defs.h"
 #include "client.h"
@@ -20,6 +21,7 @@ public:
     ~UserDataModel();
 
     std::map<std::int32_t,TDApi::object_ptr<TDApi::user>> userData;
+    std::map<std::int32_t,TDApi::object_ptr<TDApi::userFullInfo>> fullUserData;
 
     void handleUpdate(TDApi::object_ptr<TDApi::Update> u);
 

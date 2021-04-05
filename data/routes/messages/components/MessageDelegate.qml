@@ -43,6 +43,15 @@ QQC2.Control {
             // visible yoinks from layout, which isn't what we want.
             opacity: del.showAvatar ? 1 : 0
 
+            HoverHandler {
+                cursorShape: Qt.PointingHandCursor
+            }
+            TapHandler {
+                onTapped: __userDataSheet.open()
+            }
+
+            GlobalComponents.UserDataSheet { id: __userDataSheet; userID: messageData.data.authorID || "" }
+
             Layout.alignment: Qt.AlignBottom
         }
 

@@ -50,6 +50,9 @@ public:
                 qDebug() << "Error:" << error->code_ << QString::fromStdString(error->message_);
                 return;
             }
+            if (cb == nullptr) {
+                return;
+            }
 
             auto object = typename Fn::ReturnType(static_cast<typename Fn::ReturnType::pointer>(t.release()));
             cb(std::move(object));
@@ -64,6 +67,9 @@ public:
             if (t->get_id() == TDApi::error::ID) {
                 auto error = TDApi::move_object_as<TDApi::error>(t);
                 qDebug() << "Error:" << error->code_ << QString::fromStdString(error->message_);
+                return;
+            }
+            if (cb == nullptr) {
                 return;
             }
 
