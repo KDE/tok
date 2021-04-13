@@ -14,6 +14,7 @@
 #include "keys.h"
 #include "tgimageprovider.h"
 #include "userdata.h"
+#include "util.h"
 
 #include "internallib/qquickrelationallistener.h"
 
@@ -24,6 +25,8 @@ int main(int argc, char* argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QCoreApplication::setApplicationName("org.kde.Tok");
     QCoreApplication::setOrganizationName("KDE");
+
+    Executor::instance();
 
     QApplication app(argc, argv);
     app.setDesktopFileName("org.kde.Tok.desktop");

@@ -31,8 +31,6 @@ class Client : public QObject
     class Private;
     std::unique_ptr<Private> d;
 
-    QTimer* m_poller;
-
 private:
     void sendQuery(TDApi::object_ptr<TDApi::Function> fn, std::function<void(TObject)> handler);
 

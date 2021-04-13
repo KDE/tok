@@ -22,12 +22,7 @@ Client::Client()
     d->m_messagesStore.reset(new MessagesStore(this));
     d->m_notificationManager.reset(new NotificationManager(this));
 
-    m_poller = new QTimer;
-
-    QObject::connect(m_poller, &QTimer::timeout, m_poller, [this] {
-        d->poll();
-    });
-    m_poller->start(0);
+    d->poll();
 
 }
 

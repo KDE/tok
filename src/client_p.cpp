@@ -6,8 +6,12 @@
 #include "keys.h"
 #include "overloader.h"
 #include "messagesmodel_p.h"
+#include "src/util.h"
 #include <qstandardpaths.h>
+#include <td/telegram/Client.h>
 #include <td/telegram/td_api.h>
+
+#include <QtConcurrent>
 
 std::uint64_t Client::Private::nextQueryID()
 {
@@ -187,11 +191,19 @@ void Client::Private::handleResponse(TD::ClientManager::Response response)
 
 void Client::Private::poll()
 {
-    auto response = m_clientManager->receive(0);
+    QtConcurrent::run([this] {
+        while (true) {
+            auto response = m_clientManager->receive(10);
 
-    if (response.object) {
-        handleResponse(std::move(response));
-    }
+            if (response.object) {
+                runOnMainThread([this, resp = new TD::ClientManager::Response(std::move(response))] {
+                    auto mu = TD::ClientManager::Response(std::move(*resp));
+                    delete resp;
+                    handleResponse(std::move(mu));
+                });
+            }
+        }
+    });
 }
 
 Client::Private::Private(Client* parent)
