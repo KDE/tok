@@ -62,8 +62,6 @@ void MessagesStore::format(const QVariant &key, QQuickTextDocument* doc)
     auto doku = doc->textDocument();
     QTextCursor curs(doku);
 
-    qDebug() << QString::fromStdString(format->text_);
-
     for (const auto& ent : format->entities_) {
         curs.setPosition(ent->offset_, QTextCursor::MoveAnchor);
         curs.setPosition(ent->offset_ + ent->length_, QTextCursor::KeepAnchor);
