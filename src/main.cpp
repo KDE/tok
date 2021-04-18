@@ -8,6 +8,7 @@
 
 #include <KLocalizedContext>
 
+#include "chatsstore.h"
 #include "chatsmodel.h"
 #include "messagesmodel.h"
 #include "client.h"
@@ -35,6 +36,7 @@ int main(int argc, char* argv[])
     qRegisterMetaType<MessagesModel*>();
     qRegisterMetaType<MessagesStore*>();
     qRegisterMetaType<UserDataModel*>();
+    qRegisterMetaType<ChatsStore*>();
     qRegisterMetaType<QSharedPointer<TDApi::file>>();
     qmlRegisterType<TokQmlRelationalListener>("org.kde.Tok", 1, 0, "RelationalListener");
 

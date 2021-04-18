@@ -14,6 +14,7 @@
 #include "defs.h"
 
 class ChatsModel;
+class ChatsStore;
 class MessagesModel;
 class UserDataModel;
 class MessagesStore;
@@ -22,6 +23,7 @@ class Client : public QObject
 {
     Q_OBJECT
 
+    Q_PROPERTY(ChatsStore* chatsStore READ chatsStore CONSTANT)
     Q_PROPERTY(ChatsModel* chatsModel READ chatsModel CONSTANT)
     Q_PROPERTY(UserDataModel* userDataModel READ userDataModel CONSTANT)
     Q_PROPERTY(MessagesStore* messagesStore READ messagesStore CONSTANT)
@@ -78,6 +80,7 @@ public:
 
     ChatsModel* chatsModel() const;
     UserDataModel* userDataModel() const;
+    ChatsStore* chatsStore() const;
     MessagesStore* messagesStore() const;
     QString ownID() const;
 

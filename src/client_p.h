@@ -5,6 +5,7 @@
 
 #include "client.h"
 #include "chatsmodel.h"
+#include "chatsstore.h"
 #include "userdata.h"
 #include "notificationmanager.h"
 #include "defs.h"
@@ -32,6 +33,7 @@ class Client::Private
     // child managers
 
     std::unique_ptr<ChatsModel> m_chatsModel;
+    std::unique_ptr<ChatsStore> m_chatsStore;
     std::unique_ptr<UserDataModel> m_userDataModel;
     std::unique_ptr<MessagesStore> m_messagesStore;
     std::unique_ptr<NotificationManager> m_notificationManager;

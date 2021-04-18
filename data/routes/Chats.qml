@@ -25,25 +25,34 @@ Kirigami.ScrollablePage {
     }
 
     ListView {
-        model: KSortFilterProxyModel {
-            sourceModel: tClient.chatsModel
+        model: tClient.chatsModel /* KSortFilterProxyModel {
+            sourceModel: 
             filterString: searchField.text
             filterRole: "mTitle"
-        }
+        } */
 
         delegate: Kirigami.BasicListItem {
             id: del
 
-            required property string mTitle
-            required property string mLastMessageID
-            required property string mPhoto
             required property string mID
-            required property int    mUnreadCount
+
+            Tok.RelationalListener {
+                id: chatData
+
+                model: tClient.chatsStore
+                key: del.mID
+                shape: QtObject {
+                    required property string mTitle
+                    required property string mLastMessageID
+                    required property string mPhoto
+                    required property int    mUnreadCount
+                }
+            }
 
             topPadding: Kirigami.Units.largeSpacing
             bottomPadding: Kirigami.Units.largeSpacing
 
-            text: mTitle
+            text: chatData.data.mTitle
             subtitle: `${plaintext.hasAuthor ? plaintext.authorName + ": " : ""}${plaintext.onelinePlaintext}`
 
             Components.PlaintextMessage {
@@ -53,7 +62,7 @@ Kirigami.ScrollablePage {
                 userModel: tClient.userDataModel
 
                 chatID: del.mID
-                messageID: del.mLastMessageID
+                messageID: chatData.data.mLastMessageID
             }
 
             checked: Kirigami.PageRouter.router.params.chatID === del.mID
@@ -61,15 +70,15 @@ Kirigami.ScrollablePage {
             highlighted: false
 
             leading: Kirigami.Avatar {
-                name: del.mTitle
-                source: del.mPhoto
+                name: chatData.data.mTitle
+                source: chatData.data.mPhoto
 
                 width: height
             }
             trailing: RowLayout {
                 QQC2.Label {
-                    text: del.mUnreadCount
-                    visible: del.mUnreadCount > 0
+                    text: chatData.data.mUnreadCount
+                    visible: chatData.data.mUnreadCount > 0
                     padding: Kirigami.Units.smallSpacing
 
                     horizontalAlignment: Qt.AlignHCenter

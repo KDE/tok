@@ -19,10 +19,20 @@ Kirigami.ScrollablePage {
         lView.model = tClient.messagesModel(pageRoot.chatID)
     }
 
+    Tok.RelationalListener {
+        id: chatData
+
+        model: tClient.chatsStore
+        key: pageRoot.chatID
+        shape: QtObject {
+            required property string mTitle
+        }
+    }
+
     header: GlobalComponents.Header {
         Kirigami.Heading {
             level: 4
-            text: pageRoot.chatID
+            text: chatData.data.mTitle
 
             verticalAlignment: Text.AlignVCenter
             Layout.fillHeight: true

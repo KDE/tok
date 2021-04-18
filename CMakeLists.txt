@@ -35,6 +35,7 @@ add_executable(org.kde.Tok
 
   src/messagesmodel.cpp
   src/messagesstore.cpp
+  src/chatsstore.cpp
 
   src/extractinator.cpp
   src/notificationmanager.cpp
