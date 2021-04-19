@@ -133,13 +133,37 @@ void MessagesModel::messagesInView(QVariantList list)
     );
 }
 
+static auto format(const QString& txt)
+{
+    auto text = txt.toStdString();
+
+    auto textParseMarkdown = TDApi::make_object<TDApi::textParseModeMarkdown>( 2 );
+    auto parseTextEntities = TDApi::make_object<TDApi::parseTextEntities>( text, std::move( textParseMarkdown ) );
+
+    td::Client::Request parseRequest { 123, std::move( parseTextEntities ) };
+    auto parseResponse = td::Client::execute( std::move( parseRequest ) );
+
+    auto formattedText = TDApi::make_object<TDApi::formattedText>();
+
+    if ( parseResponse.object->get_id() == TDApi::formattedText::ID )
+    {
+        formattedText = TDApi::move_object_as<TDApi::formattedText>( parseResponse.object );
+    }
+    else
+    {
+        std::vector<TDApi::object_ptr<TDApi::textEntity>> entities;
+        formattedText = TDApi::make_object<TDApi::formattedText>( text, std::move(entities) );
+    }
+
+    return formattedText;
+}
+
 void MessagesModel::send(const QString& contents)
 {
     auto send_message = TDApi::make_object<TDApi::sendMessage>();
     send_message->chat_id_ = d->id;
     auto message_content = TDApi::make_object<TDApi::inputMessageText>();
-    message_content->text_ = TDApi::make_object<TDApi::formattedText>();
-    message_content->text_->text_ = contents.toStdString();
+    message_content->text_ = format(contents);
     send_message->input_message_content_ = std::move(message_content);
 
     c->callP<TDApi::sendMessage>(
