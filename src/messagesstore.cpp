@@ -87,6 +87,23 @@ void MessagesStore::format(const QVariant &key, QQuickTextDocument* doc)
             curs.setCharFormat(format);
             break;
         }
+        case textEntityTypeTextUrl::ID: {
+            auto it = static_cast<const textEntityTypeTextUrl*>(ent->type_.get());
+            QTextCharFormat format;
+            format.setAnchor(true);
+            format.setAnchorHref(QString::fromStdString(it->url_));
+            format.setFontUnderline(true);
+            curs.setCharFormat(format);
+            break;
+        }
+        case textEntityTypeUrl::ID: {
+            QTextCharFormat format;
+            format.setAnchor(true);
+            format.setAnchorHref(curs.selectedText());
+            format.setFontUnderline(true);
+            curs.setCharFormat(format);
+            break;
+        }
         }
     }
 

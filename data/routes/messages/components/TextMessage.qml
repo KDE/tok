@@ -136,6 +136,10 @@ QQC2.Control {
             onSelectionStartChanged: clamp()
             onSelectionEndChanged: clamp()
 
+            onLinkActivated: (mu) => {
+                Qt.openUrlExternally(mu)
+            }
+
             Layout.fillWidth: true
         }
     }
