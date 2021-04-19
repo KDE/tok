@@ -49,14 +49,21 @@ Kirigami.ScrollablePage {
                 txtField.text = ""
             }
 
-            QQC2.TextField {
+            QQC2.TextArea {
                 id: txtField
 
                 background: null
-                onAccepted: composeRow.send()
 
                 placeholderText: i18n("Write your message...")
 
+                Keys.onReturnPressed: (event) => {
+                    if (!(event.modifiers & Qt.ShiftModifier)) {
+                        composeRow.send()
+                        event.accepted = true
+                    } else {
+                        event.accepted = false
+                    }
+                }
                 Layout.fillWidth: true
             }
             QQC2.Button {
