@@ -19,6 +19,7 @@
         <file>routes/messages/View.qml</file>
         <file>routes/messages/NoView.qml</file>
         <file>routes/messages/components/MessageDelegate.qml</file>
+        <file>routes/messages/components/InlineKeyboard.qml</file>
         <file>routes/messages/components/Unsupported.qml</file>
 
         <file>routes/messages/components/ReplyBlock.qml</file>

@@ -12,6 +12,10 @@ enum Roles {
     Timestamp,
     InReplyTo,
 
+    // Markup
+    ReplyMarkupType,
+    ReplyMarkupInlineKeyboard,
+
     // Text messages
     Content,
 
@@ -119,6 +123,39 @@ QVariant MessagesStore::data(const QVariant& key, int role)
     auto mID = fromVariant(key);
 
     switch (Roles(role)) {
+    case Roles::ReplyMarkupInlineKeyboard: {
+        using namespace TDApi;
+
+        auto markup = d->messageData[mID]->reply_markup_.get();
+        if (!markup) {
+            return QVariant();
+        }
+
+        auto data = static_cast<replyMarkupInlineKeyboard*>(markup);
+        QJsonArray jsonRows;
+        for (const auto& row : data->rows_) {
+            QJsonArray jsonRow;
+            for (const auto& item : row) {
+                jsonRow << QJsonValue(QString::fromStdString(item->text_));
+            }
+            jsonRows << jsonRow;
+        }
+        return jsonRows.toVariantList();
+    }
+    case Roles::ReplyMarkupType: {
+        auto markup = d->messageData[mID]->reply_markup_.get();
+        if (!markup) {
+            return QString();
+        }
+        using namespace TDApi;
+        const auto types = QMap<std::int32_t,QString> {
+            { replyMarkupInlineKeyboard::ID, "inlineKeyboard" },
+            { replyMarkupForceReply::ID, "forceReply" },
+            { replyMarkupRemoveKeyboard::ID, "showKeyboard" },
+            { replyMarkupShowKeyboard::ID, "removeKeyboard" },
+        };
+        return types[markup->get_id()];
+    }
     case Roles::InReplyTo:
         return QString::number(d->messageData[mID]->reply_to_message_id_);
     case Roles::Timestamp: {
@@ -267,6 +304,9 @@ QHash<int, QByteArray> MessagesStore::roleNames()
 
     roles[Roles::ImageURL] = "imageURL";
     roles[Roles::ImageCaption] = "imageCaption";
+
+    roles[Roles::ReplyMarkupType] = "replyMarkupType";
+    roles[Roles::ReplyMarkupInlineKeyboard] = "replyMarkupInlineKeyboard";
 
     return roles;
 }

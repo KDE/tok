@@ -59,13 +59,20 @@ QQC2.Control {
             Layout.fillWidth: (del.isOwnMessage && Kirigami.Settings.isMobile)
         }
 
-        GlobalComponents.LoaderSwitch {
-            value: messageData.data.kind
-            cases: {
-                "messageText": Qt.resolvedUrl("TextMessage.qml"),
-                "messagePhoto": Qt.resolvedUrl("PhotoMessage.qml"),
+        ColumnLayout {
+            GlobalComponents.LoaderSwitch {
+                value: messageData.data.kind
+                cases: {
+                    "messageText": Qt.resolvedUrl("TextMessage.qml"),
+                    "messagePhoto": Qt.resolvedUrl("PhotoMessage.qml"),
+                }
+                defaultCase: Qt.resolvedUrl("Unsupported.qml")
             }
-            defaultCase: Qt.resolvedUrl("Unsupported.qml")
+
+            GlobalComponents.LoaderPlus {
+                active: messageData.data.replyMarkupType === "inlineKeyboard"
+                sourceComponent: InlineKeyboard {}
+            }
         }
 
         Item {
@@ -85,6 +92,7 @@ QQC2.Control {
             required property string authorID
             required property string kind
             required property string timestamp
+            required property string replyMarkupType
         }
     }
     Tok.RelationalListener {
