@@ -7,16 +7,18 @@ Kirigami.PageRoute {
 
 name: "Entry/PhoneNumber"
 
-Kirigami.Page {
+Kirigami.ScrollablePage {
     ColumnLayout {
-        Kirigami.Heading {
-            text: i18n("Enter your phone number")
-        }
+        Kirigami.FormLayout {
+            Kirigami.Heading {
+                text: i18n("Enter your phone number")
+            }
 
-        QQC2.TextField {
-            Component.onCompleted: this.forceActiveFocus()
-
-            onAccepted: tClient.enterPhoneNumber(text)
+            QQC2.TextField {
+                Component.onCompleted: this.forceActiveFocus()
+                placeholderText: i18n("Phone number")
+                onAccepted: tClient.enterPhoneNumber(text)
+            }
         }
 
     }

@@ -6,17 +6,20 @@ Kirigami.PageRoute {
 
 name: "Entry/Welcome"
 
-Kirigami.Page {
+Kirigami.ScrollablePage {
     ColumnLayout {
-        Kirigami.Heading {
-            text: i18n("Welcome to Tok")
-        }
+        Kirigami.FormLayout {
+            Kirigami.Heading {
+                text: i18n("Welcome to Tok")
+            }
 
-        QQC2.Button {
-            text: i18n("Get Started")
+            QQC2.Button {
+                text: i18n("Get Started")
 
-            onClicked: Kirigami.PageRouter.navigateToRoute("Entry/PhoneNumber")
+                onClicked: Kirigami.PageRouter.navigateToRoute("Entry/PhoneNumber")
+            }
         }
+        
     }
 }
 

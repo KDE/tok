@@ -7,16 +7,17 @@ Kirigami.PageRoute {
 
 name: "Entry/Password"
 
-Kirigami.Page {
+Kirigami.ScrollablePage {
     ColumnLayout {
-        Kirigami.Heading {
-            text: i18n("Enter your password")
-        }
+        Kirigami.FormLayout {
+            Kirigami.Heading {
+                text: i18n("Enter your password")
+            }
 
-        QQC2.TextField {
-            Component.onCompleted: this.forceActiveFocus()
-
-            onAccepted: tClient.enterPassword(text)
+            Kirigami.PasswordField {
+                Component.onCompleted: this.forceActiveFocus()
+                onAccepted: tClient.enterPassword(text)
+            }
         }
 
     }

@@ -7,18 +7,19 @@ Kirigami.PageRoute {
 
 name: "Entry/AuthenticationCode"
 
-Kirigami.Page {
+Kirigami.ScrollablePage {
     ColumnLayout {
-        Kirigami.Heading {
-            text: i18n("Enter your authentication code that you received from another Telegram client")
+        Kirigami.FormLayout {
+            Kirigami.Heading {
+                text: i18n("Enter your authentication code that you received from another Telegram client")
+            }
+
+            QQC2.TextField {
+                Component.onCompleted: this.forceActiveFocus()
+                placeholderText: i18n("Authentication code")
+                onAccepted: tClient.enterCode(text)
+            }
         }
-
-        QQC2.TextField {
-            Component.onCompleted: this.forceActiveFocus()
-
-            onAccepted: tClient.enterCode(text)
-        }
-
     }
 }
 
