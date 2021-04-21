@@ -33,6 +33,7 @@ Kirigami.ScrollablePage {
         RowLayout {
             QQC2.ToolButton {
                 icon.name: "arrow-left"
+                onClicked: Kirigami.PageRouter.bringToView(0)
             }
             Kirigami.Heading {
                 level: 4
