@@ -19,6 +19,33 @@ Kirigami.RouterWindow {
         value: rootWindow.active
     }
 
+    function tryit(fn, def) {
+        try {
+            return fn() ?? def
+        } catch (e) {
+            return def
+        }
+    }
+
+    property Rectangle focusRect: Rectangle {
+        parent: rootWindow.contentItem
+        visible: rootWindow.activeFocusItem !== null
+        x: tryit(() => rootWindow.activeFocusItem.Kirigami.ScenePosition.x, 0)
+        y: tryit(() => rootWindow.activeFocusItem.Kirigami.ScenePosition.y, 0)
+        width: tryit(() => rootWindow.activeFocusItem.width, 0)
+        height: tryit(() => rootWindow.activeFocusItem.height, 0)
+        Behavior on x { NumberAnimation { duration: 50; easing.type: Easing.InOutCirc } }
+        Behavior on y { NumberAnimation { duration: 50; easing.type: Easing.InOutCirc } }
+        Behavior on width { NumberAnimation { duration: 50; easing.type: Easing.InOutCirc } }
+        Behavior on height { NumberAnimation { duration: 50; easing.type: Easing.InOutCirc } }
+        color: "transparent"
+        radius: tryit(() => rootWindow.activeFocusItem.radius, 3)
+        border {
+            width: 3
+            color: Kirigami.Theme.focusColor
+        }
+    }
+
     property Connections conns: Connections {
         target: tClient
         function onPhoneNumberRequested() {

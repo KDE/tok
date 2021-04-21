@@ -30,6 +30,7 @@ Kirigami.ScrollablePage {
             filterString: searchField.text
             filterRole: "mTitle"
         } */
+        activeFocusOnTab: true
 
         delegate: Kirigami.BasicListItem {
             id: del

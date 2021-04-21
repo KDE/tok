@@ -30,13 +30,18 @@ Kirigami.ScrollablePage {
     }
 
     header: GlobalComponents.Header {
-        Kirigami.Heading {
-            level: 4
-            text: chatData.data.mTitle
+        RowLayout {
+            QQC2.ToolButton {
+                icon.name: "arrow-left"
+            }
+            Kirigami.Heading {
+                level: 4
+                text: chatData.data.mTitle
 
-            verticalAlignment: Text.AlignVCenter
-            Layout.fillHeight: true
-            Layout.margins: Kirigami.Units.largeSpacing
+                verticalAlignment: Text.AlignVCenter
+                Layout.fillHeight: true
+                Layout.margins: Kirigami.Units.largeSpacing
+            }
         }
     }
 
@@ -64,6 +69,7 @@ Kirigami.ScrollablePage {
                         event.accepted = false
                     }
                 }
+                Keys.onTabPressed: nextItemInFocusChain().forceActiveFocus(Qt.TabFocusReason)
                 Layout.fillWidth: true
             }
             QQC2.Button {
@@ -83,6 +89,7 @@ Kirigami.ScrollablePage {
 
         reuseItems: true
         verticalLayoutDirection: ListView.BottomToTop
+        activeFocusOnTab: true
 
         property var visibleItems: []
 
