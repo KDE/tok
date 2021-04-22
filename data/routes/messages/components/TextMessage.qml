@@ -140,6 +140,11 @@ QQC2.Control {
                 Qt.openUrlExternally(mu)
             }
 
+            HoverHandler {
+                acceptedButtons: Qt.NoButton
+                cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.IBeamCursor
+            }
+
             Layout.fillWidth: true
         }
     }
