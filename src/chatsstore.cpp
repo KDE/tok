@@ -56,7 +56,6 @@ void ChatsStore::handleUpdate(TDApi::object_ptr<TDApi::Update> u)
                 if (!update_chat_last_message.last_message_.get()) {
                     return;
                 }
-                qDebug() << "update last message...";
 
                 auto id = update_chat_last_message.chat_id_;
 

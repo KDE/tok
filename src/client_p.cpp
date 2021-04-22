@@ -151,6 +151,10 @@ void Client::Private::handleUpdate(TDApi::object_ptr<TDApi::Object> update)
                 auto mv = TDApi::move_object_as<TDApi::Update>(update);
                 q->chatsModel()->handleUpdate(std::move(mv));
             },
+            [this, &update](TDApi::updateChatPosition &update_chat_pos) {
+                auto mv = TDApi::move_object_as<TDApi::Update>(update);
+                q->chatsModel()->handleUpdate(std::move(mv));
+            },
             [this, &update](TDApi::updateUser &user) {
                 auto mv = TDApi::move_object_as<TDApi::Update>(update);
                 m_userDataModel->handleUpdate(std::move(mv));

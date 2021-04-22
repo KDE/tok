@@ -19,7 +19,7 @@ find_package(Qt5 COMPONENTS Core Quick Widgets Concurrent REQUIRED)
 find_package(KF5Kirigami2 REQUIRED)
 find_package(KF5I18n REQUIRED)
 find_package(KF5Notifications REQUIRED)
-find_package(Td 1.7.2 REQUIRED)
+find_package(Td 1.7.3 REQUIRED)
 
 add_executable(org.kde.Tok
   src/main.cpp
@@ -32,6 +32,7 @@ add_executable(org.kde.Tok
   src/util.cpp
 
   src/chatsmodel.cpp
+  src/chatsort.cpp
 
   src/messagesmodel.cpp
   src/messagesstore.cpp

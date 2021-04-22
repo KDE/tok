@@ -16,6 +16,7 @@ class ChatsModel : public QAbstractListModel
 private:
     void updateChat(TDApi::object_ptr<TDApi::chat> c);
     void newChat(TDApi::object_ptr<TDApi::chat> c);
+    void updatePositions(TDApi::int53 chatID, TDApi::object_ptr<TDApi::chatPosition>& pos);
 
 public:
     explicit ChatsModel(Client* parent);
