@@ -1,8 +1,10 @@
+#include <QJSValue>
+#include <QQmlContext>
+#include <QQmlProperty>
+#include <QQuickTextDocument>
 #include <QTextCursor>
 #include <QTextDocument>
 #include <QTextDocumentFragment>
-#include <QJSValue>
-#include <QQuickTextDocument>
 
 #include "messagesmodel_p.h"
 
@@ -44,7 +46,7 @@ void MessagesStore::newMessage(TDApi::object_ptr<TDApi::message> msg)
     Q_EMIT keyAdded(mu);
 }
 
-void MessagesStore::format(const QVariant &key, QQuickTextDocument* doc)
+void MessagesStore::format(const QVariant &key, QQuickTextDocument* doc, QQuickItem *it)
 {
     if (!checkKey(key)) {
         return;
@@ -62,6 +64,9 @@ void MessagesStore::format(const QVariant &key, QQuickTextDocument* doc)
     auto doku = doc->textDocument();
     QTextCursor curs(doku);
 
+    QTextCharFormat cfmt;
+    QColor linkColor = QQmlProperty(it, "Kirigami.Theme.linkColor", qmlContext(it)).read().value<QColor>();
+
     for (const auto& ent : format->entities_) {
         curs.setPosition(ent->offset_, QTextCursor::MoveAnchor);
         curs.setPosition(ent->offset_ + ent->length_, QTextCursor::KeepAnchor);
@@ -70,41 +75,34 @@ void MessagesStore::format(const QVariant &key, QQuickTextDocument* doc)
 
         switch (ent->type_->get_id()) {
         case textEntityTypeBold::ID: {
-            QTextCharFormat format;
-            format.setFontWeight(QFont::Bold);
-            curs.setCharFormat(format);
+            cfmt.setFontWeight(QFont::Bold);
             break;
         }
         case textEntityTypeUnderline::ID: {
-            QTextCharFormat format;
-            format.setFontUnderline(true);
-            curs.setCharFormat(format);
+            cfmt.setFontUnderline(true);
             break;
         }
         case textEntityTypeItalic::ID: {
-            QTextCharFormat format;
-            format.setFontItalic(true);
-            curs.setCharFormat(format);
+            cfmt.setFontItalic(true);
             break;
         }
         case textEntityTypeTextUrl::ID: {
             auto it = static_cast<const textEntityTypeTextUrl*>(ent->type_.get());
-            QTextCharFormat format;
-            format.setAnchor(true);
-            format.setAnchorHref(QString::fromStdString(it->url_));
-            format.setFontUnderline(true);
-            curs.setCharFormat(format);
+            cfmt.setForeground(linkColor);
+            cfmt.setAnchor(true);
+            cfmt.setAnchorHref(QString::fromStdString(it->url_));
+            cfmt.setFontUnderline(true);
             break;
         }
         case textEntityTypeUrl::ID: {
-            QTextCharFormat format;
-            format.setAnchor(true);
-            format.setAnchorHref(curs.selectedText());
-            format.setFontUnderline(true);
-            curs.setCharFormat(format);
+            cfmt.setForeground(linkColor);
+            cfmt.setAnchor(true);
+            cfmt.setAnchorHref(curs.selectedText());
+            cfmt.setFontUnderline(true);
             break;
         }
         }
+        curs.setCharFormat(cfmt);
     }
 
     return;

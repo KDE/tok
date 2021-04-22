@@ -6,6 +6,8 @@
 #include "internallib/qabstractrelationalmodel.h"
 
 class QQuickTextDocument;
+class QQuickItem;
+
 class MessagesStore : public TokAbstractRelationalModel
 {
     Q_OBJECT
@@ -21,7 +23,7 @@ public:
 
     void newMessage(TDApi::object_ptr<TDApi::message> msg);
 
-    Q_INVOKABLE void format(const QVariant& key, QQuickTextDocument* doc);
+    Q_INVOKABLE void format(const QVariant& key, QQuickTextDocument* doc, QQuickItem* it);
 
     QVariant data(const QVariant& key, int role = Qt::DisplayRole) override;
     bool checkKey(const QVariant& key) override;

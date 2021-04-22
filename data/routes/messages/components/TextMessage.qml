@@ -107,7 +107,7 @@ QQC2.Control {
 
                 target: textData.data
                 function onContentChanged() {
-                    textData.model.format(textData.key, textEdit.textDocument)
+                    textData.model.format(textData.key, textEdit.textDocument, textEdit)
                 }
             }
             Component.onCompleted: conns.onContentChanged()
