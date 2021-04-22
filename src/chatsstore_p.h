@@ -3,5 +3,5 @@
 #include "chatsstore.h"
 
 struct ChatsStore::Private {
-    std::map<std::int32_t, TDApi::object_ptr<TDApi::chat>> chatData;
+    std::map<TDApi::int53, TDApi::object_ptr<TDApi::chat>> chatData;
 };

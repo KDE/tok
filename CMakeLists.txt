@@ -32,6 +32,7 @@ add_executable(org.kde.Tok
   src/util.cpp
 
   src/chatsmodel.cpp
+  src/chatsort.cpp
 
   src/messagesmodel.cpp
   src/messagesstore.cpp

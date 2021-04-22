@@ -12,6 +12,8 @@ class ChatsStore : public TokAbstractRelationalModel
     struct Private;
     std::unique_ptr<Private> d;
 
+    friend class ChatsModel;
+
 public:
     explicit ChatsStore(Client* parent);
     ~ChatsStore();

@@ -25,17 +25,16 @@ Kirigami.ScrollablePage {
     }
 
     ListView {
-        model: tClient.chatsModel /* KSortFilterProxyModel {
-            sourceModel: 
-            filterString: searchField.text
-            filterRole: "mTitle"
-        } */
+        model: Tok.ChatSortModel {
+            sourceModel: tClient.chatsModel
+        }
         activeFocusOnTab: true
 
         delegate: Kirigami.BasicListItem {
             id: del
 
             required property string mID
+            required property string mMainListPosition
 
             Tok.RelationalListener {
                 id: chatData
@@ -53,7 +52,7 @@ Kirigami.ScrollablePage {
             topPadding: Kirigami.Units.largeSpacing
             bottomPadding: Kirigami.Units.largeSpacing
 
-            text: chatData.data.mTitle
+            text: chatData.data.mTitle + ` ${del.mMainListPosition}`
             subtitle: `${plaintext.hasAuthor ? plaintext.authorName + ": " : ""}${plaintext.onelinePlaintext}`
 
             Components.PlaintextMessage {
