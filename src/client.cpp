@@ -13,8 +13,9 @@
 
 Client* gC = nullptr;
 
-Client::Client()
+Client::Client(bool testing)
     : d(new Private(this))
+    , testing(testing)
 {
     gC = this;
     d->m_chatsModel.reset(new ChatsModel(this));

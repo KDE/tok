@@ -33,15 +33,22 @@ class Client : public QObject
     class Private;
     std::unique_ptr<Private> d;
 
+    bool testing;
+
+    friend class TestEventFeeder;
+
 private:
     void sendQuery(TDApi::object_ptr<TDApi::Function> fn, std::function<void(TObject)> handler);
 
 public:
-    Client();
+    Client(bool testing = false);
     ~Client();
 
     template<typename Fn, typename ...Args>
     void call(std::function<void(typename Fn::ReturnType)> cb, Args ... args) {
+        if (testing) {
+            return;
+        }
         static_assert(std::is_convertible<Fn*, TDApi::Function*>::value, "Derived must be a subclass of TDApi::Function");
 
         sendQuery(TDApi::make_object<Fn>(std::forward<Args>(args)...), [cb](TObject t) {
@@ -61,6 +68,9 @@ public:
 
     template<typename Fn>
     void callP(std::function<void(typename Fn::ReturnType)> cb, TDApi::object_ptr<Fn> a) {
+        if (testing) {
+            return;
+        }
         static_assert(std::is_convertible<Fn*, TDApi::Function*>::value, "Derived must be a subclass of TDApi::Function");
 
         sendQuery(std::move(a), [cb](TObject t) {

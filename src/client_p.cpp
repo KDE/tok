@@ -58,6 +58,9 @@ void Client::Private::handleAuthorizationStateUpdate(TDApi::updateAuthorizationS
 
                     Q_EMIT q->loggedIn();
                 }, "my_id");
+                if (q->testing) {
+                    Q_EMIT q->loggedIn();
+                }
             },
             [this](TDApi::authorizationStateLoggingOut&) {
                 m_loggedIn = false;
@@ -195,6 +198,9 @@ void Client::Private::handleResponse(TD::ClientManager::Response response)
 
 void Client::Private::poll()
 {
+    if (q->testing) {
+        return;
+    }
     QtConcurrent::run([this] {
         while (true) {
             auto response = m_clientManager->receive(10);

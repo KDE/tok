@@ -4,23 +4,8 @@
 
 #include <QApplication>
 #include <QQmlApplicationEngine>
-#include <QQmlContext>
 
-#include <KLocalizedContext>
-
-#include "chatsstore.h"
-#include "chatsmodel.h"
-#include "messagesmodel.h"
-#include "client.h"
-#include "keys.h"
-#include "tgimageprovider.h"
-#include "userdata.h"
-#include "util.h"
-#include "chatsort.h"
-
-#include "internallib/qquickrelationallistener.h"
-
-Q_DECLARE_METATYPE(QSharedPointer<TDApi::file>)
+#include "setup.h"
 
 int main(int argc, char* argv[])
 {
@@ -28,27 +13,12 @@ int main(int argc, char* argv[])
     QCoreApplication::setApplicationName("org.kde.Tok");
     QCoreApplication::setOrganizationName("KDE");
 
-    Executor::instance();
-
     QApplication app(argc, argv);
     app.setDesktopFileName("org.kde.Tok.desktop");
 
-    qRegisterMetaType<ChatsModel*>();
-    qRegisterMetaType<MessagesModel*>();
-    qRegisterMetaType<MessagesStore*>();
-    qRegisterMetaType<UserDataModel*>();
-    qRegisterMetaType<ChatsStore*>();
-    qRegisterMetaType<QSharedPointer<TDApi::file>>();
-    qmlRegisterType<ChatSortModel>("org.kde.Tok", 1, 0, "ChatSortModel");
-    qmlRegisterType<TokQmlRelationalListener>("org.kde.Tok", 1, 0, "RelationalListener");
-
     QQmlApplicationEngine engine;
 
-    auto c = new Client;
-
-    engine.rootContext()->setContextObject(new KLocalizedContext(&engine));
-    engine.rootContext()->setContextProperty("tClient", c);
-    engine.addImageProvider("telegram", new TelegramImageProvider(c));
+    performSetup(&engine, false);
 
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(
