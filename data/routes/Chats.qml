@@ -53,7 +53,7 @@ Kirigami.ScrollablePage {
             topPadding: Kirigami.Units.largeSpacing
             bottomPadding: Kirigami.Units.largeSpacing
 
-            text: chatData.data.mTitle + ` ${del.mMainListPosition}`
+            text: chatData.data.mTitle
             subtitle: `${plaintext.hasAuthor ? plaintext.authorName + ": " : ""}${plaintext.onelinePlaintext}`
 
             Components.PlaintextMessage {
