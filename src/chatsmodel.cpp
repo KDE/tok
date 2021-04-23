@@ -81,7 +81,6 @@ void ChatsModel::updatePositions(TDApi::int53 chatID, TDApi::object_ptr<TDApi::c
     data->positions_ = std::move(newPositions);
     auto row = std::find(d->chats.begin(), d->chats.end(), chatID) - d->chats.begin();
     Q_EMIT dataChanged(index(row), index(row), {});
-    qDebug() << "hup" << row;
 }
 
 void ChatsModel::handleUpdate(TDApi::object_ptr<TDApi::Update> u)
