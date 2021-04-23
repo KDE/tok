@@ -25,6 +25,7 @@ Kirigami.ScrollablePage {
     }
 
     ListView {
+        activeFocusOnTab: true
         model: KSortFilterProxyModel {
             sourceModel: tClient.chatsModel
             sortRole: "mMainListPosition"
