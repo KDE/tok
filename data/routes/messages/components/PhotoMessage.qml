@@ -14,6 +14,8 @@ Image {
 
     readonly property real ratio: width / implicitWidth
 
+    Accessible.name: `Photo message.`
+
     smooth: true
     mipmap: true
 

@@ -23,6 +23,9 @@ QQC2.Control {
     topPadding: del.separateFromPrevious ? Kirigami.Units.largeSpacing : Kirigami.Units.smallSpacing
     bottomPadding: 0
 
+    Accessible.role: Accessible.ListItem
+    Accessible.name: tryit(() => __loaderSwitch.item.Accessible.name)
+
     Kirigami.Theme.colorSet: {
         return Kirigami.Theme.Button
         // if (Array.from(messagesSelectionModel.selectedIndexes).includes(modelIndex)) {
@@ -60,6 +63,8 @@ QQC2.Control {
         }
 
         GlobalComponents.LoaderSwitch {
+            id: __loaderSwitch
+
             value: messageData.data.kind
             cases: {
                 "messageText": Qt.resolvedUrl("TextMessage.qml"),

@@ -6,4 +6,5 @@ Kirigami.Icon {
     implicitWidth: 64
     implicitHeight: 64
     source: "application-x-core"
+    // Accessible.name: `Unsupported message type.`
 }

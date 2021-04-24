@@ -14,6 +14,8 @@ QQC2.Control {
 
     readonly property int tailSize: Kirigami.Units.largeSpacing
 
+    Accessible.name: `${userData.data.name}: ${textData.data.content}. ${messageData.data.timestamp}`
+
     Tok.RelationalListener {
         id: textData
 

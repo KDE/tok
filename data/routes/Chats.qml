@@ -20,9 +20,15 @@ Kirigami.ScrollablePage {
                 id: searchField
 
                 Layout.fillWidth: true
+                Keys.onTabPressed: nextItemInFocusChain().forceActiveFocus(Qt.TabFocusReason)
+
+                Accessible.name: `Search chats`
+                Accessible.description: ``
+                Accessible.searchEdit: true
             }
         }
     }
+    activeFocusOnTab: true
 
     ListView {
         activeFocusOnTab: true
@@ -56,6 +62,8 @@ Kirigami.ScrollablePage {
 
             text: chatData.data.mTitle
             subtitle: `${plaintext.hasAuthor ? plaintext.authorName + ": " : ""}${plaintext.onelinePlaintext}`
+
+            Accessible.name: `${chatData.data.mTitle}. ${chatData.data.mUnreadCount > 0 ? chatData.data.mUnreadCount + " unread messages." : ""} Latest message ${plaintext.hasAuthor ? "from " + plaintext.authorName : ""}: ${plaintext.onelinePlaintext}`
 
             Components.PlaintextMessage {
                 id: plaintext
