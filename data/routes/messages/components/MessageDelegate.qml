@@ -25,6 +25,7 @@ QQC2.Control {
 
     Accessible.role: Accessible.ListItem
     Accessible.name: tryit(() => __loaderSwitch.item.Accessible.name)
+    readonly property bool showFocusRing: true
 
     Kirigami.Theme.colorSet: {
         return Kirigami.Theme.Button

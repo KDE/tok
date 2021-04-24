@@ -29,7 +29,7 @@ Kirigami.RouterWindow {
 
     property Rectangle focusRect: Rectangle {
         parent: rootWindow.contentItem
-        visible: rootWindow.activeFocusItem !== null
+        visible: rootWindow.activeFocusItem !== null && Boolean(rootWindow.activeFocusItem.showFocusRing)
 
         x: tryit(() => rootWindow.activeFocusItem.Kirigami.ScenePosition.x, 0)
         y: tryit(() => rootWindow.activeFocusItem.Kirigami.ScenePosition.y, 0)
