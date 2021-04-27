@@ -22,7 +22,7 @@ Kirigami.ScrollablePage {
                 Layout.fillWidth: true
                 Keys.onTabPressed: nextItemInFocusChain().forceActiveFocus(Qt.TabFocusReason)
 
-                Accessible.name: `Search chats`
+                Accessible.name: i18n("Search chats")
                 Accessible.description: ``
                 Accessible.searchEdit: true
             }
@@ -63,7 +63,18 @@ Kirigami.ScrollablePage {
             text: chatData.data.mTitle
             subtitle: `${plaintext.hasAuthor ? plaintext.authorName + ": " : ""}${plaintext.onelinePlaintext}`
 
-            Accessible.name: `${chatData.data.mTitle}. ${chatData.data.mUnreadCount > 0 ? chatData.data.mUnreadCount + " unread messages." : ""} Latest message ${plaintext.hasAuthor ? "from " + plaintext.authorName : ""}: ${plaintext.onelinePlaintext}`
+            Accessible.name: {
+                let strings = [`${chatData.data.mTitle}.`]
+                if (chatData.data.mUnreadCount > 0) {
+                    strings.push(i18np("1 unread message.", "%1 unread messages.", chatData.data.mUnreadCount))
+                }
+                if (plaintext.hasAuthor) {
+                    strings.push(i18nc("%1 is the message author (probably, but not necessarily a human), and %2 is the message contents", "Latest message from %1: %2", plaintext.authorName, plaintext.onelinePlaintext))
+                } else {
+                    strings.push(i18nc("%1 is the message contents", "Latest message: %1", plaintext.onelinePlaintext))
+                }
+                return strings.join(" ")
+            }
 
             Components.PlaintextMessage {
                 id: plaintext
