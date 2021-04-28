@@ -11,6 +11,7 @@
 #include "tgimageprovider.h"
 #include "userdata.h"
 #include "util.h"
+#include "utilities.h"
 #include "chatsort.h"
 
 #include "internallib/qquickrelationallistener.h"
@@ -28,7 +29,9 @@ void performSetup(QQmlEngine* eng, bool testMode)
     qRegisterMetaType<MessagesStore*>();
     qRegisterMetaType<UserDataModel*>();
     qRegisterMetaType<ChatsStore*>();
+    qRegisterMetaType<Utilities*>();
     qRegisterMetaType<QSharedPointer<TDApi::file>>();
+    qmlRegisterSingletonType<Utilities>("org.kde.Tok", 1, 0, "Utils", [](QQmlEngine*, QJSEngine*) -> QObject* { return new Utilities; });
     qmlRegisterType<ChatSortModel>("org.kde.Tok", 1, 0, "ChatSortModel");
     qmlRegisterType<TokQmlRelationalListener>("org.kde.Tok", 1, 0, "RelationalListener");
 

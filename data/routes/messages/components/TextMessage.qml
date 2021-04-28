@@ -60,6 +60,7 @@ QQC2.Control {
             Kirigami.Theme.inherit: false
         }
         Kirigami.ShadowedRectangle {
+            id: mainBG
             corners {
                 topLeftRadius: 4
                 topRightRadius: 4
@@ -71,10 +72,6 @@ QQC2.Control {
             anchors.leftMargin: textMessageRoot.tailSize
         }
         QQC2.Label {
-            id: dummy
-            text: " "
-        }
-        QQC2.Label {
             id: timestamp
             text: messageData.data.timestamp
             opacity: 0.5
@@ -83,9 +80,14 @@ QQC2.Control {
             font.pixelSize: Kirigami.Units.gridUnit * (2/3)
             anchors {
                 bottom: parent.bottom
-                right: parent.right
+                right: mainBG.right
                 margins: Kirigami.Units.smallSpacing
             }
+            LayoutMirroring.enabled: Tok.Utils.isRTL(textData.data.content)
+        }
+        QQC2.Label {
+            id: dummy
+            text: " "
         }
     }
     contentItem: ColumnLayout {
