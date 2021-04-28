@@ -1,5 +1,5 @@
 #include "messagesmodel_p.h"
-#include "src/client.h"
+#include "client.h"
 
 enum Roles {
     NextID,
