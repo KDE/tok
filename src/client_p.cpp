@@ -177,6 +177,10 @@ void Client::Private::handleUpdate(TDApi::object_ptr<TDApi::Object> update)
                 auto mv = TDApi::move_object_as<TDApi::Update>(update);
                 q->chatsModel()->handleUpdate(std::move(mv));
             },
+            [this, &update](TDApi::updateChatPermissions &upd) {
+                auto mv = TDApi::move_object_as<TDApi::Update>(update);
+                q->chatsModel()->handleUpdate(std::move(mv));
+            },
             [](auto& update) { /* qWarning() << "unhandled private client update" << QString::fromStdString(TDApi::to_string(update)); */ }));
 }
 

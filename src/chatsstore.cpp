@@ -7,6 +7,14 @@ enum Roles {
     LastMessageID,
     Photo,
     UnreadCount,
+    CanSendMessages,
+    CanSendMedia, // True, if the user can send audio files, documents, photos, videos, video notes, and voice notes. Implies can_send_messages permissions.
+    CanSendPolls,
+    CanSendOther, // True, if the user can send animations, games, stickers, and dice and use inline bots. Implies can_send_messages permissions.
+    CanSendWebPreview,
+    CanChangeInfo,
+    CanInviteUsers,
+    CanPinMessages,
 };
 
 ChatsStore::ChatsStore(Client* parent) : TokAbstractRelationalModel(parent), c(parent), d(new Private)
@@ -73,6 +81,13 @@ void ChatsStore::handleUpdate(TDApi::object_ptr<TDApi::Update> u)
 
                 Q_EMIT keyDataChanged(to(id), {});
             },
+            [this](TDApi::updateChatPermissions &update_chat_permissions) {
+                auto id = update_chat_permissions.chat_id_;
+
+                d->chatData[id]->permissions_ = std::move(update_chat_permissions.permissions_) ;
+
+                Q_EMIT keyDataChanged(to(id), {});
+            },
             [](auto& update) { qWarning() << "unhandled chatsmodel update" << QString::fromStdString(TDApi::to_string(update)); }));
 }
 
@@ -106,6 +121,15 @@ QVariant ChatsStore::data(const QVariant& key, int role)
     case Roles::UnreadCount: {
         return d->chatData[chatID]->unread_count_;
     }
+    // permissions
+    case Roles::CanSendMessages: return d->chatData[chatID]->permissions_->can_send_messages_;
+    case Roles::CanSendMedia: return d->chatData[chatID]->permissions_->can_send_media_messages_;
+    case Roles::CanSendPolls: return d->chatData[chatID]->permissions_->can_send_polls_;
+    case Roles::CanSendOther: return d->chatData[chatID]->permissions_->can_send_other_messages_;
+    case Roles::CanSendWebPreview: return d->chatData[chatID]->permissions_->can_add_web_page_previews_;
+    case Roles::CanChangeInfo: return d->chatData[chatID]->permissions_->can_change_info_;
+    case Roles::CanInviteUsers: return d->chatData[chatID]->permissions_->can_invite_users_;
+    case Roles::CanPinMessages: return d->chatData[chatID]->permissions_->can_pin_messages_;
     }
 
     return QVariant();
@@ -134,6 +158,14 @@ QHash<int,QByteArray> ChatsStore::roleNames()
     roles[int(Roles::Photo)] = "mPhoto";
     roles[int(Roles::LastMessageID)] = "mLastMessageID";
     roles[int(Roles::UnreadCount)] = "mUnreadCount";
+    roles[int(Roles::CanSendMessages)] = "mCanSendMessages";
+    roles[int(Roles::CanSendMedia)] = "mCanSendMedia";
+    roles[int(Roles::CanSendPolls)] = "mCanSendPolls";
+    roles[int(Roles::CanSendOther)] = "mCanSendOther";
+    roles[int(Roles::CanSendWebPreview)] = "mCanSendWebPreview";
+    roles[int(Roles::CanChangeInfo)] = "mCanChangeInfo";
+    roles[int(Roles::CanInviteUsers)] = "mCanInviteUsers";
+    roles[int(Roles::CanPinMessages)] = "mCanPinMessages";
 
     return roles;
 }

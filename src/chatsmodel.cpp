@@ -90,9 +90,6 @@ void ChatsModel::handleUpdate(TDApi::object_ptr<TDApi::Update> u)
             [this](TDApi::updateNewChat &update_new_chat) {
                 newChat(std::move(update_new_chat.chat_));
             },
-            [this, &u](TDApi::updateChatTitle &update_chat_title) {
-                c->chatsStore()->handleUpdate(std::move(u));
-            },
             [this, &u](TDApi::updateChatLastMessage &update_chat_last_message) {
                 auto chatID = update_chat_last_message.chat_id_;
                 auto& poses = update_chat_last_message.positions_;
@@ -101,15 +98,12 @@ void ChatsModel::handleUpdate(TDApi::object_ptr<TDApi::Update> u)
                 }
                 c->chatsStore()->handleUpdate(std::move(u));
             },
-            [this, &u](TDApi::updateChatReadInbox &update_chat_read_inbox) {
-                c->chatsStore()->handleUpdate(std::move(u));
-            },
             [this](TDApi::updateChatPosition &update_chat_pos) {
                 auto chatID = update_chat_pos.chat_id_;
                 auto pos = std::move(update_chat_pos.position_);
                 updatePositions(chatID, pos);
             },
-            [](auto& update) { qWarning() << "unhandled chatsmodel update" << QString::fromStdString(TDApi::to_string(update)); }));
+            [this, &u](auto& update) { c->chatsStore()->handleUpdate(std::move(u)); }));
 }
 
 int ChatsModel::rowCount(const QModelIndex& parent) const

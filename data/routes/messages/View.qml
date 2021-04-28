@@ -26,6 +26,7 @@ Kirigami.ScrollablePage {
         key: pageRoot.chatID
         shape: QtObject {
             required property string mTitle
+            required property bool mCanSendMessages
         }
     }
 
@@ -60,8 +61,9 @@ Kirigami.ScrollablePage {
                 id: txtField
 
                 background: null
+                enabled: chatData.data.mCanSendMessages
 
-                placeholderText: i18n("Write your message...")
+                placeholderText: enabled ? i18n("Write your message...") : i18n("You cannot send messages.")
 
                 Keys.onReturnPressed: (event) => {
                     if (!(event.modifiers & Qt.ShiftModifier)) {
