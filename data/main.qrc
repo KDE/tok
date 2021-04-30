@@ -8,6 +8,8 @@
         <file>components/LoaderSwitch.qml</file>
         <file>components/ImagePopup.qml</file>
         <file>components/UserDataSheet.qml</file>
+        <file>components/ResponsiveMenu.qml</file>
+        <file>components/ResponsiveMenuItem.qml</file>
 
         <file>routes/Chats.qml</file>
 

@@ -107,6 +107,22 @@ int MessagesModel::rowCount(const QModelIndex& parent) const
     return d->messages.size();
 }
 
+void MessagesModel::deletedMessages(const TDApi::array<TDApi::int53>& msgIDs)
+{
+    for (auto mID : msgIDs) {
+        for (auto i = 0UL; i < d->messages.size(); i++) {
+            if (d->messages[i] == mID) {
+                beginRemoveRows(QModelIndex(), i, i);
+                d->messages.erase(d->messages.begin() + i);
+                endRemoveRows();
+                goto contOuter;
+            }
+        }
+    contOuter:
+        ;
+    }
+}
+
 void MessagesModel::newMessage(TDApi::int53 msg)
 {
     if (std::find(d->messages.cbegin(), d->messages.cend(), msg) != d->messages.cend()) {

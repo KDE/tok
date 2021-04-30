@@ -22,6 +22,7 @@ public:
     ~MessagesStore();
 
     void newMessage(TDApi::object_ptr<TDApi::message> msg);
+    void deletedMessages(TDApi::int53 chatID, const TDApi::array<TDApi::int53>& msgIDs);
 
     Q_INVOKABLE void format(const QVariant& key, QQuickTextDocument* doc, QQuickItem* it);
 
@@ -31,6 +32,8 @@ public:
     void fetchKey(const QVariant& key) override;
 
     QHash<int, QByteArray> roleNames() override;
+
+    Q_INVOKABLE void deleteMessages(const QString& chatID, const QStringList& messageID);
 };
 
 class MessagesModel : public QAbstractListModel
@@ -48,6 +51,7 @@ public:
 
     void fetch();
     void newMessage(TDApi::int53 msgID);
+    void deletedMessages(const TDApi::array<TDApi::int53>& msgIDs);
 
     bool canFetchMore(const QModelIndex& parent) const override;
     void fetchMore(const QModelIndex& parent) override;

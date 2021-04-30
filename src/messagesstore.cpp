@@ -108,6 +108,28 @@ void MessagesStore::format(const QVariant &key, QQuickTextDocument* doc, QQuickI
     return;
 }
 
+void MessagesStore::deleteMessages(const QString &chatID, const QStringList &messageID)
+{
+    auto id = chatID.toLongLong();
+    TDApi::array<TDApi::int53> messageIDs;
+    messageIDs.reserve(messageID.length());
+    for (const auto& mID : messageID) {
+        messageIDs.push_back(mID.toLongLong());
+    }
+    c->call<TDApi::deleteMessages>(nullptr, id, messageIDs, true);
+}
+
+void MessagesStore::deletedMessages(TDApi::int53 chatID, const TDApi::array<TDApi::int53>& msgIDs)
+{
+    for (auto mID : msgIDs) {
+        d->messageData.erase(std::pair<TDApi::int53,TDApi::int53>(chatID, mID));
+
+        QJsonArray mu;
+        mu << QString::number(chatID) << QString::number(mID);
+        Q_EMIT keyRemoved(mu);
+    }
+}
+
 QVariant MessagesStore::data(const QVariant& key, int role)
 {
     if (!checkKey(key)) {

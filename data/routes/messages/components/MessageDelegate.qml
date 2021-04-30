@@ -19,6 +19,7 @@ QQC2.Control {
     readonly property bool isOwnMessage: messageData.data.authorID === tClient.ownID
     readonly property bool showAvatar: (nextData.data.authorID != messageData.data.authorID) && (!(Kirigami.Settings.isMobile && isOwnMessage))
     readonly property bool separateFromPrevious: previousData.data.authorID != messageData.data.authorID
+    readonly property bool canDeleteMessage: isOwnMessage
 
     topPadding: del.separateFromPrevious ? Kirigami.Units.largeSpacing : Kirigami.Units.smallSpacing
     bottomPadding: 0
@@ -35,6 +36,15 @@ QQC2.Control {
         // return messagesRoute.model.userID() == authorID ? Kirigami.Theme.Button : Kirigami.Theme.Window
     }
     Kirigami.Theme.inherit: false
+
+    GlobalComponents.ResponsiveMenu {
+        id: __responsiveMenu
+        GlobalComponents.ResponsiveMenuItem {
+            enabled: del.canDeleteMessage
+            text: i18nc("popup menu for message", "Delete")
+            onTriggered: tClient.messagesStore.deleteMessages(del.mChatID, [del.mID])
+        }
+    }
 
     contentItem: RowLayout {
         Kirigami.Avatar {
@@ -72,6 +82,14 @@ QQC2.Control {
                 "messagePhoto": Qt.resolvedUrl("PhotoMessage.qml"),
             }
             defaultCase: Qt.resolvedUrl("Unsupported.qml")
+
+            TapHandler {
+                acceptedButtons: Qt.RightButton
+                onTapped: __responsiveMenu.open()
+            }
+            TapHandler {
+                onLongPressed: __responsiveMenu.open()
+            }
         }
 
         Item {
