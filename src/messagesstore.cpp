@@ -5,6 +5,12 @@
 #include <QTextCursor>
 #include <QTextDocument>
 #include <QTextDocumentFragment>
+#include <QTextBoundaryFinder>
+#include <QFont>
+#include <QGuiApplication>
+
+#include <unicode/urename.h>
+#include <unicode/uchar.h>
 
 #include "messagesmodel_p.h"
 
@@ -52,7 +58,7 @@ void MessagesStore::messageIDChange(TDApi::int53 oldID, TDApi::object_ptr<TDApi:
     newMessage(std::move(msg));
 }
 
-void MessagesStore::format(const QVariant &key, QQuickTextDocument* doc, QQuickItem *it)
+void MessagesStore::format(const QVariant &key, QQuickTextDocument* doc, QQuickItem *it, bool emojiOnly)
 {
     if (!checkKey(key)) {
         return;
@@ -109,6 +115,31 @@ void MessagesStore::format(const QVariant &key, QQuickTextDocument* doc, QQuickI
         }
         }
         curs.setCharFormat(cfmt);
+    }
+
+    QTextBoundaryFinder finder(QTextBoundaryFinder::Grapheme, doku->toRawText());
+    int pos = 0;
+    while (finder.toNextBoundary() != -1) {
+        auto range = finder.position();
+
+        auto first = doku->toRawText().mid(pos, range-pos).toUcs4()[0];
+
+        if (u_hasBinaryProperty(first, UCHAR_EMOJI_PRESENTATION)) {
+            curs.setPosition(pos, QTextCursor::MoveAnchor);
+            curs.setPosition(range, QTextCursor::KeepAnchor);
+
+            QTextCharFormat cfmt;
+            auto font = QGuiApplication::font();
+            font.setFamily("emoji");
+            if (emojiOnly) {
+                font.setPointSize(font.pointSize()*8);
+            }
+            cfmt.setFont(font);
+
+            curs.setCharFormat(cfmt);
+        }
+
+        pos = range;
     }
 
     return;

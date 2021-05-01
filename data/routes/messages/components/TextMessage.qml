@@ -111,10 +111,13 @@ QQC2.Control {
 
                 target: textData.data
                 function onContentChanged() {
-                    textData.model.format(textData.key, textEdit.textDocument, textEdit)
+                    textData.model.format(textData.key, textEdit.textDocument, textEdit, textEdit.isEmojiOnly)
                 }
             }
             Component.onCompleted: conns.onContentChanged()
+
+            readonly property var isEmoji: /^(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])+$/
+            readonly property bool isEmojiOnly: isEmoji.test(textData.data.content)
 
             readonly property string paddingT: " ".repeat(Math.ceil(timestamp.implicitWidth / dummy.implicitWidth)) + "⠀"
 

@@ -11,6 +11,7 @@ StaticLibrary {
         }
         Depends { name: "cpp" }
         Depends { name: "Qt"; submodules: ["widgets", "qml", "quick", "concurrent"] }
+        Depends { name: "icu-uc" }
     }
 
     Probe {
@@ -41,4 +42,5 @@ StaticLibrary {
 
     Depends { name: "cpp" }
     Depends { name: "Qt"; submodules: ["widgets", "qml", "quick", "concurrent"] }
+    Depends { name: "icu-uc" }
 }
