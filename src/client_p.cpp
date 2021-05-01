@@ -176,6 +176,13 @@ void Client::Private::handleUpdate(TDApi::object_ptr<TDApi::Object> update)
                 m_messageModels[msgs.chat_id_]->deletedMessages(msgs.message_ids_);
                 m_messagesStore->deletedMessages(msgs.chat_id_, msgs.message_ids_);
             },
+            [this](TDApi::updateMessageSendSucceeded &msg) {
+                if (!m_messageModels.contains(msg.message_->chat_id_)) {
+                    return;
+                }
+                m_messageModels[msg.message_->chat_id_]->messageIDChanged(msg.old_message_id_, msg.message_->id_);
+                m_messagesStore->messageIDChange(msg.old_message_id_, std::move(msg.message_));
+            },
             [this](TDApi::updateFile &file) {
                 auto ptr = QSharedPointer<TDApi::file>(file.file_.release());
                 Q_EMIT q->fileDataChanged(ptr->id_, ptr);

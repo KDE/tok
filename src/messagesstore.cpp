@@ -46,6 +46,12 @@ void MessagesStore::newMessage(TDApi::object_ptr<TDApi::message> msg)
     Q_EMIT keyAdded(mu);
 }
 
+void MessagesStore::messageIDChange(TDApi::int53 oldID, TDApi::object_ptr<TDApi::message> msg)
+{
+    deletedMessages(msg->chat_id_, {oldID});
+    newMessage(std::move(msg));
+}
+
 void MessagesStore::format(const QVariant &key, QQuickTextDocument* doc, QQuickItem *it)
 {
     if (!checkKey(key)) {

@@ -123,6 +123,28 @@ void MessagesModel::deletedMessages(const TDApi::array<TDApi::int53>& msgIDs)
     }
 }
 
+void MessagesModel::messageIDChanged(TDApi::int53 oldID, TDApi::int53 newID)
+{
+    auto it = std::find(d->messages.cbegin(), d->messages.cend(), oldID);
+    if (it == d->messages.cend()) {
+        return;
+    }
+    auto idx = std::distance(d->messages.cbegin(), it);
+
+    auto before = idx-1;
+    auto after = idx+1;
+
+    d->messages[idx] = newID;
+
+    if (before > 0) {
+        dataChanged(index(before), index(before), {Roles::PreviousID, Roles::NextID});
+    }
+    if (after < d->messages.size()) {
+        dataChanged(index(after), index(after), {Roles::PreviousID, Roles::NextID});
+    }
+    dataChanged(index(idx), index(idx), {Roles::ID});
+}
+
 void MessagesModel::newMessage(TDApi::int53 msg)
 {
     if (std::find(d->messages.cbegin(), d->messages.cend(), msg) != d->messages.cend()) {
