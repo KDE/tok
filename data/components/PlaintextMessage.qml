@@ -23,7 +23,7 @@ QtObject {
         case "messageAudio":
             return i18n("Music")
         case "messageDocument":
-            return i18n("Attachment")
+            return i18nc("Specifically a file; I use Attachment in English because it sounds better than File in this context.", "Attachment")
         case "messagePhoto":
             return i18n("Photo")
         case "messageExpiredPhoto":
