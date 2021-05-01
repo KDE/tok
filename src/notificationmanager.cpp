@@ -34,8 +34,8 @@ void NotificationManager::handleUpdateNotificationGroup(TDApi::object_ptr<TDApi:
                 notif->setTitle(title);
                 notif->setText(body);
 
-                auto reply = std::make_unique<KNotificationReplyAction>(i18n("Reply"));
-                reply->setPlaceholderText(i18n("Reply to %1...", title));
+                auto reply = std::make_unique<KNotificationReplyAction>(i18n("button action", "Reply"));
+                reply->setPlaceholderText(i18nc("placeholder text", "Reply to %1...", title));
                 QObject::connect(reply.get(), &KNotificationReplyAction::replied, c, [this, chatID = msg->message_->chat_id_](const QString& reply) {
                     qDebug() << "replied!";
 
