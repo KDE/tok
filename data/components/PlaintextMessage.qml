@@ -10,7 +10,7 @@ QtObject {
     required property string chatID
     required property string messageID
 
-    readonly property bool hasAuthor: universalData.authorID !== ""
+    readonly property bool hasAuthor: universalData.data.authorKind === "user"
 
     readonly property string authorName: authorData.data.name
     readonly property string onelinePlaintext: this.plaintext.split("\n")[0]
@@ -91,6 +91,7 @@ QtObject {
         key: [plaintext.chatID, plaintext.messageID]
         shape: QtObject {
             required property string authorID
+            required property string authorKind
             required property string kind
             required property string timestamp
         }

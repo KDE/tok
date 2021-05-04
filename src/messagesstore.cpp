@@ -16,6 +16,7 @@
 
 enum Roles {
     AuthorID = Qt::UserRole,
+    AuthorKind,
     Kind,
     Timestamp,
     InReplyTo,
@@ -238,6 +239,15 @@ QVariant MessagesStore::data(const QVariant& key, int role)
         return idFrom(d->messageData[mID]->sender_.get());
     }
 
+    case Roles::AuthorKind: {
+        using namespace TDApi;
+
+        switch (d->messageData[mID]->sender_->get_id()) {
+        case messageSenderChat::ID: return QString("chat");
+        case messageSenderUser::ID: return QString("user");
+        }
+    }
+
     case Roles::Kind: {
         switch (d->messageData[mID]->content_->get_id()) {
         case TDApi::messageText::ID: return QString("messageText");
@@ -316,6 +326,7 @@ QHash<int, QByteArray> MessagesStore::roleNames()
     QHash<int,QByteArray> roles;
 
     roles[Roles::AuthorID] = "authorID";
+    roles[Roles::AuthorKind] = "authorKind";
     roles[Roles::Kind] = "kind";
     roles[Roles::Timestamp] = "timestamp";
     roles[Roles::InReplyTo] = "inReplyTo";
