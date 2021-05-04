@@ -51,7 +51,7 @@ Kirigami.ScrollablePage {
             QQC2.ToolButton {
                 icon.name: "arrow-left"
                 onClicked: Kirigami.PageRouter.bringToView(0)
-                visible: !applicationWindow().wideScreen
+                visible: !rootRow.wideMode
             }
             Kirigami.Heading {
                 level: 4
