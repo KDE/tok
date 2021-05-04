@@ -44,6 +44,11 @@ QQC2.Control {
             text: i18nc("popup menu for message", "Delete")
             onTriggered: tClient.messagesStore.deleteMessages(del.mChatID, [del.mID])
         }
+        GlobalComponents.ResponsiveMenuItem {
+            enabled: chatData.data.mCanSendMessages
+            text: i18nc("popup menu for message", "Reply")
+            onTriggered: messagesViewRoot.replyToID = del.mID
+        }
     }
 
     contentItem: RowLayout {

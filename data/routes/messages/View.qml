@@ -12,18 +12,20 @@ Kirigami.PageRoute {
 name: "Messages/View"
 
 Kirigami.ScrollablePage {
-    id: pageRoot
+    id: messagesViewRoot
 
     property string chatID
+    property string replyToID: ""
+
     onChatIDChanged: {
-        lView.model = tClient.messagesModel(pageRoot.chatID)
+        lView.model = tClient.messagesModel(messagesViewRoot.chatID)
     }
 
     Tok.RelationalListener {
         id: chatData
 
         model: tClient.chatsStore
-        key: pageRoot.chatID
+        key: messagesViewRoot.chatID
         shape: QtObject {
             required property string mTitle
             required property bool mCanSendMessages
@@ -49,42 +51,96 @@ Kirigami.ScrollablePage {
     }
 
     footer: QQC2.ToolBar {
-        RowLayout {
-            id: composeRow
-
-            function send() {
-                lView.model.send(txtField.text)
-                txtField.text = ""
-            }
-
-            QQC2.TextArea {
-                id: txtField
-
-                background: null
-                enabled: chatData.data.mCanSendMessages
-
-                placeholderText: enabled ? i18n("Write your message...") : i18n("You cannot send messages.")
-
-                Keys.onReturnPressed: (event) => {
-                    if (!(event.modifiers & Qt.ShiftModifier)) {
-                        composeRow.send()
-                        event.accepted = true
-                    } else {
-                        event.accepted = false
-                    }
-                }
-                Keys.onTabPressed: nextItemInFocusChain().forceActiveFocus(Qt.TabFocusReason)
-                Layout.fillWidth: true
-            }
-            QQC2.Button {
-                Accessible.name: i18n("Send message")
-                icon.name: "document-send"
-                onClicked: composeRow.send()
-            }
-
+        ColumnLayout {
             anchors {
                 left: parent.left
                 right: parent.right
+            }
+
+            GlobalComponents.LoaderPlus {
+                active: messagesViewRoot.replyToID != ""
+                visible: messagesViewRoot.replyToID != ""
+
+                sourceComponent: QQC2.Control {
+                    padding: 6
+                    contentItem: RowLayout {
+                        spacing: 6
+
+                        GlobalComponents.PlaintextMessage {
+                            id: repliedToData
+
+                            messagesModel: tClient.messagesStore
+                            userModel: tClient.userDataModel
+                            chatID: messagesViewRoot.chatID
+                            messageID: messagesViewRoot.replyToID
+                        }
+                        Kirigami.Icon {
+                            source: "dialog-messages"
+                        }
+                        ColumnLayout {
+                            spacing: 1
+                            QQC2.Label {
+                                text: repliedToData.authorName
+                                elide: Text.ElideRight
+                                color: Kirigami.NameUtils.colorsFromString(repliedToData.authorName)
+                                Layout.fillWidth: true
+                            }
+                            QQC2.Label {
+                                text: repliedToData.onelinePlaintext
+                                elide: Text.ElideRight
+                                textFormat: TextEdit.MarkdownText
+                                Layout.fillWidth: true
+                            }
+
+                            clip: true
+                            Layout.fillWidth: true
+                        }
+                        QQC2.ToolButton {
+                            icon.name: "dialog-cancel"
+                            onClicked: messagesViewRoot.replyToID = ""
+                        }
+
+                        Layout.fillWidth: true
+                    }
+                    Layout.fillWidth: true
+                }
+            }
+
+            RowLayout {
+                id: composeRow
+
+                function send() {
+                    lView.model.send(txtField.text, messagesViewRoot.replyToID)
+                    txtField.text = ""
+                    messagesViewRoot.replyToID = ""
+                }
+
+                Layout.fillWidth: true
+
+                QQC2.TextArea {
+                    id: txtField
+
+                    background: null
+                    enabled: chatData.data.mCanSendMessages
+
+                    placeholderText: enabled ? i18n("Write your message...") : i18n("You cannot send messages.")
+
+                    Keys.onReturnPressed: (event) => {
+                        if (!(event.modifiers & Qt.ShiftModifier)) {
+                            composeRow.send()
+                            event.accepted = true
+                        } else {
+                            event.accepted = false
+                        }
+                    }
+                    Keys.onTabPressed: nextItemInFocusChain().forceActiveFocus(Qt.TabFocusReason)
+                    Layout.fillWidth: true
+                }
+                QQC2.Button {
+                    Accessible.name: i18n("Send message")
+                    icon.name: "document-send"
+                    onClicked: composeRow.send()
+                }
             }
         }
     }

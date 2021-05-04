@@ -196,12 +196,15 @@ static auto format(const QString& txt)
     return formattedText;
 }
 
-void MessagesModel::send(const QString& contents)
+void MessagesModel::send(const QString& contents, const QString& inReplyTo)
 {
     auto send_message = TDApi::make_object<TDApi::sendMessage>();
     send_message->chat_id_ = d->id;
     auto message_content = TDApi::make_object<TDApi::inputMessageText>();
     message_content->text_ = format(contents);
+    if (!inReplyTo.isEmpty()) {
+        send_message->reply_to_message_id_ = inReplyTo.toLongLong();
+    }
     send_message->input_message_content_ = std::move(message_content);
 
     c->callP<TDApi::sendMessage>(
@@ -210,6 +213,11 @@ void MessagesModel::send(const QString& contents)
         },
         std::move(send_message)
     );
+}
+
+void MessagesModel::send(const QString& contents)
+{
+    send(contents, {});
 }
 
 void MessagesModel::comingIn()

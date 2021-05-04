@@ -64,6 +64,7 @@ public:
     QHash<int,QByteArray> roleNames() const override;
 
     Q_INVOKABLE void send(const QString& contents);
+    Q_INVOKABLE void send(const QString& contents, const QString& inReplyTo);
     Q_INVOKABLE void messagesInView(QVariantList list);
     Q_INVOKABLE void comingIn();
     Q_INVOKABLE void comingOut();
