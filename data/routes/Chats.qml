@@ -1,4 +1,4 @@
-import QtQuick 2.10
+import QtQuick 2.15
 import QtQuick.Layouts 1.10
 import QtQuick.Controls 2.12 as QQC2
 import org.kde.kirigami 2.14 as Kirigami
@@ -31,7 +31,9 @@ Kirigami.ScrollablePage {
     activeFocusOnTab: true
 
     ListView {
+        reuseItems: true
         activeFocusOnTab: true
+
         model: KSortFilterProxyModel {
             sourceModel: tClient.chatsModel
             sortRole: "mMainListPosition"
