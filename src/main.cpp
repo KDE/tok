@@ -20,7 +20,7 @@ int main(int argc, char* argv[])
 
     performSetup(&engine, false);
 
-    const QUrl url(QStringLiteral("qrc:/main.qml"));
+    const QUrl url(!qgetenv("TOK_MAUI").isEmpty() ? QStringLiteral("qrc:/maui_main.qml") : QStringLiteral("qrc:/main.qml"));
     QObject::connect(
         &engine,
         &QQmlApplicationEngine::objectCreated,

@@ -14,7 +14,7 @@ QQC2.Control {
     required property string mNextID
     required property string mPreviousID
 
-    readonly property int recommendedSize: (applicationWindow().wideScreen ? Math.max(del.width / 3, Kirigami.Units.gridUnit * 15) : (del.width * 0.8))
+    readonly property int recommendedSize: (rootRow.wideMode ? Math.max(del.width / 3, Kirigami.Units.gridUnit * 15) : (del.width * 0.8))
 
     readonly property bool isOwnMessage: messageData.data.authorID === tClient.ownID
     readonly property bool showAvatar: (nextData.data.authorID != messageData.data.authorID) && (!(Kirigami.Settings.isMobile && isOwnMessage))

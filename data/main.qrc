@@ -1,6 +1,8 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
+        <file>maui_main.qml</file>
+        <file>Content.qml</file>
 
         <file>components/Header.qml</file>
         <file>components/PlaintextMessage.qml</file>
