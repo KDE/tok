@@ -207,6 +207,9 @@ QVariant MessagesStore::data(const QVariant& key, int role)
             }
             i++;
         }
+        if (trueI == -1) {
+            return QString();
+        }
         return QString("image://telegram/%1").arg(image->photo_->sizes_[trueI]->photo_->id_);
     }
     case Roles::ImageCaption: {

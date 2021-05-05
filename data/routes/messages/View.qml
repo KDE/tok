@@ -4,6 +4,8 @@ import QtQuick.Controls 2.12 as QQC2
 import org.kde.kirigami 2.14 as Kirigami
 import org.kde.Tok 1.0 as Tok
 
+import QtQuick.Dialogs 1.0 as Dialogues
+
 import "components" as Components
 import "qrc:/components" as GlobalComponents
 
@@ -16,6 +18,18 @@ Kirigami.ScrollablePage {
 
     property string chatID
     property string replyToID: ""
+    property url uploadPath: ""
+    property bool isPhoto: false
+
+    Dialogues.FileDialog {
+        id: uploadDialog
+        title: messagesViewRoot.isPhoto ? i18nc("Dialog title", "Upload photo") : i18nc("Dialog title", "Upload file")
+        folder: messagesViewRoot.isPhoto ? shortcuts.pictures : shortcuts.home
+        onAccepted: {
+            messagesViewRoot.uploadPath = uploadDialog.fileUrl
+            composeRow.send()
+        }
+    }
 
     onChatIDChanged: {
         lView.model = tClient.messagesModel(messagesViewRoot.chatID)
@@ -110,12 +124,41 @@ Kirigami.ScrollablePage {
                 id: composeRow
 
                 function send() {
+                    if (messagesViewRoot.uploadPath != "") {
+                        if (messagesViewRoot.isPhoto) {
+                            lView.model.sendPhoto(txtField.text, messagesViewRoot.uploadPath, messagesViewRoot.replyToID)
+                        } else {
+                            lView.model.sendFile(txtField.text, messagesViewRoot.uploadPath, messagesViewRoot.replyToID)
+                        }
+
+                        messagesViewRoot.uploadPath = ""
+                        txtField.text = ""
+                        messagesViewRoot.replyToID = ""
+                        return
+                    }
                     lView.model.send(txtField.text, messagesViewRoot.replyToID)
                     txtField.text = ""
                     messagesViewRoot.replyToID = ""
                 }
 
                 Layout.fillWidth: true
+
+                QQC2.ToolButton {
+                    Accessible.name: i18n("Upload photo")
+                    icon.name: "photo"
+                    onClicked: {
+                        messagesViewRoot.isPhoto = true
+                        uploadDialog.open()
+                    }
+                }
+                QQC2.ToolButton {
+                    Accessible.name: i18n("Upload file")
+                    icon.name: "mail-attachment"
+                    onClicked: {
+                        messagesViewRoot.isPhoto = false
+                        uploadDialog.open()
+                    }
+                }
 
                 QQC2.TextArea {
                     id: txtField

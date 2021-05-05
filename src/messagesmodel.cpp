@@ -196,28 +196,67 @@ static auto format(const QString& txt)
     return formattedText;
 }
 
-void MessagesModel::send(const QString& contents, const QString& inReplyTo)
+static TDApi::object_ptr<TDApi::InputFile> as_local_file(const QUrl& path) {
+    return TDApi::make_object<TDApi::inputFileLocal>(path.toLocalFile().toStdString());
+}
+
+void MessagesModel::send(SendData data)
 {
     auto send_message = TDApi::make_object<TDApi::sendMessage>();
     send_message->chat_id_ = d->id;
-    auto message_content = TDApi::make_object<TDApi::inputMessageText>();
-    message_content->text_ = format(contents);
-    if (!inReplyTo.isEmpty()) {
-        send_message->reply_to_message_id_ = inReplyTo.toLongLong();
+
+    if (data.replyToID != 0) {
+        send_message->reply_to_message_id_ = data.replyToID;
     }
-    send_message->input_message_content_ = std::move(message_content);
+
+    if (auto it = std::get_if<SendData::Text>(&data.contents)) {
+        auto message_content = TDApi::make_object<TDApi::inputMessageText>();
+        message_content->text_ = format(it->s);
+
+        send_message->input_message_content_ = std::move(message_content);
+    } else if (auto it = std::get_if<SendData::Photo>(&data.contents)) {
+        auto message_content = TDApi::make_object<TDApi::inputMessagePhoto>();
+        message_content->photo_ = as_local_file(it->p);
+        message_content->caption_ = format(it->s);
+
+        send_message->input_message_content_ = std::move(message_content);
+    } else if (auto it = std::get_if<SendData::File>(&data.contents)) {
+        auto message_content = TDApi::make_object<TDApi::inputMessageDocument>();
+        message_content->document_ = as_local_file(it->p);
+        message_content->caption_ = format(it->s);
+        message_content->disable_content_type_detection_ = true;
+
+        send_message->input_message_content_ = std::move(message_content);
+    }
 
     c->callP<TDApi::sendMessage>(
-        [=](TDApi::sendMessage::ReturnType t) {
-
-        },
+        [=](TDApi::sendMessage::ReturnType) {},
         std::move(send_message)
     );
 }
 
-void MessagesModel::send(const QString& contents)
+void MessagesModel::send(const QString& contents, const QString& inReplyTo)
 {
-    send(contents, {});
+    send(SendData {
+        .contents = SendData::Text {contents},
+        .replyToID = inReplyTo.toLongLong()
+    });
+}
+
+void MessagesModel::sendFile(const QString& contents, QUrl url, const QString& inReplyTo)
+{
+    send(SendData {
+        .contents = SendData::File {contents, url},
+        .replyToID = inReplyTo.toLongLong()
+    });
+}
+
+void MessagesModel::sendPhoto(const QString& contents, QUrl url, const QString& inReplyTo)
+{
+    send(SendData {
+        .contents = SendData::Photo {contents, url},
+        .replyToID = inReplyTo.toLongLong()
+    });
 }
 
 void MessagesModel::comingIn()

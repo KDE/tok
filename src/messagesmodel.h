@@ -46,6 +46,9 @@ class MessagesModel : public QAbstractListModel
     struct Private;
     std::unique_ptr<Private> d;
 
+    struct SendData;
+    void send(SendData data);
+
 public:
     explicit MessagesModel(Client* parent, TDApi::int53 id);
     ~MessagesModel();
@@ -63,8 +66,10 @@ public:
 
     QHash<int,QByteArray> roleNames() const override;
 
-    Q_INVOKABLE void send(const QString& contents);
     Q_INVOKABLE void send(const QString& contents, const QString& inReplyTo);
+    Q_INVOKABLE void sendFile(const QString& contents, QUrl url, const QString& inReplyTo);
+    Q_INVOKABLE void sendPhoto(const QString& contents, QUrl url, const QString& inReplyTo);
+
     Q_INVOKABLE void messagesInView(QVariantList list);
     Q_INVOKABLE void comingIn();
     Q_INVOKABLE void comingOut();
