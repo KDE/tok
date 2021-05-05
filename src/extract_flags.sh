@@ -12,7 +12,7 @@ cmake_minimum_required(VERSION 3.19)
 find_package(KF5Kirigami2 REQUIRED)
 find_package(KF5I18n REQUIRED)
 find_package(KF5Notifications REQUIRED)
-find_package(Td 1.7.3 REQUIRED)
+find_package(Td 1.7.4 REQUIRED)
 
 add_executable(tok null.cpp)
 
