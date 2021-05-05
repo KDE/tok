@@ -2,6 +2,7 @@ Project {
     references: [
         "src/Shared.qbs",
         "src/Tok.qbs",
+        "app data/Appdata.qbs",
     ]
 
     property bool withTests: false
