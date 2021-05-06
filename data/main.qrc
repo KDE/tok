@@ -26,6 +26,7 @@
         <file>routes/messages/components/ReplyBlock.qml</file>
 
         <file>routes/messages/components/TextMessage.qml</file>
+        <file>routes/messages/components/FileMessage.qml</file>
         <file>routes/messages/components/PhotoMessage.qml</file>
     </qresource>
 </RCC>

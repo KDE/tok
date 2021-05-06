@@ -85,6 +85,7 @@ QQC2.Control {
             cases: {
                 "messageText": Qt.resolvedUrl("TextMessage.qml"),
                 "messagePhoto": Qt.resolvedUrl("PhotoMessage.qml"),
+                "messageDocument": Qt.resolvedUrl("FileMessage.qml"),
             }
             defaultCase: Qt.resolvedUrl("Unsupported.qml")
 

@@ -27,6 +27,10 @@ enum Roles {
     // Photo messages
     ImageURL,
     ImageCaption,
+
+    // FileMessages
+    FileName,
+    FileCaption,
 };
 
 MessagesStore::MessagesStore(Client* parent) : c(parent), d(new Private)
@@ -224,6 +228,30 @@ QVariant MessagesStore::data(const QVariant& key, int role)
         }
         return QString::fromStdString(image->caption_->text_);
     }
+    case Roles::FileCaption: {
+        auto content = d->messageData[mID]->content_.get();
+        if (content->get_id() != TDApi::messageDocument::ID) {
+            return QString();
+        }
+
+        auto file = static_cast<TDApi::messageDocument*>(content);
+        if (file->caption_ == nullptr) {
+            return QString();
+        }
+        return QString::fromStdString(file->caption_->text_);
+    }
+    case Roles::FileName: {
+        auto content = d->messageData[mID]->content_.get();
+        if (content->get_id() != TDApi::messageDocument::ID) {
+            return QString();
+        }
+
+        auto file = static_cast<TDApi::messageDocument*>(content);
+        if (file->document_ == nullptr) {
+            return QString();
+        }
+        return QString::fromStdString(file->document_->file_name_);
+    }
 
     case Roles::AuthorID: {
         const auto idFrom = [](TDApi::MessageSender* s) {
@@ -338,6 +366,9 @@ QHash<int, QByteArray> MessagesStore::roleNames()
 
     roles[Roles::ImageURL] = "imageURL";
     roles[Roles::ImageCaption] = "imageCaption";
+
+    roles[Roles::FileCaption] = "fileCaption";
+    roles[Roles::FileName] = "fileName";
 
     return roles;
 }
