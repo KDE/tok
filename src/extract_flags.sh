@@ -7,7 +7,7 @@ set(REQUIRED_QT_VERSION 5.15.0)
 
 project(Tok LANGUAGES CXX)
 
-cmake_minimum_required(VERSION 3.19)
+cmake_minimum_required(VERSION 3.5)
 
 find_package(KF5Kirigami2 REQUIRED)
 find_package(KF5I18n REQUIRED)
