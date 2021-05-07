@@ -29,7 +29,7 @@ mkdir _build
 cd _build
 mkdir -p ".cmake/api/v1/query"
 touch ".cmake/api/v1/query/codemodel-v2"
-nohup cmake .. 2>/dev/null >nohup.out
+cmake .. 2>&1 >nohup.out
 retval=$?
 
 if [ $retval -ne 0 ]; then
