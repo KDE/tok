@@ -29,10 +29,21 @@ mkdir _build
 cd _build
 mkdir -p ".cmake/api/v1/query"
 touch ".cmake/api/v1/query/codemodel-v2"
-nohup cmake .. >/dev/null 2>&1
+nohup cmake .. 2>/dev/null >nohup.out
+retval=$?
 
-jq -r ".link.commandFragments[].fragment" .cmake/api/v1/reply/target-*.json
+if [ $retval -ne 0 ]; then
+    cat nohup.out
+    exit $retval
+fi
+
+function bail {
+	echo $@
+	exit 1
+}
+
+jq -r ".link.commandFragments[].fragment" .cmake/api/v1/reply/target-*.json || bail $PWD
 
 echo "===="
 
-jq -r ".compileGroups[].includes[].path" .cmake/api/v1/reply/target-*.json
+jq -r ".compileGroups[].includes[].path" .cmake/api/v1/reply/target-*.json || bail $PWD
