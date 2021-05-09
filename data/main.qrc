@@ -36,6 +36,7 @@
 
         <file>routes/messages/components/ReplyBlock.qml</file>
         <file alias="routes/messages/components/thin/ReplyBlock.qml">routes/messages/components/ReplyBlock.qml</file>
+        <file>routes/messages/components/WebPageBlock.qml</file>
 
         <file>routes/messages/components/TextMessage.qml</file>
         <file>routes/messages/components/FileMessage.qml</file>

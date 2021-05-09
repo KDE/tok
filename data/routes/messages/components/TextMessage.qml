@@ -95,6 +95,9 @@ QQC2.Control {
 
             Layout.fillWidth: true
         }
+        WebPageBlock {
+            Layout.bottomMargin: timestamp.height
+        }
     }
 
     Layout.maximumWidth: del.recommendedSize
