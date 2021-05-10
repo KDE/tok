@@ -28,6 +28,7 @@ enum Roles {
     WebPageDisplay,
     WebPageSiteName,
     WebPageTitle,
+    WebPageText,
 
     // InstantView
     HasInstantView,
@@ -218,7 +219,7 @@ QVariant MessagesStore::data(const QVariant& key, int role)
 
     auto mID = fromVariant(key);
 
-    static const auto hasWebPage = [this, mID]() {
+    const auto hasWebPage = [this, mID]() {
         return static_cast<TDApi::messageText*>(d->messageData[mID]->content_.get())->web_page_ != nullptr;
     };
 
@@ -373,22 +374,23 @@ QVariant MessagesStore::data(const QVariant& key, int role)
     }
 
     case Roles::WebPageTitle: {
-        qDebug() << "titel" << hasWebPage();
-
         if (!hasWebPage()) return QString();
 
         auto it = static_cast<TDApi::messageText*>(d->messageData[mID]->content_.get())->web_page_.get();
         return QString::fromStdString(it->title_);
     }
 
-    case Roles::HasInstantView: {
-        qDebug() << "melome" << hasWebPage();
+    case Roles::WebPageText: {
+        if (!hasWebPage()) return QString();
 
+        auto it = static_cast<TDApi::messageText*>(d->messageData[mID]->content_.get())->web_page_.get();
+        return QString::fromStdString(it->description_->text_);
+    }
+
+    case Roles::HasInstantView: {
         if (!hasWebPage()) return false;
 
         auto it = static_cast<TDApi::messageText*>(d->messageData[mID]->content_.get())->web_page_.get();
-
-        qDebug() << it->instant_view_version_;
 
         return it->instant_view_version_ != 0;
     }
@@ -635,6 +637,7 @@ QHash<int, QByteArray> MessagesStore::roleNames()
     roles[Roles::WebPageDisplay] = "webPageDisplay";
     roles[Roles::WebPageSiteName] = "webPageSiteName";
     roles[Roles::WebPageTitle] = "webPageTitle";
+    roles[Roles::WebPageText] = "webPageText";
     roles[Roles::HasInstantView] = "hasInstantView";
 
     return roles;

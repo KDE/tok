@@ -24,6 +24,7 @@ QQC2.Control {
             required property string webPageDisplay
             required property string webPageSiteName
             required property string webPageTitle
+            required property string webPageText
             required property bool hasInstantView
         }
     }
@@ -51,16 +52,18 @@ QQC2.Control {
             Layout.fillWidth: true
         }
         QQC2.Label {
-            text: "los gays son heterosexuales"
+            text: webPageData.data.webPageText
             elide: Text.ElideRight
             textFormat: TextEdit.MarkdownText
 
             Layout.fillWidth: true
         }
 
-        QQC2.Button {
+        QQC2.ToolButton {
             visible: webPageData.data.hasInstantView
             text: i18nc("button that opens a preview of a web page. 'instant view' is sort of like a brand name, but also sort of not? i would recommend consulting translations.telegram.org to see how instant view was translated officially.", "Instant View")
+
+            Layout.fillWidth: true
         }
 
         clip: true

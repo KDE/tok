@@ -60,7 +60,7 @@ QQC2.Control {
             readonly property var isEmoji: /^(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])+$/
             readonly property bool isEmojiOnly: isEmoji.test(textData.data.content)
 
-            readonly property string paddingT: " ".repeat(Math.ceil(_background.timestamp.implicitWidth / _background.dummy.implicitWidth)) + "⠀"
+            readonly property string paddingT: (web.visible ? "" : " ".repeat(Math.ceil(_background.timestamp.implicitWidth / _background.dummy.implicitWidth)) + "⠀")
 
             readOnly: true
             selectByMouse: !Kirigami.Settings.isMobile
@@ -96,6 +96,7 @@ QQC2.Control {
             Layout.fillWidth: true
         }
         WebPageBlock {
+            id: web
             Layout.bottomMargin: timestamp.height
         }
     }
