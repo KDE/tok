@@ -166,7 +166,7 @@ Kirigami.ScrollablePage {
                     background: null
                     enabled: chatData.data.mCanSendMessages
 
-                    placeholderText: enabled ? i18n("Write your message...") : i18n("You cannot send messages.")
+                    placeholderText: enabled ? i18n("Write your message…") : i18n("You cannot send messages.")
 
                     Keys.onReturnPressed: (event) => {
                         if (!(event.modifiers & Qt.ShiftModifier)) {

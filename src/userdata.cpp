@@ -41,7 +41,7 @@ QVariant UserDataModel::data(const QVariant& key, int role)
                     Q_EMIT keyAdded(QString::number(id));
                 },
                 id);
-            return i18n("Loading...");
+            return i18n("Loading…");
         }
         return QString::fromStdString(fullUserData[id]->bio_);
     case Roles::Name:
