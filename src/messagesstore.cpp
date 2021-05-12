@@ -138,6 +138,8 @@ void MessagesStore::format(const QVariant &key, QQuickTextDocument* doc, QQuickI
             font.setFamily("emoji");
             if (emojiOnly) {
                 font.setPointSize(font.pointSize()*8);
+            } else {
+                font.setPointSizeF(font.pointSizeF()*1.2);
             }
             cfmt.setFont(font);
 
