@@ -9,6 +9,8 @@ import "routes/messages" as MessagesRoutes
 Kirigami.AbstractApplicationWindow {
     id: rootWindow
 
+    title: i18nc("window title", "Tok")
+
     Content { anchors.fill: parent }
 
 }

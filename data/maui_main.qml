@@ -8,6 +8,8 @@ import "qrc:/components" as Components
 Maui.ApplicationWindow {
     id: rootWindow
 
+    title: i18nc("window title", "Tok")
+
     width: 800
     height: 600
 
