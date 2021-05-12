@@ -13,6 +13,22 @@
 
 #include <QtConcurrent>
 
+#ifdef Q_OS_LINUX
+#include <QGuiApplication>
+#include <QDBusMessage>
+#include <QDBusConnection>
+
+inline auto setUnity(const QVariantMap& props)
+{
+    QDBusMessage message = QDBusMessage::createSignal("/", "com.canonical.Unity.LauncherEntry", "Update");
+
+    message.setArguments({QGuiApplication::desktopFileName(), props});
+
+    QDBusConnection::sessionBus().send(message);
+}
+
+#endif
+
 std::uint64_t Client::Private::nextQueryID()
 {
     return ++m_queryID;
@@ -162,6 +178,17 @@ void Client::Private::handleUpdate(TDApi::object_ptr<TDApi::Object> update)
                 auto mv = TDApi::move_object_as<TDApi::Update>(update);
                 m_userDataModel->handleUpdate(std::move(mv));
             },
+#ifdef Q_OS_LINUX
+            [](TDApi::updateUnreadMessageCount& it) {
+                if (it.chat_list_->get_id() != TDApi::chatListMain::ID) {
+                    return;
+                }
+                setUnity({
+                    {"count-visible", it.unread_count_ > 0},
+                    {"count", it.unread_count_},
+                });
+            },
+#endif
             [this](TDApi::updateNewMessage &msg) {
                 if (!m_messageModels.contains(msg.message_->chat_id_)) {
                     return;

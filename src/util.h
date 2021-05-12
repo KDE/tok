@@ -2,6 +2,7 @@
 
 #include <QString>
 #include <QCoreApplication>
+#include <QDebug>
 
 class ExecuteEvent : public QEvent {
 public:
@@ -21,3 +22,8 @@ public:
 };
 
 void runOnMainThread(std::function<void ()> f);
+
+inline QDebug operator<< (QDebug d, const std::string &model) {
+    d << QString::fromStdString(model);
+    return d;
+}
