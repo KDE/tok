@@ -21,6 +21,10 @@ Kirigami.ScrollablePage {
     property url uploadPath: ""
     property bool isPhoto: false
 
+    function doit() {
+        txtField.forceActiveFocus()
+    }
+
     Dialogues.FileDialog {
         id: uploadDialog
         title: messagesViewRoot.isPhoto ? i18nc("Dialog title", "Upload photo") : i18nc("Dialog title", "Upload file")

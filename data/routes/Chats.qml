@@ -116,11 +116,17 @@ Kirigami.ScrollablePage {
             }
 
             onClicked: {
+                if (Kirigami.PageRouter.router.params.chatID === del.mID) {
+                    Kirigami.PageRouter.bringToView(1)
+                    Kirigami.PageRouter.router.pageStack.currentItem.doit()
+                    return
+                }
                 if (Kirigami.PageRouter.router.params.chatID !== undefined) {
                     tClient.messagesModel(Kirigami.PageRouter.router.params.chatID).comingOut()
                 }
                 tClient.messagesModel(del.mID).comingIn()
                 Kirigami.PageRouter.pushFromHere({ "route": "Messages/View", "chatID": del.mID })
+                Kirigami.PageRouter.router.pageStack.currentItem.doit()
             }
         }
 
