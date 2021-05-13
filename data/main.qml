@@ -11,6 +11,8 @@ Kirigami.AbstractApplicationWindow {
 
     title: i18nc("window title", "Tok")
 
+    contextDrawer: MessagesRoutes.Sidebar {}
+
     Content { anchors.fill: parent }
 
 }

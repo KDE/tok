@@ -22,6 +22,7 @@
 
         <file>routes/messages/View.qml</file>
         <file>routes/messages/NoView.qml</file>
+        <file>routes/messages/Sidebar.qml</file>
         <file>routes/messages/components/MessageDelegate.qml</file>
         <file>routes/messages/components/Unsupported.qml</file>
 
