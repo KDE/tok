@@ -165,6 +165,7 @@ Kirigami.ScrollablePage {
 
                     background: null
                     enabled: chatData.data.mCanSendMessages
+                    wrapMode: Text.Wrap
 
                     placeholderText: enabled ? i18n("Write your message…") : i18n("You cannot send messages.")
 
