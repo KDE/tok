@@ -14,9 +14,11 @@ class ChatSortModel : public QSortFilterProxyModel
     Q_OBJECT
 
     QString _filter;
+    QString _folder;
     ChatsStore* _store = nullptr;
     Q_PROPERTY(ChatsStore* store READ store WRITE setStore NOTIFY storeChanged)
     Q_PROPERTY(QString filter READ filter WRITE setFilter NOTIFY filterChanged)
+    Q_PROPERTY(QString folder READ folder WRITE setFolder NOTIFY folderChanged)
 
 protected:
     bool lessThan(const QModelIndex& lhs, const QModelIndex& rhs) const override;
@@ -32,5 +34,9 @@ public:
     QString filter();
     void setFilter(const QString& filter);
     Q_SIGNAL void filterChanged();
+
+    QString folder();
+    void setFolder(const QString& folder);
+    Q_SIGNAL void folderChanged();
 
 };

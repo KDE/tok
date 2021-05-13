@@ -132,13 +132,36 @@ Kirigami.ScrollablePage {
         activeFocusOnTab: true
 
         model: Tok.ChatSortModel {
+            id: filter
+
             sourceModel: tClient.chatsModel
             store: tClient.chatsStore
             filter: searchField.text
         }
 
-        header: Item {
-            height: !rootRow.shouldUseSidebars && audioBar.active ? audioBar.item.height : 0
+        header: ColumnLayout {
+            spacing: 0
+            width: parent.width
+
+            Item {
+                implicitHeight: !rootRow.shouldUseSidebars && audioBar.active ? audioBar.item.height : 0
+            }
+            ListView {
+                model: tClient.chatListModel
+                delegate: QQC2.TabButton {
+                    required property string name
+                    required property string chatListID
+
+                    text: name
+                    checked: filter.folder == chatListID
+
+                    onClicked: filter.folder = chatListID
+                }
+                orientation: ListView.Horizontal
+
+                implicitHeight: 30
+                Layout.fillWidth: true
+            }
         }
 
         delegate: Kirigami.BasicListItem {

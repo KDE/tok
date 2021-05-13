@@ -7,7 +7,7 @@
 #include "chatsort.h"
 #include "chatsstore_p.h"
 
-ChatSortModel::ChatSortModel(QObject* parent) : QSortFilterProxyModel(parent), _store(nullptr)
+ChatSortModel::ChatSortModel(QObject* parent) : QSortFilterProxyModel(parent), _store(nullptr), _folder(QString::number(TDApi::chatListMain::ID))
 {
     setDynamicSortFilter(true);
     setFilterRole(Qt::UserRole);
@@ -65,9 +65,15 @@ bool ChatSortModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourcePar
         return false;
     }
 
+    const auto folderID = _folder.toLongLong();
+    const auto isFolder = folderID != TDApi::chatListMain::ID;
+
     auto& data = _store->d->chatData[id];
     for (const auto& pos : data->positions_) {
-        if (pos->list_->get_id() == TDApi::chatListMain::ID) {
+        if (!isFolder && pos->list_->get_id() == TDApi::chatListMain::ID) {
+            goto ok;
+        }
+        if (pos->list_->get_id() == TDApi::chatListFilter::ID && static_cast<const TDApi::chatListFilter*>(pos->list_.get())->chat_filter_id_ == folderID) {
             goto ok;
         }
     }
@@ -116,5 +122,33 @@ void ChatSortModel::setFilter(const QString& filter)
 
     _filter = filter;
     Q_EMIT filterChanged();
+    invalidateFilter();
+}
+
+QString ChatSortModel::folder()
+{
+    return _folder;
+}
+
+void ChatSortModel::setFolder(const QString& folder)
+{
+    if (folder == _folder) {
+        return;
+    }
+
+    auto it = folder.toLongLong();
+
+    TDApi::object_ptr<TDApi::ChatList> list = nullptr;
+    if (it != TDApi::chatListMain::ID) {
+        list = TDApi::make_object<TDApi::chatListFilter>(it);
+    }
+
+    _store->c->call<TDApi::getChats>(
+        nullptr,
+        std::move(list), std::numeric_limits<std::int64_t>::max(), 0, 20
+    );
+
+    _folder = folder;
+    Q_EMIT folderChanged();
     invalidateFilter();
 }

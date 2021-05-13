@@ -193,6 +193,9 @@ void Client::Private::handleUpdate(TDApi::object_ptr<TDApi::Object> update)
                 });
             },
 #endif
+            [this](TDApi::updateChatFilters& filts) {
+                m_chatListModel->handleUpdate(std::move(filts.chat_filters_));
+            },
             [this](TDApi::updateNewMessage &msg) {
                 if (!m_messageModels.contains(msg.message_->chat_id_)) {
                     return;

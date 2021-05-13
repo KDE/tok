@@ -26,6 +26,7 @@
 #include "colorschemer.h"
 #include "usersortmodel.h"
 #include "searchmessagesmodel.h"
+#include "chatlistmodel.h"
 
 #include "internallib/qquickrelationallistener.h"
 
@@ -49,6 +50,7 @@ void performSetup(QQmlEngine* eng, bool testMode)
     qRegisterMetaType<ColorSchemer*>();
     qRegisterMetaType<FileMangler*>();
     qRegisterMetaType<SearchMessagesModel*>();
+    qRegisterMetaType<ChatListModel*>();
     qRegisterMetaType<QSharedPointer<TDApi::file>>();
     qmlRegisterSingletonType<Utilities>("org.kde.Tok", 1, 0, "Utils", [](QQmlEngine*, QJSEngine*) -> QObject* { return new Utilities; });
     qmlRegisterSingletonType<ColorSchemer>("org.kde.Tok", 1, 0, "ColorSchemer", [](QQmlEngine*, QJSEngine*) -> QObject* { return new ColorSchemer; });

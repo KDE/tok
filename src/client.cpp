@@ -24,6 +24,7 @@ Client::Client(bool testing)
     d->m_messagesStore.reset(new MessagesStore(this));
     d->m_notificationManager.reset(new NotificationManager(this));
     d->m_fileMangler.reset(new FileMangler(this));
+    d->m_chatListModel.reset(new ChatListModel(this));
 
     d->poll();
 
@@ -92,6 +93,11 @@ ChatsStore* Client::chatsStore() const
 FileMangler* Client::fileMangler() const
 {
     return d->m_fileMangler.get();
+}
+
+ChatListModel* Client::chatListModel() const
+{
+    return d->m_chatListModel.get();
 }
 
 bool Client::online() const
