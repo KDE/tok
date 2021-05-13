@@ -247,7 +247,7 @@ void Client::Private::poll()
         return;
     }
     QtConcurrent::run([this] {
-        while (true) {
+        while (!quitting) {
             auto response = m_clientManager->receive(10);
 
             if (response.object) {
@@ -269,6 +269,7 @@ Client::Private::Private(Client* parent)
     m_clientID = m_clientManager->create_client_id();
 
     sendQuery(TDApi::make_object<TDApi::getOption>("version"), {});
+    connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, parent, [this](){ quitting = true; });
 }
 
 void Client::Private::enterPhoneNumber(const QString& phoneNumber)

@@ -17,6 +17,7 @@ class Client::Private
     Client* q;
 
     bool online;
+    bool quitting = false;
 
     // members
 
