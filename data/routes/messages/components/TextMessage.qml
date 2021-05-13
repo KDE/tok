@@ -122,7 +122,7 @@ QQC2.Control {
             readonly property string paddingT: " ".repeat(Math.ceil(timestamp.implicitWidth / dummy.implicitWidth)) + "⠀"
 
             readOnly: true
-            selectByMouse: true
+            selectByMouse: !Kirigami.Settings.isMobile
             wrapMode: Text.Wrap
 
             color: Kirigami.Theme.textColor
