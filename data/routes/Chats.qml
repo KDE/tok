@@ -26,6 +26,21 @@ Kirigami.ScrollablePage {
                 Accessible.description: ``
                 Accessible.searchEdit: true
             }
+
+            QQC2.ToolButton {
+                QQC2.Menu {
+                    id: settingsMenu
+
+                    QQC2.MenuItem {
+                        text: i18nc("Checkable menu item to toggle between the default appearance and a more compact style", "Compact mode")
+                        checkable: true
+                        onToggled: settings.thinMode = checked
+                        checked: settings.thinMode
+                    }
+                }
+                icon.name: "application-menu"
+                onClicked: settingsMenu.popup()
+            }
         }
     }
     activeFocusOnTab: true

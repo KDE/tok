@@ -21,7 +21,7 @@ QQC2.Control {
     readonly property bool separateFromPrevious: previousData.data.authorID != messageData.data.authorID
     readonly property bool canDeleteMessage: isOwnMessage
 
-    topPadding: del.separateFromPrevious ? Kirigami.Units.largeSpacing : Kirigami.Units.smallSpacing
+    topPadding: del.separateFromPrevious ? Kirigami.Units.smallSpacing : 0
     bottomPadding: 0
 
     Accessible.role: Accessible.ListItem
@@ -51,6 +51,18 @@ QQC2.Control {
         }
     }
 
+    background: Item {
+        Kirigami.Separator {
+            visible: del.separateFromPrevious && settings.thinMode
+            opacity: 0.5
+            anchors {
+                top: parent.top
+                left: parent.left
+                right: parent.right
+            }
+        }
+    }
+
     contentItem: RowLayout {
         Kirigami.Avatar {
             name: userData.data.name
@@ -61,6 +73,8 @@ QQC2.Control {
 
             // visible yoinks from layout, which isn't what we want.
             opacity: del.showAvatar ? 1 : 0
+
+            visible: !settings.thinMode
 
             HoverHandler {
                 cursorShape: Qt.PointingHandCursor
@@ -83,9 +97,9 @@ QQC2.Control {
 
             value: messageData.data.kind
             cases: {
-                "messageText": Qt.resolvedUrl("TextMessage.qml"),
-                "messagePhoto": Qt.resolvedUrl("PhotoMessage.qml"),
-                "messageDocument": Qt.resolvedUrl("FileMessage.qml"),
+                "messageText": Qt.resolvedUrl((settings.thinMode ? "thin/" : "") + "TextMessage.qml"),
+                "messagePhoto": Qt.resolvedUrl((settings.thinMode ? "thin/" : "") + "PhotoMessage.qml"),
+                "messageDocument": Qt.resolvedUrl((settings.thinMode ? "thin/" : "") + "FileMessage.qml"),
             }
             defaultCase: Qt.resolvedUrl("Unsupported.qml")
 
