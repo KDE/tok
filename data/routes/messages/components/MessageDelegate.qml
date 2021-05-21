@@ -21,7 +21,7 @@ QQC2.Control {
     readonly property bool separateFromPrevious: previousData.data.authorID != messageData.data.authorID
     readonly property bool canDeleteMessage: isOwnMessage
 
-    topPadding: del.separateFromPrevious ? Kirigami.Units.smallSpacing : 0
+    topPadding: settings.slimMode ? (del.separateFromPrevious ? Kirigami.Units.smallSpacing : 0) : (del.separateFromPrevious ? Kirigami.Units.largeSpacing : Kirigami.Units.smallSpacing)
     bottomPadding: 0
 
     Accessible.role: Accessible.ListItem
