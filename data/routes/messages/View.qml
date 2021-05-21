@@ -12,6 +12,7 @@ import "qrc:/components" as GlobalComponents
 Kirigami.PageRoute {
 
 name: "Messages/View"
+cache: true
 
 Kirigami.ScrollablePage {
     id: messagesViewRoot

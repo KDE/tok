@@ -1,3 +1,5 @@
+#define QT_QML_DEBUG
+
 #include <QQmlEngine>
 #include <QQmlContext>
 

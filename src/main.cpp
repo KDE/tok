@@ -2,6 +2,8 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+#define QT_QML_DEBUG
+
 #include <QApplication>
 #include <QQmlApplicationEngine>
 
