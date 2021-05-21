@@ -16,17 +16,6 @@ Kirigami.ScrollablePage {
             Layout.margins: Kirigami.Units.largeSpacing
             Layout.fillWidth: true
 
-            Kirigami.SearchField {
-                id: searchField
-
-                Layout.fillWidth: true
-                Keys.onTabPressed: nextItemInFocusChain().forceActiveFocus(Qt.TabFocusReason)
-
-                Accessible.name: i18n("Search chats")
-                Accessible.description: ``
-                Accessible.searchEdit: true
-            }
-
             QQC2.ToolButton {
                 QQC2.Menu {
                     id: settingsMenu
@@ -40,6 +29,17 @@ Kirigami.ScrollablePage {
                 }
                 icon.name: "application-menu"
                 onClicked: settingsMenu.popup()
+            }
+
+            Kirigami.SearchField {
+                id: searchField
+
+                Layout.fillWidth: true
+                Keys.onTabPressed: nextItemInFocusChain().forceActiveFocus(Qt.TabFocusReason)
+
+                Accessible.name: i18n("Search chats")
+                Accessible.description: ``
+                Accessible.searchEdit: true
             }
         }
     }
