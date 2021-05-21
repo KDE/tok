@@ -45,7 +45,25 @@ Kirigami.ScrollablePage {
     }
     activeFocusOnTab: true
 
+    // yes, the decrement goes up and the increment goes down visually.
+    Shortcut {
+        sequence: "Alt+Up"
+        onActivated: {
+            lView.decrementCurrentIndex()
+            lView.itemAtIndex(lView.currentIndex).clicked()
+        }
+    }
+    Shortcut {
+        sequence: "Alt+Down"
+        onActivated: {
+            lView.incrementCurrentIndex()
+            lView.itemAtIndex(lView.currentIndex).clicked()
+        }
+    }
+
     ListView {
+        id: lView
+
         reuseItems: true
         activeFocusOnTab: true
 
