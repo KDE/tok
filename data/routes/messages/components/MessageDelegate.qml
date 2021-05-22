@@ -28,6 +28,16 @@ QQC2.Control {
     Accessible.name: tryit(() => __loaderSwitch.item.Accessible.name)
     readonly property bool showFocusRing: true
 
+    Kirigami.Theme.backgroundColor: {
+        if (isOwnMessage)
+            return Kirigami.ColorUtils.tintWithAlpha(Kirigami.Theme.backgroundColor, Kirigami.Theme.focusColor, 0.1)
+
+        if (Kirigami.ColorUtils.brightnessForColor(messagesViewRoot.Kirigami.Theme.backgroundColor) == Kirigami.ColorUtils.Light)
+            return Qt.darker(messagesViewRoot.Kirigami.Theme.backgroundColor, 1.1)
+        else
+            return Qt.lighter(messagesViewRoot.Kirigami.Theme.backgroundColor, 1.3)
+    }
+
     Kirigami.Theme.colorSet: {
         return Kirigami.Theme.Button
         // if (Array.from(messagesSelectionModel.selectedIndexes).includes(modelIndex)) {
