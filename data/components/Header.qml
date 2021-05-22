@@ -7,10 +7,8 @@ Kirigami.AbstractApplicationHeader {
 
     default property alias it: colLayout.data
 
-    DragHandler {
-        acceptedDevices: PointerDevice.GenericPointer
-        grabPermissions: PointerHandler.CanTakeOverFromItems | PointerHandler.CanTakeOverFromHandlersOfDifferentType | PointerHandler.ApprovesTakeOverByAnything
-        onActiveChanged: if (active) rootWindow.startSystemMove()
+    TapHandler {
+        onPressedChanged: if (pressed) rootWindow.startSystemMove()
     }
 
     contentItem: ColumnLayout {
