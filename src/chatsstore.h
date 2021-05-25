@@ -13,6 +13,7 @@ class ChatsStore : public TokAbstractRelationalModel
     std::unique_ptr<Private> d;
 
     friend class ChatsModel;
+    friend class ChatSortModel;
 
 public:
     explicit ChatsStore(Client* parent);

@@ -15,7 +15,6 @@
 
 enum Roles {
     ID = Qt::UserRole,
-    MainListPosition,
 };
 
 ChatsModel::ChatsModel(Client* parent) : QAbstractListModel(parent), c(parent), d(new Private)
@@ -79,8 +78,7 @@ void ChatsModel::updatePositions(TDApi::int53 chatID, TDApi::object_ptr<TDApi::c
     Q_ASSERT(ps == newPositions.size());
 
     data->positions_ = std::move(newPositions);
-    auto row = std::find(d->chats.begin(), d->chats.end(), chatID) - d->chats.begin();
-    Q_EMIT dataChanged(index(row), index(row), {});
+    Q_EMIT c->chatsStore()->keyDataChanged(QString::number(chatID), {});
 }
 
 void ChatsModel::handleUpdate(TDApi::object_ptr<TDApi::Update> u)
@@ -116,7 +114,6 @@ QHash<int,QByteArray> ChatsModel::roleNames() const
     QHash<int,QByteArray> roles;
 
     roles[int(Roles::ID)] = "mID";
-    roles[int(Roles::MainListPosition)] = "mMainListPosition";
 
     return roles;
 }
@@ -133,18 +130,6 @@ QVariant ChatsModel::data(const QModelIndex& idx, int role) const
     switch (r) {
     case Roles::ID: {
         return QString::number(chatID);
-    }
-    case Roles::MainListPosition: {
-        if (!c->chatsStore()->d->chatData.contains(chatID)) {
-            return QString();
-        }
-        auto& data = c->chatsStore()->d->chatData[chatID];
-        for (const auto& pos : data->positions_) {
-            if (pos->list_->get_id() == TDApi::chatListMain::ID) {
-                return QString::number(pos->order_);
-            }
-        }
-        return QString();
     }
     }
 
