@@ -2,6 +2,8 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+#include <QtConcurrent>
+
 #include "client_p.h"
 #include "keys.h"
 #include "overloader.h"
@@ -10,8 +12,6 @@
 #include <qstandardpaths.h>
 #include <td/telegram/Client.h>
 #include <td/telegram/td_api.h>
-
-#include <QtConcurrent>
 
 #ifdef Q_OS_LINUX
 #include <QGuiApplication>

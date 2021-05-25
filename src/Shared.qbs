@@ -4,7 +4,7 @@ StaticLibrary {
     name: "tokInternal"
 
     Export {
-        cpp.driverLinkerFlags: mu.linkerFlags
+        cpp.driverLinkerFlags: mu.linkerFlags.concat(["-pthread"])
         cpp.includePaths: mu.includeDirs
         Group {
             files: ["../data/main.qrc"]

@@ -67,17 +67,16 @@ Kirigami.ScrollablePage {
         reuseItems: true
         activeFocusOnTab: true
 
-        model: KSortFilterProxyModel {
+        model: Tok.ChatSortModel {
             sourceModel: tClient.chatsModel
-            sortRole: "mMainListPosition"
-            sortOrder: Qt.DescendingOrder
+            store: tClient.chatsStore
+            filter: searchField.text
         }
 
         delegate: Kirigami.BasicListItem {
             id: del
 
             required property string mID
-            required property string mMainListPosition
 
             Tok.RelationalListener {
                 id: chatData
