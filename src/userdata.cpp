@@ -70,6 +70,9 @@ bool UserDataModel::canFetchKey(const QVariant& key)
 
 void UserDataModel::fetchKey(const QVariant& key)
 {
+    if (key.toString().toLong() == 0) {
+        return;
+    }
     c->call<TDApi::getUser>(
         [this, key](TDApi::getUser::ReturnType t) {
             userData[key.toString().toLong()] = std::move(t);

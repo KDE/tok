@@ -159,6 +159,9 @@ bool ChatsStore::canFetchKey(const QVariant& key)
 
 void ChatsStore::fetchKey(const QVariant& key)
 {
+    if (from(key) == 0) {
+        return;
+    }
     c->call<TDApi::getChat>(nullptr, from(key));
 }
 

@@ -347,6 +347,9 @@ bool MessagesStore::canFetchKey(const QVariant& key)
 void MessagesStore::fetchKey(const QVariant& key)
 {
     auto [chat, msg] = fromVariant(key);
+    if (chat == 0 || msg == 0) {
+        return;
+    }
     c->call<TDApi::getMessage>(
         [](TDApi::getMessage::ReturnType) {},
         chat, msg
