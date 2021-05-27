@@ -33,10 +33,12 @@
         <file>routes/messages/components/FileMessage.qml</file>
         <file>routes/messages/components/PhotoMessage.qml</file>
         <file>routes/messages/components/UserAddMessage.qml</file>
+        <file>routes/messages/components/Sticker.qml</file>
 
         <file>routes/messages/components/thin/TextMessage.qml</file>
         <file>routes/messages/components/thin/FileMessage.qml</file>
         <file>routes/messages/components/thin/PhotoMessage.qml</file>
         <file>routes/messages/components/thin/UserAddMessage.qml</file>
+        <file alias="routes/messages/components/thin/Sticker.qml">routes/messages/components/Sticker.qml</file>
     </qresource>
 </RCC>

@@ -114,6 +114,7 @@ QQC2.Control {
                 "messagePhoto": Qt.resolvedUrl((settings.thinMode ? "thin/" : "") + "PhotoMessage.qml"),
                 "messageDocument": Qt.resolvedUrl((settings.thinMode ? "thin/" : "") + "FileMessage.qml"),
                 "messageChatAddMembers": Qt.resolvedUrl((settings.thinMode ? "thin/" : "") + "UserAddMessage.qml"),
+                "messageSticker": Qt.resolvedUrl((settings.thinMode ? "thin/" : "") + "Sticker.qml"),
             }
             defaultCase: Qt.resolvedUrl("Unsupported.qml")
 

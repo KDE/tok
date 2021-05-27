@@ -34,6 +34,9 @@ enum Roles {
 
     // AddMembers messages
     AddedMembers,
+
+    // Sticker messages
+    StickerURL,
 };
 
 MessagesStore::MessagesStore(Client* parent) : c(parent), d(new Private)
@@ -341,6 +344,11 @@ QVariant MessagesStore::data(const QVariant& key, int role)
         return l;
     }
 
+    case Roles::StickerURL: {
+        auto it = static_cast<TDApi::messageSticker*>(d->messageData[mID]->content_.get());
+        return QString("image://telegram/%1").arg(it->sticker_->sticker_->id_);
+    }
+
     }
 
     Q_UNREACHABLE();
@@ -388,6 +396,8 @@ QHash<int, QByteArray> MessagesStore::roleNames()
     roles[Roles::FileName] = "fileName";
 
     roles[Roles::AddedMembers] = "addedMembers";
+
+    roles[Roles::StickerURL] = "stickerURL";
 
     return roles;
 }
