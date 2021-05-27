@@ -21,7 +21,11 @@ StaticLibrary {
         property var includeDirs
         configure: {
             var proc = new Process()
-            proc.exec(mu.src + "/extract_flags.sh", [])
+            var exitCode = proc.exec(mu.src + "/extract_flags.sh", [])
+            if (exitCode != 0) {
+            	console.error(proc.readStdOut())
+            	throw "extracting flags from CMake libraries failed"
+            }
             var stdout = proc.readStdOut()
             stdout = stdout.split("====")
             linkerFlags = stdout[0].split("\n").filter(function(it) { return Boolean(it) && !it.contains("rpath") && (it.startsWith("/") || it.startsWith("-l")) }).map(function(it) { return it.replace("-Wl,", "") })

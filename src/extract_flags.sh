@@ -20,6 +20,7 @@ target_link_libraries(tok
   PUBLIC
     KF5::Kirigami2 KF5::I18n KF5::Notifications Td::TdStatic
 )
+
 EndOfMessage
 
 touch "$dir/null.cpp"
@@ -42,8 +43,8 @@ function bail {
 	exit 1
 }
 
-jq -r ".link.commandFragments[].fragment" .cmake/api/v1/reply/target-*.json || bail $PWD
+jq -r ".link.commandFragments[].fragment" .cmake/api/v1/reply/target-*.json || bail "Check out the logs in" $PWD
 
 echo "===="
 
-jq -r ".compileGroups[].includes[].path" .cmake/api/v1/reply/target-*.json || bail $PWD
+jq -r ".compileGroups[].includes[].path" .cmake/api/v1/reply/target-*.json || bail "Check out the logs in" $PWD
