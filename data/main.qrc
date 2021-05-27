@@ -14,6 +14,7 @@
         <file>components/ResponsiveMenuItem.qml</file>
 
         <file>routes/Chats.qml</file>
+        <file>routes/chats components/QuickView.qml</file>
 
         <file>routes/entry/AuthenticationCode.qml</file>
         <file>routes/entry/Password.qml</file>

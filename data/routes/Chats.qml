@@ -5,6 +5,7 @@ import org.kde.kirigami 2.14 as Kirigami
 import org.kde.kitemmodels 1.0
 import org.kde.Tok 1.0 as Tok
 import "qrc:/components" as Components
+import "qrc:/routes/chats components" as ChatsComponents
 
 Kirigami.PageRoute {
 
@@ -25,6 +26,10 @@ Kirigami.ScrollablePage {
                         checkable: true
                         onToggled: settings.thinMode = checked
                         checked: settings.thinMode
+                    }
+                    QQC2.MenuItem {
+                        text: i18nc("menu item that opens a UI element called the 'Quick Switcher', which offers a fast keyboard-based interface for switching in between chats.", "Quick Switcher")
+                        onTriggered: quickView.open()
                     }
                 }
                 icon.name: "application-menu"
@@ -60,9 +65,31 @@ Kirigami.ScrollablePage {
             lView.itemAtIndex(lView.currentIndex).clicked()
         }
     }
+    Shortcut {
+        sequence: "Ctrl+K"
+        onActivated: {
+            quickView.open()
+        }
+    }
+
+    ChatsComponents.QuickView { id: quickView }
 
     ListView {
         id: lView
+
+        function triggerPage(chatID) {
+            if (Kirigami.PageRouter.router.params.chatID === chatID) {
+                Kirigami.PageRouter.bringToView(1)
+                Kirigami.PageRouter.router.pageStack.currentItem.doit()
+                return
+            }
+            if (Kirigami.PageRouter.router.params.chatID !== undefined) {
+                tClient.messagesModel(Kirigami.PageRouter.router.params.chatID).comingOut()
+            }
+            tClient.messagesModel(chatID).comingIn()
+            Kirigami.PageRouter.pushFromHere({ "route": "Messages/View", "chatID": chatID })
+            Kirigami.PageRouter.router.pageStack.currentItem.doit()
+        }
 
         reuseItems: true
         activeFocusOnTab: true
@@ -147,19 +174,7 @@ Kirigami.ScrollablePage {
                 }
             }
 
-            onClicked: {
-                if (Kirigami.PageRouter.router.params.chatID === del.mID) {
-                    Kirigami.PageRouter.bringToView(1)
-                    Kirigami.PageRouter.router.pageStack.currentItem.doit()
-                    return
-                }
-                if (Kirigami.PageRouter.router.params.chatID !== undefined) {
-                    tClient.messagesModel(Kirigami.PageRouter.router.params.chatID).comingOut()
-                }
-                tClient.messagesModel(del.mID).comingIn()
-                Kirigami.PageRouter.pushFromHere({ "route": "Messages/View", "chatID": del.mID })
-                Kirigami.PageRouter.router.pageStack.currentItem.doit()
-            }
+            onClicked: lView.triggerPage(del.mID)
         }
 
         Kirigami.PlaceholderMessage {
