@@ -54,7 +54,7 @@ public:
         sendQuery(TDApi::make_object<Fn>(std::forward<Args>(args)...), [cb](TObject t) {
             if (t->get_id() == TDApi::error::ID) {
                 auto error = TDApi::move_object_as<TDApi::error>(t);
-                qDebug() << "Error:" << error->code_ << QString::fromStdString(error->message_);
+                qDebug() << "Error:" << __PRETTY_FUNCTION__ << error->code_ << QString::fromStdString(error->message_);
                 return;
             }
             if (cb == nullptr) {
@@ -76,7 +76,7 @@ public:
         sendQuery(std::move(a), [cb](TObject t) {
             if (t->get_id() == TDApi::error::ID) {
                 auto error = TDApi::move_object_as<TDApi::error>(t);
-                qDebug() << "Error:" << error->code_ << QString::fromStdString(error->message_);
+                qDebug() << "Error:" << __PRETTY_FUNCTION__ << error->code_ << QString::fromStdString(error->message_);
                 return;
             }
             if (cb == nullptr) {
