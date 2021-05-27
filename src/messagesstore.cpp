@@ -31,6 +31,9 @@ enum Roles {
     // FileMessages
     FileName,
     FileCaption,
+
+    // AddMembers messages
+    AddedMembers,
 };
 
 MessagesStore::MessagesStore(Client* parent) : c(parent), d(new Private)
@@ -329,6 +332,15 @@ QVariant MessagesStore::data(const QVariant& key, int role)
         }
     }
 
+    case Roles::AddedMembers: {
+        auto it = static_cast<TDApi::messageChatAddMembers*>(d->messageData[mID]->content_.get());
+        QVariantList l;
+        for (const auto& item : it->member_user_ids_) {
+            l << QString::number(item);
+        }
+        return l;
+    }
+
     }
 
     Q_UNREACHABLE();
@@ -374,6 +386,8 @@ QHash<int, QByteArray> MessagesStore::roleNames()
 
     roles[Roles::FileCaption] = "fileCaption";
     roles[Roles::FileName] = "fileName";
+
+    roles[Roles::AddedMembers] = "addedMembers";
 
     return roles;
 }

@@ -17,7 +17,10 @@ QQC2.Control {
     readonly property int recommendedSize: (rootRow.wideMode ? Math.max(del.width / 3, Kirigami.Units.gridUnit * 15) : (del.width * 0.8))
 
     readonly property bool isOwnMessage: messageData.data.authorID === tClient.ownID
-    readonly property bool showAvatar: (nextData.data.authorID != messageData.data.authorID) && (!(Kirigami.Settings.isMobile && isOwnMessage))
+    readonly property bool showAvatar: !serviceMessage && (nextData.data.authorID != messageData.data.authorID) && (!(Kirigami.Settings.isMobile && isOwnMessage))
+    readonly property bool serviceMessage: {
+        return messageData.data.kind == "messageChatAddMembers"
+    }
     readonly property bool separateFromPrevious: previousData.data.authorID != messageData.data.authorID
     readonly property bool canDeleteMessage: isOwnMessage
 
@@ -110,6 +113,7 @@ QQC2.Control {
                 "messageText": Qt.resolvedUrl((settings.thinMode ? "thin/" : "") + "TextMessage.qml"),
                 "messagePhoto": Qt.resolvedUrl((settings.thinMode ? "thin/" : "") + "PhotoMessage.qml"),
                 "messageDocument": Qt.resolvedUrl((settings.thinMode ? "thin/" : "") + "FileMessage.qml"),
+                "messageChatAddMembers": Qt.resolvedUrl((settings.thinMode ? "thin/" : "") + "UserAddMessage.qml"),
             }
             defaultCase: Qt.resolvedUrl("Unsupported.qml")
 
