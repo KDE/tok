@@ -8,6 +8,7 @@
 #include <QTextBoundaryFinder>
 #include <QFont>
 #include <QGuiApplication>
+#include <QDesktopServices>
 
 #include <unicode/urename.h>
 #include <unicode/uchar.h>
@@ -37,6 +38,10 @@ enum Roles {
 
     // Sticker messages
     StickerURL,
+
+    // Video messages
+    VideoSize,
+    VideoThumbnail,
 };
 
 MessagesStore::MessagesStore(Client* parent) : c(parent), d(new Private)
@@ -349,9 +354,61 @@ QVariant MessagesStore::data(const QVariant& key, int role)
         return QString("image://telegram/%1").arg(it->sticker_->sticker_->id_);
     }
 
+    case Roles::VideoSize: {
+        auto it = static_cast<TDApi::messageVideo*>(d->messageData[mID]->content_.get());
+
+        return QSize(it->video_->width_, it->video_->height_);
+    }
+
+    case Roles::VideoThumbnail: {
+        auto it = static_cast<TDApi::messageVideo*>(d->messageData[mID]->content_.get());
+
+        return QString("image://telegram/%1").arg(it->video_->thumbnail_->file_->id_);
+    }
+
     }
 
     Q_UNREACHABLE();
+}
+
+void MessagesStore::openVideo(const QString& chat, const QString& msg)
+{
+    auto cID = chat.toLongLong();
+    auto mID = msg.toLongLong();
+    auto id = std::make_pair(cID, mID);
+    if (!d->messageData.contains(id)) {
+        return;
+    }
+
+    auto it = static_cast<TDApi::messageVideo*>(d->messageData[id]->content_.get());
+    auto video = it->video_->video_->id_;
+
+    auto onFinished = [video](qint32 id, QSharedPointer<TDApi::file> file) {
+        if (id != video) {
+            return;
+        }
+        if (file->local_ == nullptr) {
+            return;
+        }
+        if (!file->local_->is_downloading_completed_) {
+            return;
+        }
+
+        auto it = QString::fromStdString(file->local_->path_);
+#ifdef Q_OS_LINUX
+        QProcess::startDetached("xdg-open", {it});
+#else
+        QDesktopServices::openUrl(QUrl(it, QUrl::TolerantMode));
+#endif
+    };
+    c->call<TDApi::downloadFile>(
+        [onFinished](TDApi::downloadFile::ReturnType t) {
+            auto id = t->id_;
+            onFinished(id, QSharedPointer<TDApi::file>(t.release()));
+        },
+        video, 10, 0, 0, true
+    );
+
 }
 
 bool MessagesStore::checkKey(const QVariant& key)
@@ -398,6 +455,9 @@ QHash<int, QByteArray> MessagesStore::roleNames()
     roles[Roles::AddedMembers] = "addedMembers";
 
     roles[Roles::StickerURL] = "stickerURL";
+
+    roles[Roles::VideoSize] = "videoSize";
+    roles[Roles::VideoThumbnail] = "videoThumbnail";
 
     return roles;
 }

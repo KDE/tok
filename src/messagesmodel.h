@@ -35,6 +35,7 @@ public:
     QHash<int, QByteArray> roleNames() override;
 
     Q_INVOKABLE void deleteMessages(const QString& chatID, const QStringList& messageID);
+    Q_INVOKABLE void openVideo(const QString& chatID, const QString& messageID);
 };
 
 class MessagesModel : public QAbstractListModel

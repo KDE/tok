@@ -34,6 +34,7 @@
         <file>routes/messages/components/PhotoMessage.qml</file>
         <file>routes/messages/components/UserAddMessage.qml</file>
         <file>routes/messages/components/Sticker.qml</file>
+        <file>routes/messages/components/VideoMessage.qml</file>
 
         <file>routes/messages/components/thin/TextMessage.qml</file>
         <file>routes/messages/components/thin/FileMessage.qml</file>
