@@ -10,9 +10,9 @@ QtObject {
     required property string chatID
     required property string messageID
 
-    readonly property bool hasAuthor: universalData.data.authorKind === "user"
+    readonly property bool hasAuthor: universalData.data.authorKind === "user" && (plaintext.chatID != universalData.data.authorID)
 
-    readonly property string authorName: authorData.data.name
+    readonly property string authorName: tClient.ownID == universalData.data.authorID ? i18n("You") : authorData.data.name
     readonly property string onelinePlaintext: this.plaintext.split("\n")[0]
     readonly property string plaintext: {
         switch ([universalData.data.kind, universalData.dummy][0]) {
