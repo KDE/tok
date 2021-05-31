@@ -1,4 +1,16 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
+
+bail() {
+	echo $@
+	exit 1
+}
+
+has() {
+  type -p "$1" >/dev/null
+}
+
+has cmake || bail "CMake is missing; please install CMake"
+has jq || bail "jq is missing; please install jq"
 
 dir=$(mktemp -d)
 
@@ -37,11 +49,6 @@ if [ $retval -ne 0 ]; then
     cat nohup.out
     exit $retval
 fi
-
-function bail {
-	echo $@
-	exit 1
-}
 
 jq -r ".link.commandFragments[].fragment" .cmake/api/v1/reply/target-*.json || bail "Check out the logs in" $PWD
 
