@@ -89,8 +89,10 @@ QQC2.Control {
             }
 
             HoverHandler {
-                acceptedButtons: Qt.NoButton
-                cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.IBeamCursor
+                id: _handler
+                acceptedButtons: Qt.LeftButton
+                grabPermissions: PointerHandler.TakeOverForbidden
+                cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : (inTailing ? Qt.ForbiddenCursor : Qt.IBeamCursor)
             }
 
             Layout.fillWidth: true
