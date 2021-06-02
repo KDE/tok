@@ -10,8 +10,8 @@ Maui.ApplicationWindow {
 
     title: i18nc("window title", "Tok")
 
-    width: 800
-    height: 600
+    width: Kirigami.Units.gridUnit * 60
+    height: Kirigami.Units.gridUnit * 35
 
     header: Item {}
 

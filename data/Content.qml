@@ -29,6 +29,10 @@ Kirigami.PageRow {
         }
     }
 
+    readonly property bool shouldUseSidebars: (rootWindow.width-300) >= (rootRow.defaultColumnWidth*2)
+    columnView.columnResizeMode: shouldUseSidebars ? Kirigami.ColumnView.FixedColumns : Kirigami.ColumnView.SingleColumn
+    anchors.rightMargin: rootRouter.pageHasSidebar ? 300 : 0
+
     property Settings settings: Settings {
         property bool thinMode: false
         property bool imageBackground: true
@@ -78,6 +82,18 @@ Kirigami.PageRow {
         id: rootRouter
         pageStack: rootRow.columnView
         initialRoute: ""
+
+        property bool pageHasSidebar: rootRow.shouldUseSidebars && pageCanHaveSidebar
+        property bool pageCanHaveSidebar: false
+
+        function evaluatePageHasSidebar() {
+            const routes = [
+                ["Chats", "Messages/View"]
+            ]
+            pageCanHaveSidebar = routes.some((it) => rootRouter.routeActive(it))
+        }
+
+        onNavigationChanged: evaluatePageHasSidebar()
 
         Kirigami.PageRoute {
             name: ""

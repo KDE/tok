@@ -16,6 +16,7 @@
 class ChatsModel;
 class ChatsStore;
 class MessagesModel;
+class MembersModel;
 class UserDataModel;
 class MessagesStore;
 
@@ -111,6 +112,12 @@ public:
     Q_INVOKABLE MessagesModel* messagesModel(const QString& s)
     {
         return messagesModel(s.toLongLong());
+    }
+
+    MembersModel* membersModel(qint64 number, const QString& kind);
+    Q_INVOKABLE MembersModel* membersModel(const QString& s, const QString& kind)
+    {
+        return membersModel(s.toLongLong(), kind);
     }
 
     Q_INVOKABLE void enterPhoneNumber(const QString& phoneNumber);

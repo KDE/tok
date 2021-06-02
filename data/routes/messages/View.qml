@@ -47,7 +47,10 @@ Kirigami.ScrollablePage {
         model: tClient.chatsStore
         key: messagesViewRoot.chatID
         shape: QtObject {
+            required property string mPhoto
             required property string mTitle
+            required property string mKind
+            required property string mKindID
             required property bool mCanSendMessages
         }
     }
@@ -96,8 +99,45 @@ Kirigami.ScrollablePage {
 
                 verticalAlignment: Text.AlignVCenter
                 Layout.fillHeight: true
+                Layout.fillWidth: true
                 Layout.margins: Kirigami.Units.largeSpacing
             }
+            QQC2.ToolButton {
+                icon.name: "documentinfo"
+                onClicked: rootRow.layers.push(groupInfoComponent)
+                visible: !rootRow.shouldUseSidebars
+            }
+        }
+    }
+
+    Component {
+        id: groupInfoComponent
+
+        Components.GroupInformation { anchors.fill: parent }
+    }
+
+    Loader {
+        active: rootRow.shouldUseSidebars
+        sourceComponent: QQC2.Drawer {
+            width: 300
+            height: rootWindow.height
+            visible: true
+            modal: false
+            interactive: false
+            position: 1
+            edge: Qt.RightEdge
+
+            background: Item {
+                Kirigami.Separator {
+                    anchors {
+                        top: parent.top
+                        bottom: parent.bottom
+                        left: parent.left
+                    }
+                }
+            }
+
+            Components.GroupInformation { anchors.fill: parent }
         }
     }
 

@@ -8,6 +8,7 @@ enum Roles {
     Photo,
     UnreadCount,
     Kind,
+    KindID,
     CanSendMessages,
     CanSendMedia, // True, if the user can send audio files, documents, photos, videos, video notes, and voice notes. Implies can_send_messages permissions.
     CanSendPolls,
@@ -133,6 +134,18 @@ QVariant ChatsStore::data(const QVariant& key, int role)
         };
         return map[id];
     }
+    case Roles::KindID: {
+        using namespace TDApi;
+        match (d->chatData[chatID]->type_)
+            handleCase(chatTypeBasicGroup, basic)
+                return QString::number(basic->basic_group_id_);
+            endhandle
+            handleCase(chatTypeSupergroup, supergroup)
+                return QString::number(supergroup->supergroup_id_);
+            endhandle
+        endmatch
+        return QVariant();
+    }
     // permissions
     case Roles::CanSendMessages: return d->chatData[chatID]->permissions_->can_send_messages_;
     case Roles::CanSendMedia: return d->chatData[chatID]->permissions_->can_send_media_messages_;
@@ -182,6 +195,7 @@ QHash<int,QByteArray> ChatsStore::roleNames()
     roles[int(Roles::CanInviteUsers)] = "mCanInviteUsers";
     roles[int(Roles::CanPinMessages)] = "mCanPinMessages";
     roles[int(Roles::Kind)] = "mKind";
+    roles[int(Roles::KindID)] = "mKindID";
 
     return roles;
 }

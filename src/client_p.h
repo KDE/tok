@@ -10,6 +10,7 @@
 #include "notificationmanager.h"
 #include "defs.h"
 #include "messagesmodel.h"
+#include "membersmodel.h"
 
 class Client::Private
 {

@@ -23,8 +23,11 @@
         <file>routes/entry/PhoneNumber.qml</file>
         <file>routes/entry/Welcome.qml</file>
 
-        <file>routes/messages/View.qml</file>
         <file>routes/messages/NoView.qml</file>
+
+        <file>routes/messages/View.qml</file>
+        <file>routes/messages/components/GroupInformation.qml</file>
+
         <file>routes/messages/components/MessageDelegate.qml</file>
         <file>routes/messages/components/MessageBackground.qml</file>
         <file>routes/messages/components/Unsupported.qml</file>

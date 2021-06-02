@@ -93,6 +93,17 @@ bool Client::online() const
     return d->online;
 }
 
+MembersModel* Client::membersModel(qint64 number, const QString& kind)
+{
+    if (kind == "basicGroup") {
+        return new MembersModel(this, number, false);
+    } else if (kind == "superGroup") {
+        return new MembersModel(this, number, true);
+    }
+
+    return nullptr;
+}
+
 void Client::setOnline(bool online)
 {
     d->online = online;

@@ -15,6 +15,7 @@
 #include "util.h"
 #include "utilities.h"
 #include "chatsort.h"
+#include "membersmodel.h"
 
 #include "internallib/qquickrelationallistener.h"
 
@@ -31,6 +32,7 @@ void performSetup(QQmlEngine* eng, bool testMode)
     qRegisterMetaType<MessagesStore*>();
     qRegisterMetaType<UserDataModel*>();
     qRegisterMetaType<ChatsStore*>();
+    qRegisterMetaType<MembersModel*>();
     qRegisterMetaType<Utilities*>();
     qRegisterMetaType<QSharedPointer<TDApi::file>>();
     qmlRegisterSingletonType<Utilities>("org.kde.Tok", 1, 0, "Utils", [](QQmlEngine*, QJSEngine*) -> QObject* { return new Utilities; });
