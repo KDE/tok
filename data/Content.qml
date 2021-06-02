@@ -31,6 +31,7 @@ Kirigami.PageRow {
 
     property Settings settings: Settings {
         property bool thinMode: false
+        property bool imageBackground: true
     }
 
     property Rectangle focusRect: Rectangle {

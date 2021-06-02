@@ -28,6 +28,12 @@ Kirigami.ScrollablePage {
                         checked: settings.thinMode
                     }
                     QQC2.MenuItem {
+                        text: i18nc("Checkable menu item to toggle between a photo background for the chat and using a solid colour", "Image background")
+                        checkable: true
+                        onToggled: settings.imageBackground = checked
+                        checked: settings.imageBackground
+                    }
+                    QQC2.MenuItem {
                         text: i18nc("menu item that opens a UI element called the 'Quick Switcher', which offers a fast keyboard-based interface for switching in between chats.", "Quick Switcher")
                         onTriggered: quickView.open()
                     }

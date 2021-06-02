@@ -27,69 +27,9 @@ QQC2.Control {
         }
     }
 
-    background: Item {
-        clip: true
-
-        Rectangle {
-            color: Kirigami.Theme.backgroundColor
-            anchors.fill: tail
-            anchors.topMargin: 4
-            anchors.rightMargin: -fileMessageRoot.tailSize
-            visible: del.showAvatar
-        }
-        Kirigami.ShadowedRectangle {
-            id: tail
-
-            visible: del.showAvatar
-            anchors {
-                top: parent.top
-                bottom: parent.bottom
-                left: parent.left
-                leftMargin: -fileMessageRoot.tailSize*2
-            }
-            width: fileMessageRoot.tailSize*3
-            color: Kirigami.Theme.backgroundColor
-
-            corners {
-                topLeftRadius: 0
-                topRightRadius: 0
-                bottomRightRadius: fileMessageRoot.tailSize*10
-                bottomLeftRadius: 0
-            }
-
-            Kirigami.Theme.colorSet: Kirigami.Theme.View
-            Kirigami.Theme.inherit: false
-        }
-        Kirigami.ShadowedRectangle {
-            id: mainBG
-            corners {
-                topLeftRadius: 4
-                topRightRadius: 4
-                bottomRightRadius: 4
-                bottomLeftRadius: 4
-            }
-            color: Kirigami.Theme.backgroundColor
-            anchors.fill: parent
-            anchors.leftMargin: fileMessageRoot.tailSize
-        }
-        QQC2.Label {
-            id: timestamp
-            text: messageData.data.timestamp
-            opacity: 0.5
-
-            font.pointSize: -1
-            font.pixelSize: Kirigami.Units.gridUnit * (2/3)
-            anchors {
-                bottom: parent.bottom
-                right: mainBG.right
-                margins: Kirigami.Units.smallSpacing
-            }
-            LayoutMirroring.enabled: Tok.Utils.isRTL(fileData.data.fileName)
-        }
-        QQC2.Label {
-            id: dummy
-            text: " "
-        }
+    background: MessageBackground {
+        id: _background
+        tailSize: fileMessageRoot.tailSize
     }
     contentItem: ColumnLayout {
         QQC2.Label {
@@ -107,7 +47,7 @@ QQC2.Control {
             text: fileData.data.fileName + (fileData.data.fileCaption == "" ? paddingT : "")
             wrapMode: Text.Wrap
 
-            readonly property string paddingT: " ".repeat(Math.ceil(timestamp.implicitWidth / dummy.implicitWidth)) + "⠀"
+            readonly property string paddingT: " ".repeat(Math.ceil(_background.timestamp.implicitWidth / _background.dummy.implicitWidth)) + "⠀"
 
             Layout.fillWidth: true
         }
@@ -116,7 +56,7 @@ QQC2.Control {
             wrapMode: Text.Wrap
             visible: fileData.data.fileCaption != ""
 
-            readonly property string paddingT: " ".repeat(Math.ceil(timestamp.implicitWidth / dummy.implicitWidth)) + "⠀"
+            readonly property string paddingT: " ".repeat(Math.ceil(_background.timestamp.implicitWidth / _background.dummy.implicitWidth)) + "⠀"
 
             Layout.fillWidth: true
         }

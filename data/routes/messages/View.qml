@@ -3,6 +3,7 @@ import QtQuick.Layouts 1.10
 import QtQuick.Controls 2.12 as QQC2
 import org.kde.kirigami 2.14 as Kirigami
 import org.kde.Tok 1.0 as Tok
+import QtGraphicalEffects 1.15
 
 import QtQuick.Dialogs 1.0 as Dialogues
 
@@ -48,6 +49,37 @@ Kirigami.ScrollablePage {
         shape: QtObject {
             required property string mTitle
             required property bool mCanSendMessages
+        }
+    }
+
+    background: Rectangle {
+        color: Kirigami.Theme.backgroundColor
+
+        Loader {
+            anchors.fill: parent
+            active: settings.imageBackground
+
+            sourceComponent: Item {
+                anchors.fill: parent
+                Image {
+                    id: bgImg
+
+                    source: "qrc:/img/light background.png"
+                    anchors.fill: parent
+                    fillMode: Image.PreserveAspectCrop
+                }
+                FastBlur {
+                    source: bgImg
+                    anchors.fill: parent
+                    cached: true
+                    radius: 64
+                }
+                Rectangle {
+                    color: Kirigami.Theme.backgroundColor
+                    opacity: 0.5
+                    anchors.fill: parent
+                }
+            }
         }
     }
 

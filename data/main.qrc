@@ -4,6 +4,8 @@
         <file>maui_main.qml</file>
         <file>Content.qml</file>
 
+        <file>img/light background.png</file>
+
         <file>components/Header.qml</file>
         <file>components/PlaintextMessage.qml</file>
         <file>components/LoaderPlus.qml</file>
@@ -24,6 +26,7 @@
         <file>routes/messages/View.qml</file>
         <file>routes/messages/NoView.qml</file>
         <file>routes/messages/components/MessageDelegate.qml</file>
+        <file>routes/messages/components/MessageBackground.qml</file>
         <file>routes/messages/components/Unsupported.qml</file>
 
         <file>routes/messages/components/ReplyBlock.qml</file>
