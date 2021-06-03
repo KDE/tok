@@ -11,7 +11,7 @@ qbs
 ```
 
 The binary will be output in ./default, assuming you have all dependencies.
-Tok depends on the latest version of [Td](https://github.com/tdlib/tdlib), and Qt >= 5.15, with `widgets`, `qml`, `quick`, and `concurrent` modules installed.
+Tok depends on the latest version of [Td](https://github.com/tdlib/td), and Qt >= 5.15, with `widgets`, `qml`, `quick`, and `concurrent` modules installed.
 CMake is required in order to utilise Td.
 
 # Development Group
