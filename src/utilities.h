@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QObject>
+#include <QQuickItem>
 
 class Utilities : public QObject
 {
@@ -10,5 +11,6 @@ class Utilities : public QObject
 public:
 
     Q_INVOKABLE bool isRTL(const QString& str);
+    Q_INVOKABLE void setBlur(QQuickItem* item, bool doit);
 
 };

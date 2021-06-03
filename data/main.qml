@@ -14,6 +14,8 @@ Kirigami.AbstractApplicationWindow {
 
     title: i18nc("window title", "Tok")
 
-    Content { anchors.fill: parent }
+    color: content.settings.transparent ? "transparent" : Kirigami.Theme.backgroundColor
+
+    Content { id: content; anchors.fill: parent }
 
 }

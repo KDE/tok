@@ -1,6 +1,7 @@
 import QtQuick 2.10
 import QtQuick.Controls 2.10 as QQC2
 import org.kde.kirigami 2.12 as Kirigami
+import org.kde.Tok 1.0 as Tok
 
 import Qt.labs.settings 1.0
 
@@ -36,6 +37,12 @@ Kirigami.PageRow {
     property Settings settings: Settings {
         property bool thinMode: false
         property bool imageBackground: true
+        property bool transparent: false
+
+        onTransparentChanged: {
+            Tok.Utils.setBlur(rootRow, transparent)
+        }
+        Component.onCompleted: Tok.Utils.setBlur(rootRow, transparent)
     }
 
     property Rectangle focusRect: Rectangle {

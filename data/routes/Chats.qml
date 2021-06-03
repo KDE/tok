@@ -34,6 +34,12 @@ Kirigami.ScrollablePage {
                         checked: settings.imageBackground
                     }
                     QQC2.MenuItem {
+                        text: i18nc("Checkable menu item to toggle viewing content underneath the window (transparent window bg)", "Window transparency")
+                        checkable: true
+                        onToggled: settings.transparent = checked
+                        checked: settings.transparent
+                    }
+                    QQC2.MenuItem {
                         text: i18nc("menu item that opens a UI element called the 'Quick Switcher', which offers a fast keyboard-based interface for switching in between chats.", "Quick Switcher")
                         onTriggered: quickView.open()
                     }

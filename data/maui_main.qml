@@ -13,6 +13,8 @@ Maui.ApplicationWindow {
     width: Kirigami.Units.gridUnit * 60
     height: Kirigami.Units.gridUnit * 35
 
+    color: cont.settings.transparent ? "transparent" : Kirigami.Theme.backgroundColor
+
     header: Item {}
 
     Maui.App.enableCSD: true

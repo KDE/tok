@@ -25,13 +25,14 @@ find_package(KF5Kirigami2 REQUIRED)
 find_package(KF5I18n REQUIRED)
 find_package(KF5Notifications REQUIRED)
 find_package(KF5ConfigWidgets REQUIRED)
+find_package(KF5WindowSystem REQUIRED)
 find_package(Td 1.7.4 REQUIRED)
 
 add_executable(tok null.cpp)
 
 target_link_libraries(tok
   PUBLIC
-    KF5::Kirigami2 KF5::I18n KF5::Notifications KF5::ConfigWidgets Td::TdStatic
+    KF5::Kirigami2 KF5::I18n KF5::Notifications KF5::ConfigWidgets KF5::WindowSystem Td::TdStatic
 )
 
 EndOfMessage

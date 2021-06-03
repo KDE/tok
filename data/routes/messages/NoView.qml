@@ -14,6 +14,10 @@ name: "Messages/NoView"
 Kirigami.Page {
     id: pageRoot
 
+    background: Rectangle {
+        color: settings.transparent ? Kirigami.ColorUtils.scaleColor("transparent", {"alpha": -80}) : Kirigami.Theme.backgroundColor
+    }
+
     QQC2.Label {
         text: i18n("Select a chat to start messaging")
         anchors.centerIn: parent

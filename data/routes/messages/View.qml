@@ -56,11 +56,11 @@ Kirigami.ScrollablePage {
     }
 
     background: Rectangle {
-        color: Kirigami.Theme.backgroundColor
+        color: settings.transparent ? Kirigami.ColorUtils.scaleColor("transparent", {"alpha": -80}) : Kirigami.Theme.backgroundColor
 
         Loader {
             anchors.fill: parent
-            active: settings.imageBackground
+            active: settings.imageBackground | settings.transparent
 
             sourceComponent: Item {
                 anchors.fill: parent
@@ -70,12 +70,14 @@ Kirigami.ScrollablePage {
                     source: "qrc:/img/light background.png"
                     anchors.fill: parent
                     fillMode: Image.PreserveAspectCrop
+                    visible: settings.imageBackground
                 }
                 FastBlur {
                     source: bgImg
                     anchors.fill: parent
                     cached: true
                     radius: 64
+                    visible: settings.imageBackground
                 }
                 Rectangle {
                     color: Kirigami.Theme.backgroundColor
