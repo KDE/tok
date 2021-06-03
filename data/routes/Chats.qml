@@ -37,6 +37,20 @@ Kirigami.ScrollablePage {
                         text: i18nc("menu item that opens a UI element called the 'Quick Switcher', which offers a fast keyboard-based interface for switching in between chats.", "Quick Switcher")
                         onTriggered: quickView.open()
                     }
+                    QQC2.Menu {
+                        title: i18nc("menu item that has a submenu listing a bunch of colour schemes users can pick from", "Color schemes")
+                        Repeater {
+                            model: Tok.ColorSchemer.model
+                            QQC2.MenuItem {
+                                required property int index
+                                required property string colorSchemeName
+
+                                text: colorSchemeName
+
+                                onClicked: Tok.ColorSchemer.apply(index)
+                            }
+                        }
+                    }
                 }
                 icon.name: "application-menu"
                 onClicked: settingsMenu.popup()
