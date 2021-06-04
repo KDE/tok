@@ -133,6 +133,13 @@ QQC2.Control {
                 }
                 TapHandler {
                     onTapped: {
+                        if (audioData.data.audioLargeThumbnail != "") {
+                            tClient.fileMangler.downloadFile(audioData.data.audioLargeThumbnail).then((url) => {
+                                Components.AudioPlayer.thumbnail = "file://"+url
+                            })
+                        } else {
+                            Components.AudioPlayer.thumbnail = ""
+                        }
                         tClient.fileMangler.downloadFile(audioData.data.audioFileID).then((url) => {
                             Components.AudioPlayer.source = "file://"+url
                             Components.AudioPlayer.play()

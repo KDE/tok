@@ -38,6 +38,13 @@ Kirigami.PageRow {
         }
     }
 
+    function closing(event) {
+        if (Components.AudioPlayer.playbackState == Audio.PlayingState) {
+            event.accepted = false
+            rootWindow.showMinimized()
+        }
+    }
+
     Loader {
         id: audioBar
 

@@ -6,8 +6,12 @@
 
 #include <QApplication>
 #include <QQmlApplicationEngine>
+#include <QQmlContext>
+#include <QQmlProperty>
+#include <QMediaPlayer>
 
 #include "setup.h"
+#include "mprissetup.h"
 
 int main(int argc, char* argv[])
 {
@@ -34,6 +38,10 @@ int main(int argc, char* argv[])
         },
         Qt::QueuedConnection);
     engine.load(url);
+
+    auto aplayer = engine.rootObjects()[0]->property("aplayer").value<QObject*>();
+    auto it = aplayer->property("mediaObject").value<QMediaPlayer*>();
+    setupMPRIS(&app, aplayer, it);
 
     return QApplication::exec();
 }

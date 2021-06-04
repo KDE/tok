@@ -9,6 +9,8 @@ import "qrc:/components" as Components
 Maui.ApplicationWindow {
     id: rootWindow
 
+    property var aplayer: Components.AudioPlayer
+
     title: i18nc("window title", "Tok")
 
     width: Kirigami.Units.gridUnit * 60
@@ -20,6 +22,10 @@ Maui.ApplicationWindow {
     header: Item {}
 
     Maui.App.enableCSD: true
+
+    onClosing: (e) => {
+        cont.closing(e)
+    }
 
     Content {
         id: cont
