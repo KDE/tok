@@ -6,6 +6,8 @@
 
         <file>img/light background.png</file>
 
+        <file>components/qmldir</file>
+        <file>components/AudioPlayer.qml</file>
         <file>components/Header.qml</file>
         <file>components/PlaintextMessage.qml</file>
         <file>components/LoaderPlus.qml</file>
@@ -41,11 +43,14 @@
         <file>routes/messages/components/UserAddMessage.qml</file>
         <file>routes/messages/components/Sticker.qml</file>
         <file>routes/messages/components/VideoMessage.qml</file>
+        <file>routes/messages/components/AudioMessage.qml</file>
 
         <file>routes/messages/components/thin/TextMessage.qml</file>
         <file>routes/messages/components/thin/FileMessage.qml</file>
         <file>routes/messages/components/thin/PhotoMessage.qml</file>
         <file>routes/messages/components/thin/UserAddMessage.qml</file>
         <file alias="routes/messages/components/thin/Sticker.qml">routes/messages/components/Sticker.qml</file>
+        <!-- video message is used for thinmode too -->
+        <!-- <file>routes/messages/components/thin/AudioMessage.qml</file> -->
     </qresource>
 </RCC>

@@ -44,6 +44,17 @@ enum Roles {
     // Video messages
     VideoSize,
     VideoThumbnail,
+
+    // Audio messages
+    AudioCaption,
+    AudioDuration,
+    AudioTitle,
+    AudioPerformer,
+    AudioFilename,
+    AudioMimetype,
+    AudioSmallThumbnail,
+    AudioLargeThumbnail,
+    AudioFileID,
 };
 
 MessagesStore::MessagesStore(Client* parent) : c(parent), d(new Private)
@@ -186,6 +197,8 @@ void MessagesStore::deletedMessages(TDApi::int53 chatID, const TDApi::array<TDAp
         Q_EMIT keyRemoved(mu);
     }
 }
+
+inline auto to(const std::string& str) { return QString::fromStdString(str); }
 
 QVariant MessagesStore::data(const QVariant& key, int role)
 {
@@ -394,6 +407,64 @@ QVariant MessagesStore::data(const QVariant& key, int role)
         return QString("image://telegram/%1").arg(it->video_->thumbnail_->file_->id_);
     }
 
+    case Roles::AudioCaption: {
+        auto it = static_cast<TDApi::messageAudio*>(d->messageData[mID]->content_.get());
+
+        return QString::fromStdString(it->caption_->text_);
+    }
+    case Roles::AudioDuration: {
+        auto it = static_cast<TDApi::messageAudio*>(d->messageData[mID]->content_.get());
+
+        return it->audio_->duration_;
+    }
+    case Roles::AudioTitle: {
+        auto it = static_cast<TDApi::messageAudio*>(d->messageData[mID]->content_.get());
+
+        return to(it->audio_->title_);
+    }
+    case Roles::AudioPerformer: {
+        auto it = static_cast<TDApi::messageAudio*>(d->messageData[mID]->content_.get());
+
+        return to(it->audio_->performer_);
+    }
+    case Roles::AudioFilename: {
+        auto it = static_cast<TDApi::messageAudio*>(d->messageData[mID]->content_.get());
+
+        return to(it->audio_->file_name_);
+    }
+    case Roles::AudioMimetype: {
+        auto it = static_cast<TDApi::messageAudio*>(d->messageData[mID]->content_.get());
+
+        return to(it->audio_->mime_type_);
+    }
+    case Roles::AudioSmallThumbnail: {
+        auto it = static_cast<TDApi::messageAudio*>(d->messageData[mID]->content_.get());
+
+        if (it->audio_->album_cover_minithumbnail_ == nullptr) {
+            return QVariant();
+        }
+
+        QString image("data:image/jpg;base64,");
+        auto ba = QByteArray::fromStdString(it->audio_->album_cover_minithumbnail_->data_);
+        image.append(QString::fromLatin1(ba.toBase64().data()));
+
+        return image;
+    }
+    case Roles::AudioLargeThumbnail: {
+        auto it = static_cast<TDApi::messageAudio*>(d->messageData[mID]->content_.get());
+
+        if (it->audio_->album_cover_minithumbnail_ == nullptr) {
+            return QVariant();
+        }
+
+        return QString::number(it->audio_->album_cover_thumbnail_->file_->id_);
+    }
+    case Roles::AudioFileID: {
+        auto it = static_cast<TDApi::messageAudio*>(d->messageData[mID]->content_.get());
+
+        return QString::number(it->audio_->audio_->id_);
+    }
+
     }
 
     Q_UNREACHABLE();
@@ -488,6 +559,16 @@ QHash<int, QByteArray> MessagesStore::roleNames()
 
     roles[Roles::VideoSize] = "videoSize";
     roles[Roles::VideoThumbnail] = "videoThumbnail";
+
+    roles[Roles::AudioCaption] = "audioCaption";
+    roles[Roles::AudioDuration] = "audioDuration";
+    roles[Roles::AudioTitle] = "audioTitle";
+    roles[Roles::AudioPerformer] = "audioPerformer";
+    roles[Roles::AudioFilename] = "audioFilename";
+    roles[Roles::AudioMimetype] = "audioMimetype";
+    roles[Roles::AudioSmallThumbnail] = "audioSmallThumbnail";
+    roles[Roles::AudioLargeThumbnail] = "audioLargeThumbnail";
+    roles[Roles::AudioFileID] = "audioFileID";
 
     return roles;
 }

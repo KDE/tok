@@ -126,6 +126,10 @@ Kirigami.ScrollablePage {
             filter: searchField.text
         }
 
+        header: Item {
+            height: !rootRow.shouldUseSidebars && audioBar.active ? audioBar.item.height : 0
+        }
+
         delegate: Kirigami.BasicListItem {
             id: del
 
