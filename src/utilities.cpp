@@ -18,7 +18,19 @@ bool Utilities::isRTL(const QString& str)
 
 void Utilities::setBlur(QQuickItem* item, bool doit)
 {
-    KWindowEffects::enableBackgroundContrast(item->window(), doit);
-    KWindowEffects::enableBlurBehind(item->window(), doit);
-    item->window();
+    auto setWindows = [=]() {
+        static const bool isMaui = !qgetenv("TOK_MAUI").isEmpty();
+
+        auto reg = QRect(QPoint(0, 0), item->window()->size());
+        if (isMaui) {
+            reg.adjust(2, 2, -2, -2);
+        }
+
+        KWindowEffects::enableBackgroundContrast(item->window(), doit, 1, 1, 1, reg);
+        KWindowEffects::enableBlurBehind(item->window(), doit, reg);
+    };
+
+    connect(item->window(), &QQuickWindow::heightChanged, this, setWindows);
+    connect(item->window(), &QQuickWindow::widthChanged, this, setWindows);
+    setWindows();
 }

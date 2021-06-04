@@ -1,5 +1,6 @@
 import QtQuick 2.10
 import QtQuick.Layouts 1.10
+import QtQuick.Controls 2.10 as QQC2
 import org.kde.kirigami 2.14 as Kirigami
 import org.mauikit.controls 1.2 as Maui
 
@@ -14,6 +15,7 @@ Maui.ApplicationWindow {
     height: Kirigami.Units.gridUnit * 35
 
     color: cont.settings.transparent ? "transparent" : Kirigami.Theme.backgroundColor
+    background.visible: false
 
     header: Item {}
 
@@ -29,7 +31,9 @@ Maui.ApplicationWindow {
         visible: false
     }
     Maui.WindowControls {
+        parent: QQC2.Overlay.overlay
         side: Qt.LeftEdge
+        z: 300
 
         anchors.left: parent.left
         anchors.leftMargin: y
@@ -37,7 +41,9 @@ Maui.ApplicationWindow {
         y: Math.round(dummyHeader.height/2 - height/2)
     }
     Maui.WindowControls {
+        parent: QQC2.Overlay.overlay
         side: Qt.RightEdge
+        z: 300
 
         anchors.right: parent.right
         anchors.rightMargin: y
