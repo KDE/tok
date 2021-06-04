@@ -94,9 +94,18 @@ Kirigami.ScrollablePage {
             Layout.rightMargin: !rootRow.shouldUseSidebars ? rootRow.rightOffset+Kirigami.Units.largeSpacing : Kirigami.Units.largeSpacing
 
             QQC2.ToolButton {
+                id: backButton
                 icon.name: "arrow-left"
                 onClicked: Kirigami.PageRouter.bringToView(0)
-                visible: !rootRow.wideMode
+                visible: !rootRow.shouldUseSidebars
+            }
+            Kirigami.Avatar {
+                name: chatData.data.mTitle
+                source: chatData.data.mPhoto
+
+                visible: !rootRow.shouldUseSidebars
+                Layout.preferredHeight: backButton.implicitHeight
+                Layout.preferredWidth: Layout.preferredHeight
             }
             Kirigami.Heading {
                 level: 4
