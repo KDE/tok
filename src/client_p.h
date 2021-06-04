@@ -11,6 +11,7 @@
 #include "defs.h"
 #include "messagesmodel.h"
 #include "membersmodel.h"
+#include "filemangler.h"
 
 class Client::Private
 {
@@ -38,6 +39,7 @@ class Client::Private
     std::unique_ptr<ChatsStore> m_chatsStore;
     std::unique_ptr<UserDataModel> m_userDataModel;
     std::unique_ptr<MessagesStore> m_messagesStore;
+    std::unique_ptr<FileMangler> m_fileMangler;
     std::unique_ptr<NotificationManager> m_notificationManager;
     std::map<TDApi::int53, std::unique_ptr<MessagesModel>> m_messageModels;
 

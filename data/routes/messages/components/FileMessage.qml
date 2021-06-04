@@ -24,6 +24,8 @@ QQC2.Control {
         shape: QtObject {
             required property string fileName
             required property string fileCaption
+            required property string fileID
+            required property string fileIcon
         }
     }
 
@@ -43,11 +45,34 @@ QQC2.Control {
             Layout.fillWidth: true
         }
         ReplyBlock {}
-        QQC2.Label {
-            text: fileData.data.fileName + (fileData.data.fileCaption == "" ? paddingT : "")
-            wrapMode: Text.Wrap
+        QQC2.Control {
+            padding: Kirigami.Units.largeSpacing
+            contentItem: RowLayout {
+                Kirigami.Icon {
+                    source: fileData.data.fileIcon
+                    fallback: "unknown"
+                }
+                QQC2.Label {
+                    text: fileData.data.fileName
+                    wrapMode: Text.Wrap
 
-            readonly property string paddingT: " ".repeat(Math.ceil(_background.timestamp.implicitWidth / _background.dummy.implicitWidth)) + "⠀"
+                    readonly property string paddingT: " ".repeat(Math.ceil(_background.timestamp.implicitWidth / _background.dummy.implicitWidth)) + "⠀"
+
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                }
+            }
+
+            HoverHandler {
+                cursorShape: Qt.PointingHandCursor
+            }
+            TapHandler {
+                onTapped: {
+                    tClient.fileMangler.downloadFile(fileData.data.fileID).then((url) => {
+                        Qt.openUrlExternally("file://"+url)
+                    })
+                }
+            }
 
             Layout.fillWidth: true
         }

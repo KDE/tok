@@ -19,6 +19,7 @@ class MessagesModel;
 class MembersModel;
 class UserDataModel;
 class MessagesStore;
+class FileMangler;
 
 class Client : public QObject
 {
@@ -28,6 +29,7 @@ class Client : public QObject
     Q_PROPERTY(ChatsModel* chatsModel READ chatsModel CONSTANT)
     Q_PROPERTY(UserDataModel* userDataModel READ userDataModel CONSTANT)
     Q_PROPERTY(MessagesStore* messagesStore READ messagesStore CONSTANT)
+    Q_PROPERTY(FileMangler* fileMangler READ fileMangler CONSTANT)
     Q_PROPERTY(bool online READ online WRITE setOnline NOTIFY onlineChanged)
     Q_PROPERTY(QString ownID READ ownID CONSTANT)
 
@@ -93,6 +95,7 @@ public:
     UserDataModel* userDataModel() const;
     ChatsStore* chatsStore() const;
     MessagesStore* messagesStore() const;
+    FileMangler* fileMangler() const;
     QString ownID() const;
 
     bool online() const;

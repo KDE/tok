@@ -14,6 +14,7 @@
 #include "userdata.h"
 #include "util.h"
 #include "utilities.h"
+#include "filemangler.h"
 #include "chatsort.h"
 #include "membersmodel.h"
 #include "colorschemer.h"
@@ -36,6 +37,7 @@ void performSetup(QQmlEngine* eng, bool testMode)
     qRegisterMetaType<MembersModel*>();
     qRegisterMetaType<Utilities*>();
     qRegisterMetaType<ColorSchemer*>();
+    qRegisterMetaType<FileMangler*>();
     qRegisterMetaType<QSharedPointer<TDApi::file>>();
     qmlRegisterSingletonType<Utilities>("org.kde.Tok", 1, 0, "Utils", [](QQmlEngine*, QJSEngine*) -> QObject* { return new Utilities; });
     qmlRegisterSingletonType<ColorSchemer>("org.kde.Tok", 1, 0, "ColorSchemer", [](QQmlEngine*, QJSEngine*) -> QObject* { return new ColorSchemer; });

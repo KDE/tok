@@ -5,12 +5,12 @@ StaticLibrary {
 
     Export {
         cpp.driverLinkerFlags: mu.linkerFlags.concat(["-pthread"])
-        cpp.includePaths: mu.includeDirs
+        cpp.includePaths: mu.includeDirs.concat(["yoinked from qt automotive"])
         Group {
             files: ["../data/main.qrc"]
         }
         Depends { name: "cpp" }
-        Depends { name: "Qt"; submodules: ["widgets", "qml", "quick", "concurrent"] }
+        Depends { name: "Qt"; submodules: ["widgets", "qml", "qml-private", "core-private", "quick", "concurrent"] }
         Depends { name: "icu-uc" }
     }
 
@@ -33,7 +33,7 @@ StaticLibrary {
         }
     }
     cpp.driverLinkerFlags: mu.linkerFlags
-    cpp.includePaths: mu.includeDirs
+    cpp.includePaths: mu.includeDirs.concat(["yoinked from qt automotive"])
     cpp.cxxLanguageVersion: "c++20"
 
     files: [
@@ -41,10 +41,12 @@ StaticLibrary {
         "*.h",
         "internallib/*.cpp",
         "internallib/*.h",
+        "yoinked from qt automotive/*.cpp",
+        "yoinked from qt automotive/*.h",
     ]
     excludeFiles: ["main.cpp", "test_main.cpp"]
 
     Depends { name: "cpp" }
-    Depends { name: "Qt"; submodules: ["widgets", "qml", "quick", "concurrent"] }
+    Depends { name: "Qt"; submodules: ["widgets", "qml", "qml-private", "core-private", "quick", "concurrent"] }
     Depends { name: "icu-uc" }
 }

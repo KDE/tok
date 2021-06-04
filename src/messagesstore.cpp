@@ -32,6 +32,8 @@ enum Roles {
     // FileMessages
     FileName,
     FileCaption,
+    FileID,
+    FileIcon,
 
     // AddMembers messages
     AddedMembers,
@@ -265,6 +267,32 @@ QVariant MessagesStore::data(const QVariant& key, int role)
         }
         return QString::fromStdString(file->document_->file_name_);
     }
+    case Roles::FileID: {
+        auto content = d->messageData[mID]->content_.get();
+        if (content->get_id() != TDApi::messageDocument::ID) {
+            return QString();
+        }
+
+        auto file = static_cast<TDApi::messageDocument*>(content);
+        if (file->document_ == nullptr || file->document_->document_ == nullptr) {
+            return QString();
+        }
+
+        return QString::number(file->document_->document_->id_);
+    }
+    case Roles::FileIcon: {
+        auto content = d->messageData[mID]->content_.get();
+        if (content->get_id() != TDApi::messageDocument::ID) {
+            return QString();
+        }
+
+        auto file = static_cast<TDApi::messageDocument*>(content);
+        if (file->document_ == nullptr || file->document_->document_ == nullptr) {
+            return QString();
+        }
+
+        return QString::fromStdString(file->document_->mime_type_).replace("/", "-");
+    }
 
     case Roles::AuthorID: {
         const auto idFrom = [](TDApi::MessageSender* s) {
@@ -451,6 +479,8 @@ QHash<int, QByteArray> MessagesStore::roleNames()
 
     roles[Roles::FileCaption] = "fileCaption";
     roles[Roles::FileName] = "fileName";
+    roles[Roles::FileID] = "fileID";
+    roles[Roles::FileIcon] = "fileIcon";
 
     roles[Roles::AddedMembers] = "addedMembers";
 
