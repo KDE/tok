@@ -25,12 +25,17 @@ Maui.ApplicationWindow {
         id: cont
 
         anchors.fill: parent
+
+        leftOffset: lhControls.width>0 ? lhControls.width+lhControls.anchors.leftMargin : 0
+        rightOffset: rhControls.width>0 ? rhControls.width+rhControls.anchors.rightMargin : 0
     }
     Components.Header {
         id: dummyHeader
         visible: false
     }
     Maui.WindowControls {
+        id: lhControls
+
         parent: QQC2.Overlay.overlay
         side: Qt.LeftEdge
         z: 300
@@ -41,6 +46,8 @@ Maui.ApplicationWindow {
         y: Math.round(dummyHeader.height/2 - height/2)
     }
     Maui.WindowControls {
+        id: rhControls
+
         parent: QQC2.Overlay.overlay
         side: Qt.RightEdge
         z: 300

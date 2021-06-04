@@ -15,6 +15,9 @@ Kirigami.ScrollablePage {
     header: Components.Header {
         RowLayout {
             Layout.margins: Kirigami.Units.largeSpacing
+            Layout.leftMargin: !rootRow.shouldUseSidebars ? rootRow.leftOffset+Kirigami.Units.largeSpacing : Kirigami.Units.largeSpacing
+            Layout.rightMargin: !rootRow.shouldUseSidebars ? rootRow.rightOffset+Kirigami.Units.largeSpacing : Kirigami.Units.largeSpacing
+
             Layout.fillWidth: true
 
             QQC2.ToolButton {

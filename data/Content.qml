@@ -21,6 +21,9 @@ Kirigami.PageRow {
 
     property alias router: rootRouter
 
+    property int rightOffset: 0
+    property int leftOffset: 0
+
     property Binding binding: Binding {
         target: tClient
         property: "online"

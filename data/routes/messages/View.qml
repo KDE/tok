@@ -90,6 +90,9 @@ Kirigami.ScrollablePage {
 
     header: GlobalComponents.Header {
         RowLayout {
+            Layout.leftMargin: !rootRow.shouldUseSidebars ? rootRow.leftOffset+Kirigami.Units.largeSpacing : Kirigami.Units.largeSpacing
+            Layout.rightMargin: !rootRow.shouldUseSidebars ? rootRow.rightOffset+Kirigami.Units.largeSpacing : Kirigami.Units.largeSpacing
+
             QQC2.ToolButton {
                 icon.name: "arrow-left"
                 onClicked: Kirigami.PageRouter.bringToView(0)
