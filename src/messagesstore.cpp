@@ -392,7 +392,7 @@ QVariant MessagesStore::data(const QVariant& key, int role)
 
     case Roles::StickerURL: {
         auto it = static_cast<TDApi::messageSticker*>(d->messageData[mID]->content_.get());
-        return QString("image://telegram/%1").arg(it->sticker_->sticker_->id_);
+        return QString::number(it->sticker_->sticker_->id_);
     }
 
     case Roles::VideoSize: {
