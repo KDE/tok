@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2021 Carson Black <uhhadd@gmail.com>
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #include "tgimageprovider.h"
 
 TelegramImageProviderResponse::TelegramImageProviderResponse(Client* c, std::int32_t image)

@@ -1,4 +1,10 @@
-#include <QAudio>
+// Copyright © 2006-2012 the VideoLAN team (Mirsal Ennaime, Rafaël Carré, Jean-Paul Saman)
+// Copyright © 2005-2008 Milosz Derezynski
+// Copyright © 2008 Nick Welch
+// Copyright © 2010-2012 Alex Merry
+//
+// SPDX-License-Identifier: LGPL-2.1-or-later
+
 #include <QMediaPlayer>
 #include <QMediaMetaData>
 

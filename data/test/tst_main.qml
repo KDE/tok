@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2021 Carson Black <uhhadd@gmail.com>
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 import org.kde.Tok.Tests 1.0
 import QtTest 1.15
 import QtQuick 2.0
