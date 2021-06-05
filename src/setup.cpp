@@ -23,6 +23,8 @@
 
 #include "setup.h"
 
+Q_IMPORT_PLUGIN(LottiePlugin)
+
 Q_DECLARE_METATYPE(QSharedPointer<TDApi::file>)
 
 void performSetup(QQmlEngine* eng, bool testMode)

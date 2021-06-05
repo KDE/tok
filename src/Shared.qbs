@@ -10,6 +10,7 @@ StaticLibrary {
             files: ["../data/main.qrc"]
         }
         Depends { name: "cpp" }
+        Depends { name: "rlottieplugin" }
         Depends { name: "Qt"; submodules: ["widgets", "qml", "qml-private", "core-private", "quick", "concurrent", "multimedia"] }
         Depends { name: "icu-uc" }
     }
@@ -47,6 +48,7 @@ StaticLibrary {
     excludeFiles: ["main.cpp", "test_main.cpp"]
 
     Depends { name: "cpp" }
+    Depends { name: "rlottieplugin" }
     Depends { name: "Qt"; submodules: ["widgets", "qml", "qml-private", "core-private", "quick", "concurrent", "multimedia"] }
     Depends { name: "icu-uc" }
 }

@@ -7,10 +7,8 @@ import org.kde.Tok 1.0 as Tok
 
 import "qrc:/components" as Components
 
-Image {
+AnimatedImage {
     id: image
-
-    source: stickerData.data.stickerURL
 
     readonly property real ratio: width / implicitWidth
 
@@ -26,6 +24,11 @@ Image {
         key: [del.mChatID, del.mID]
         shape: QtObject {
             required property string stickerURL
+            onStickerURLChanged: {
+                tClient.fileMangler.downloadFile(stickerData.data.stickerURL).then((url) => {
+                    image.source = "file://"+url
+                })
+            }
         }
     }
 
@@ -51,16 +54,6 @@ Image {
             color: Kirigami.Theme.backgroundColor
             opacity: 0.7
             radius: 3
-        }
-    }
-
-    layer.enabled: true
-    layer.effect: OpacityMask {
-        maskSource: Rectangle {
-            color: "red"
-            radius: 4
-            width: image.width
-            height: image.height
         }
     }
 
