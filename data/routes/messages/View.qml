@@ -109,7 +109,8 @@ Kirigami.ScrollablePage {
             }
             Kirigami.Heading {
                 level: 4
-                text: chatData.data.mTitle
+                text: Tok.Utils.emojified(chatData.data.mTitle)
+                textFormat: Text.RichText
 
                 verticalAlignment: Text.AlignVCenter
                 Layout.fillHeight: true

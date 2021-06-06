@@ -60,7 +60,8 @@ contentItem: ColumnLayout {
                     Layout.alignment: Qt.AlignHCenter
                 }
                 Kirigami.Heading {
-                    text: chatData.data.mTitle
+                    text: Tok.Utils.emojified(chatData.data.mTitle)
+                    textFormat: Text.RichText
                     level: 2
 
                     horizontalAlignment: Text.AlignHCenter

@@ -154,8 +154,10 @@ Kirigami.ScrollablePage {
             topPadding: Kirigami.Units.largeSpacing
             bottomPadding: Kirigami.Units.largeSpacing
 
-            text: chatData.data.mTitle
-            subtitle: `${plaintext.hasAuthor ? plaintext.authorName + ": " : ""}${plaintext.onelinePlaintext}`
+            text: Tok.Utils.emojified(chatData.data.mTitle)
+            labelItem.textFormat: Text.RichText
+            subtitle: Tok.Utils.emojified(`${plaintext.hasAuthor ? plaintext.authorName + ": " : ""}${plaintext.onelinePlaintext}`)
+            subtitleItem.textFormat: Text.RichText
 
             Accessible.name: {
                 let strings = [`${chatData.data.mTitle}.`]
