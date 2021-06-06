@@ -14,9 +14,7 @@ LottieHandler::LottieHandler()
 
 LottieHandler::~LottieHandler()
 {
-    for (auto it : imageData) {
-        delete[] it;
-    }
+
 }
 
 // code yoinked from https://stackoverflow.com/questions/2690328/qt-quncompress-gzip-data
@@ -129,12 +127,24 @@ bool LottieHandler::load(QIODevice* it) const
     loaded = true;
     imageData.reserve(animation->totalFrame());
 
-    for (int i = 0; i < animation->totalFrame(); i++) {
-        auto data = new QRgb[512 * 512];
-        rlottie::Surface surface(data, 512, 512, 512*4);
+    if (!mmappedFile.open()) {
+        return false;
+    }
+    if (!mmappedFile.resize(animation->totalFrame()*512*512*4)) {
+        return false;
+    }
+    auto base = mmappedFile.map(0, animation->totalFrame()*512*512*4);
+    if (base == nullptr) {
+        return false;
+    }
 
+    for (int i = 0; i < animation->totalFrame(); i++) {
+        auto data = base+(i*512*512*4);
+        rlottie::Surface surface((uint32_t*)data, 512, 512, 512*4);
+
+        qDebug() << "rendering...";
         animation->renderSync(i, surface);
-        imageData << data;
+        imageData << (QRgb*)data;
     }
 
     return true;
@@ -155,7 +165,6 @@ bool LottieHandler::read(QImage *image)
     }
 
     QImage out((uchar*)imageData[currentFrame], 512, 512, QImage::Format_ARGB32_Premultiplied);
-    out.detach();
     *image = out;
 
     return true;

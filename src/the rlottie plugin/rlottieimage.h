@@ -3,6 +3,7 @@
 #include <QImage>
 #include <QImageIOHandler>
 #include <QByteArray>
+#include <QTemporaryFile>
 
 #include "rlottie.h"
 
@@ -14,6 +15,7 @@ class LottieHandler : public QImageIOHandler
     mutable bool loaded = false;
     mutable QScopedPointer<rlottie::Animation> animation;
     mutable QList<QRgb*> imageData;
+    mutable QTemporaryFile mmappedFile;
     mutable int currentFrame = -1;
 
 public:
