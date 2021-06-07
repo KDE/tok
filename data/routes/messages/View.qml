@@ -112,6 +112,8 @@ Kirigami.ScrollablePage {
                 text: chatData.data.mTitle
 
                 verticalAlignment: Text.AlignVCenter
+                elide: Text.ElideRight
+
                 Layout.fillHeight: true
                 Layout.fillWidth: true
                 Layout.margins: Kirigami.Units.largeSpacing

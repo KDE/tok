@@ -64,6 +64,10 @@ contentItem: ColumnLayout {
                     level: 2
 
                     horizontalAlignment: Text.AlignHCenter
+                    wrapMode: Text.Wrap
+
+                    Layout.leftMargin: Kirigami.Units.largeSpacing
+                    Layout.rightMargin: Kirigami.Units.largeSpacing
                     Layout.bottomMargin: Kirigami.Units.largeSpacing
                     Layout.fillWidth: true
                 }
