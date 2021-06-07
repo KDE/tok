@@ -116,7 +116,7 @@ QQC2.Control {
                 "messageDocument": Qt.resolvedUrl((settings.thinMode ? "thin/" : "") + "FileMessage.qml"),
                 "messageChatAddMembers": Qt.resolvedUrl((settings.thinMode ? "thin/" : "") + "UserAddMessage.qml"),
                 "messageSticker": Qt.resolvedUrl((settings.thinMode ? "thin/" : "") + "Sticker.qml"),
-                "messageAudio": Qt.resolvedUrl("AudioMessage.qml"),
+                "messageAudio": Qt.resolvedUrl((settings.thinMode ? "thin/" : "") + "AudioMessage.qml"),
                 "messageVideo": Qt.resolvedUrl("VideoMessage.qml"),
             }
             defaultCase: Qt.resolvedUrl("Unsupported.qml")
