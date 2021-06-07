@@ -99,6 +99,7 @@ QQC2.Control {
             GlobalComponents.UserDataSheet { id: __userDataSheet; userID: messageData.data.authorID || "" }
 
             Layout.alignment: Qt.AlignBottom
+            Layout.leftMargin: Kirigami.Units.largeSpacing
         }
 
         Item {
