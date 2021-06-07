@@ -117,6 +117,11 @@ Kirigami.ScrollablePage {
                 Layout.margins: Kirigami.Units.largeSpacing
             }
             QQC2.ToolButton {
+                icon.name: settings.userWantsSidebars ? "sidebar-collapse-right" : "sidebar-expand-right"
+                onClicked: settings.userWantsSidebars = !settings.userWantsSidebars
+                visible: rootRow.shouldUseSidebars
+            }
+            QQC2.ToolButton {
                 icon.name: "documentinfo"
                 onClicked: rootRow.layers.push(groupInfoComponent)
                 visible: !rootRow.shouldUseSidebars
@@ -131,7 +136,7 @@ Kirigami.ScrollablePage {
     }
 
     Loader {
-        active: rootRow.shouldUseSidebars
+        active: rootRow.shouldUseSidebars && settings.userWantsSidebars
         sourceComponent: QQC2.Drawer {
             width: 300
             height: rootWindow.height

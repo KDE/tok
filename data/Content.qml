@@ -152,6 +152,7 @@ Kirigami.PageRow {
         property bool thinMode: false
         property bool imageBackground: true
         property bool transparent: false
+        property bool userWantsSidebars: true
         property int pageWidth: -1
 
         onTransparentChanged: {
@@ -211,7 +212,7 @@ Kirigami.PageRow {
         pageStack: rootRow.columnView
         initialRoute: ""
 
-        property bool pageHasSidebar: rootRow.shouldUseSidebars && pageCanHaveSidebar
+        property bool pageHasSidebar: rootRow.shouldUseSidebars && settings.userWantsSidebars && pageCanHaveSidebar
         property bool pageCanHaveSidebar: false
 
         function evaluatePageHasSidebar() {
