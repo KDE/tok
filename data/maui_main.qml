@@ -13,7 +13,7 @@ Maui.ApplicationWindow {
 
     title: i18nc("window title", "Tok")
 
-    width: Kirigami.Units.gridUnit * 60
+    width: Kirigami.Units.gridUnit * 65
     height: Kirigami.Units.gridUnit * 35
 
     color: cont.settings.transparent ? "transparent" : Kirigami.Theme.backgroundColor
