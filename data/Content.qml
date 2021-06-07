@@ -45,6 +45,35 @@ Kirigami.PageRow {
         }
     }
 
+    MouseArea {
+        visible: rootRow.shouldUseSidebars
+        z: 500
+
+        anchors.top: parent.top
+        anchors.bottom: parent.bottom
+
+        x: rootRow.pageWidth - (width / 2)
+        width: Kirigami.Units.devicePixelRatio * 2
+
+        property int _lastX: -1
+
+        cursorShape: Qt.SplitHCursor
+
+        onPressed: _lastX = mouseX
+
+        onPositionChanged: {
+            if (_lastX == -1) return
+
+            if (mouse.x > _lastX) {
+                settings.pageWidth = Math.min((rootRow.defaultPageWidth),
+                    rootRow.pageWidth + (mouse.x - _lastX));
+            } else if (mouse.x < _lastX) {
+                settings.pageWidth = Math.max((rootRow.defaultPageWidth - rootRow.leeway),
+                    rootRow.pageWidth - (_lastX - mouse.x));
+            }
+        }
+    }
+
     Loader {
         id: audioBar
 
@@ -108,20 +137,33 @@ Kirigami.PageRow {
         }
     }
 
+    readonly property int defaultPageWidth: Kirigami.Units.gridUnit * 20
+    readonly property int leeway: (Kirigami.Units.gridUnit * 5)
+    readonly property alias pageWidth: settings.pageWidth
+    defaultColumnWidth: pageWidth
 
-    readonly property bool shouldUseSidebars: (rootWindow.width-300) >= (rootRow.defaultColumnWidth*2)
+    readonly property bool shouldUseSidebars: (rootWindow.width-300) >= (rootRow.defaultPageWidth*2)
     columnView.columnResizeMode: shouldUseSidebars ? Kirigami.ColumnView.FixedColumns : Kirigami.ColumnView.SingleColumn
     anchors.rightMargin: rootRouter.pageHasSidebar ? 300 : 0
 
     property Settings settings: Settings {
+        id: settings
+
         property bool thinMode: false
         property bool imageBackground: true
         property bool transparent: false
+        property int pageWidth: -1
 
         onTransparentChanged: {
             Tok.Utils.setBlur(rootRow, transparent)
         }
-        Component.onCompleted: Tok.Utils.setBlur(rootRow, transparent)
+        Component.onCompleted: {
+            if (settings.pageWidth == -1) {
+                settings.pageWidth = Kirigami.Units.gridUnit * 20
+            }
+            Tok.Utils.setBlur(rootRow, transparent)
+            rootRow.defaultColumnWidth = Qt.binding(() => settings.pageWidth)
+        }
     }
 
     property Rectangle focusRect: Rectangle {

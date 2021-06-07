@@ -13,7 +13,7 @@ Kirigami.AbstractApplicationWindow {
 
     property var aplayer: Components.AudioPlayer
 
-    width: Kirigami.Units.gridUnit * 60
+    width: Kirigami.Units.gridUnit * 65
     height: Kirigami.Units.gridUnit * 35
 
     title: i18nc("window title", "Tok")
