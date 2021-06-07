@@ -260,6 +260,14 @@ Kirigami.ScrollablePage {
 
                     placeholderText: enabled ? i18n("Write your message…") : i18n("You cannot send messages.")
 
+                    Tok.Clipboard.paste: function(clipboard) {
+                        if (clipboard.hasUrls) {
+                            messagesViewRoot.uploadPath = clipboard.urls[0]
+                            composeRow.send()
+                            return true
+                        }
+                    }
+
                     Keys.onReturnPressed: (event) => {
                         if (!(event.modifiers & Qt.ShiftModifier)) {
                             composeRow.send()
