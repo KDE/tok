@@ -33,7 +33,7 @@ QQC2.Control {
 
     Kirigami.Theme.backgroundColor: {
         if (isOwnMessage)
-            return Kirigami.ColorUtils.tintWithAlpha(Kirigami.Theme.backgroundColor, Kirigami.Theme.focusColor, 0.1)
+            return Kirigami.ColorUtils.tintWithAlpha(messagesViewRoot.Kirigami.Theme.backgroundColor, messagesViewRoot.Kirigami.Theme.focusColor, 0.2)
 
         if (Kirigami.ColorUtils.brightnessForColor(messagesViewRoot.Kirigami.Theme.backgroundColor) == Kirigami.ColorUtils.Light)
             return Qt.darker(messagesViewRoot.Kirigami.Theme.backgroundColor, 1.1)
