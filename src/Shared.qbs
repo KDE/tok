@@ -22,7 +22,16 @@ StaticLibrary {
         property var includeDirs
         configure: {
             var proc = new Process()
-            var exitCode = proc.exec(mu.src + "/extract_flags.sh", [])
+            var exitCode = proc.exec(mu.src + "/extract_flags.sh", [
+                "find_package(KF5Kirigami2 REQUIRED)\n"+
+                "find_package(KF5I18n REQUIRED)\n"+
+                "find_package(KF5Notifications REQUIRED)\n"+
+                "find_package(KF5ConfigWidgets REQUIRED)\n"+
+                "find_package(KF5WindowSystem REQUIRED)\n"+
+                "find_package(Td 1.7.4 REQUIRED)\n",
+
+                "KF5::Kirigami2 KF5::I18n KF5::Notifications KF5::ConfigWidgets KF5::WindowSystem Td::TdStatic",
+            ])
             if (exitCode != 0) {
             	console.error(proc.readStdOut())
             	throw "extracting flags from CMake libraries failed"
