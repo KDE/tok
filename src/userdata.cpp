@@ -10,6 +10,7 @@ enum Roles {
     Name = Qt::UserRole,
     SmallAvatar,
     Bio,
+    Username,
 };
 
 UserDataModel::UserDataModel(Client* parent)
@@ -51,6 +52,8 @@ QVariant UserDataModel::data(const QVariant& key, int role)
             return QVariant();
         }
         return QString("image://telegram/%1").arg(userData[id]->profile_photo_->small_->id_);
+    case Roles::Username:
+        return QString::fromStdString(userData[id]->username_);
     }
 
     Q_UNREACHABLE();
@@ -88,6 +91,7 @@ QHash<int, QByteArray> UserDataModel::roleNames()
     ret[Roles::Name] = "name";
     ret[Roles::SmallAvatar] = "smallAvatar";
     ret[Roles::Bio] = "bio";
+    ret[Roles::Username] = "username";
 
     return ret;
 }

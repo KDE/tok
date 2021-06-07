@@ -34,3 +34,32 @@ void Utilities::setBlur(QQuickItem* item, bool doit)
     connect(item->window(), &QQuickWindow::widthChanged, this, setWindows);
     setWindows();
 }
+
+QString Utilities::wordAt(int pos, const QString& in)
+{
+    if (in.length() == 0) return QString();
+
+    int first = 0, last = 0;
+
+    if (pos == in.length()) {
+        last = pos-1;
+    } else for (int i = pos; i < in.length(); i++) {
+        last = i;
+        if (in[i] == ' ') {
+            last--;
+            break;
+        }
+    }
+
+    if (pos-1 <= 0) {
+        first = 0;
+    } else for (int i = pos-1 >= in.length() ? in.length()-1 : pos-1; i >= 0; i--) {
+        first = i;
+        if (in[i] == ' ') {
+            first++;
+            break;
+        }
+    }
+
+    return in.mid(first, last-first+1);
+}

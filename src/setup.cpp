@@ -19,6 +19,7 @@
 #include "copyinterceptor.h"
 #include "membersmodel.h"
 #include "colorschemer.h"
+#include "usersortmodel.h"
 
 #include "internallib/qquickrelationallistener.h"
 
@@ -46,6 +47,7 @@ void performSetup(QQmlEngine* eng, bool testMode)
     qmlRegisterSingletonType<ColorSchemer>("org.kde.Tok", 1, 0, "ColorSchemer", [](QQmlEngine*, QJSEngine*) -> QObject* { return new ColorSchemer; });
     qmlRegisterUncreatableType<CopyInterceptor>("org.kde.Tok", 1, 0, "Clipboard", "You cannot create an instance of Clipboard.");
     qmlRegisterType<ChatSortModel>("org.kde.Tok", 1, 0, "ChatSortModel");
+    qmlRegisterType<UserSortModel>("org.kde.Tok", 1, 0, "UserSortModel");
     qmlRegisterType<TokQmlRelationalListener>("org.kde.Tok", 1, 0, "RelationalListener");
 
     auto c = new Client(testMode);

@@ -29,6 +29,7 @@
 
         <file>routes/messages/View.qml</file>
         <file>routes/messages/components/GroupInformation.qml</file>
+        <file>routes/messages/components/MentionBar.qml</file>
 
         <file>routes/messages/components/MessageDelegate.qml</file>
         <file>routes/messages/components/MessageBackground.qml</file>

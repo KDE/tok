@@ -163,12 +163,27 @@ Kirigami.ScrollablePage {
     }
 
     footer: QQC2.ToolBar {
-        ColumnLayout {
+        id: composeBar
+
+        Components.MentionBar {
+            id: autoCompleteThing
+            clip: true
+            visible: false
+
+            parent: composeBar
+
+            height: 200
             anchors {
+                bottom: parent.top
                 left: parent.left
                 right: parent.right
             }
+        }
 
+        implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset, contentItem.implicitWidth + leftPadding + rightPadding)
+        implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset, contentItem.implicitHeight + topPadding + bottomPadding)
+
+        contentItem: ColumnLayout {
             GlobalComponents.LoaderPlus {
                 active: messagesViewRoot.replyToID != ""
                 visible: messagesViewRoot.replyToID != ""
@@ -275,6 +290,18 @@ Kirigami.ScrollablePage {
                         }
                     }
 
+                    onCursorPositionChanged: {
+                        doAutocomplete()
+                    }
+                    onTextChanged: {
+                        doAutocomplete()
+                    }
+
+                    function doAutocomplete() {
+                        autoCompleteThing.visible = Tok.Utils.wordAt(cursorPosition, text)[0] == '@'
+                        autoCompleteThing.filter = Tok.Utils.wordAt(cursorPosition, text).slice(1)
+                    }
+
                     Keys.onReturnPressed: (event) => {
                         if (!(event.modifiers & Qt.ShiftModifier)) {
                             composeRow.send()
@@ -283,7 +310,14 @@ Kirigami.ScrollablePage {
                             event.accepted = false
                         }
                     }
-                    Keys.onTabPressed: nextItemInFocusChain().forceActiveFocus(Qt.TabFocusReason)
+                    Keys.onUpPressed: (event) => autoCompleteThing.up(event)
+                    Keys.onDownPressed: (event) => autoCompleteThing.down(event)
+                    Keys.onTabPressed: (event) => {
+                        if (autoCompleteThing.tab(event)) {
+                            return
+                        }
+                        nextItemInFocusChain().forceActiveFocus(Qt.TabFocusReason)
+                    }
                     Layout.fillWidth: true
                 }
                 QQC2.Button {
