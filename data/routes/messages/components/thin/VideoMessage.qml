@@ -10,12 +10,15 @@ import "qrc:/components" as Components
 ColumnLayout {
     Layout.leftMargin: Kirigami.Units.largeSpacing
 
+    ReplyBlock {}
     Image {
-        id: image
+        id: video
 
-        source: imageData.data.imageURL
+        source: videoData.data.videoThumbnail
 
         readonly property real ratio: width / implicitWidth
+        Layout.preferredHeight: video.implicitHeight * video.ratio
+        Layout.fillWidth: true
 
         Accessible.name: i18n("Photo message.")
 
@@ -26,22 +29,38 @@ ColumnLayout {
             cursorShape: Qt.PointingHandCursor
         }
         TapHandler {
-            onTapped: imagePopup.open()
+            onTapped: tClient.messagesStore.openVideo(del.mChatID, del.mID)
         }
 
-        Components.ImagePopup {
-            id: imagePopup
-            source: image.source
+        Rectangle {
+            id: scrim
+
+            anchors.fill: icon
+            anchors.margins: -Kirigami.Units.largeSpacing
+
+            color: Qt.rgba(0, 0, 0, 0.3)
+
+            radius: width / 2
+        }
+
+        Kirigami.Icon {
+            id: icon
+
+            anchors.centerIn: parent
+
+            source: "media-playback-start"
+            Kirigami.Theme.textColor: "white"
         }
 
         Tok.RelationalListener {
-            id: imageData
+            id: videoData
 
             model: tClient.messagesStore
             key: [del.mChatID, del.mID]
             shape: QtObject {
-                required property string imageURL
-                required property string imageCaption
+                required property size videoSize
+                required property string videoThumbnail
+                required property string videoCaption
             }
         }
 
@@ -57,6 +76,8 @@ ColumnLayout {
             padding: Kirigami.Units.smallSpacing
             leftPadding: Math.floor(Kirigami.Units.smallSpacing*(3/2))
             rightPadding: Math.floor(Kirigami.Units.smallSpacing*(3/2))
+
+            visible: !textEdit.visible
 
             anchors {
                 bottom: parent.bottom
@@ -75,19 +96,15 @@ ColumnLayout {
             maskSource: Rectangle {
                 color: "red"
                 radius: 4
-                width: image.width
-                height: image.height
+                width: video.width
+                height: video.height
             }
         }
-
-        Layout.preferredHeight: implicitHeight * ratio
-        Layout.maximumWidth: implicitWidth
-        Layout.fillWidth: true
     }
     TextEdit {
         id: textEdit
-        text: imageData.data.imageCaption
-        visible: imageData.data.imageCaption != ""
+        text: videoData.data.videoCaption
+        visible: videoData.data.videoCaption != ""
 
         topPadding: Kirigami.Units.smallSpacing
         bottomPadding: Kirigami.Units.largeSpacing
@@ -97,12 +114,12 @@ ColumnLayout {
         Connections {
             id: conns
 
-            target: imageData.data
-            function onImageCaptionChanged() {
-                imageData.model.format(imageData.key, textEdit.textDocument, textEdit, textEdit.isEmojiOnly)
+            target: videoData.data
+            function onVideoCaptionChanged() {
+                videoData.model.format(videoData.key, textEdit.textDocument, textEdit, textEdit.isEmojiOnly)
             }
         }
-        Component.onCompleted: conns.onImageCaptionChanged()
+        Component.onCompleted: conns.onVideoCaptionChanged()
 
         readOnly: true
         selectByMouse: !Kirigami.Settings.isMobile

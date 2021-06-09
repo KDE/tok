@@ -44,6 +44,7 @@ enum Roles {
     // Video messages
     VideoSize,
     VideoThumbnail,
+    VideoCaption,
 
     // Audio messages
     AudioCaption,
@@ -95,12 +96,26 @@ void MessagesStore::format(const QVariant &key, QQuickTextDocument* doc, QQuickI
 
     auto mID = fromVariant(key);
 
-    auto content = d->messageData[mID]->content_.get();
-    if (content->get_id() != TDApi::messageText::ID) {
-        return;
-    }
+    TDApi::formattedText* format = nullptr;
+    using namespace TDApi;
 
-    auto format = static_cast<TDApi::messageText*>(content)->text_.get();
+    match(d->messageData[mID]->content_)
+        handleCase(messageText, it)
+            format = it->text_.get();
+        endhandle
+        handleCase(messagePhoto, it)
+            format = it->caption_.get();
+        endhandle
+        handleCase(messageAudio, it)
+            format = it->caption_.get();
+        endhandle
+        handleCase(messageDocument, it)
+            format = it->caption_.get();
+        endhandle
+        handleCase(messageVideo, it)
+            format = it->caption_.get();
+        endhandle
+    endmatch
 
     auto doku = doc->textDocument();
     QTextCursor curs(doku);
@@ -407,6 +422,12 @@ QVariant MessagesStore::data(const QVariant& key, int role)
         return QString("image://telegram/%1").arg(it->video_->thumbnail_->file_->id_);
     }
 
+    case Roles::VideoCaption: {
+        auto it = static_cast<TDApi::messageVideo*>(d->messageData[mID]->content_.get());
+
+        return QString::fromStdString(it->caption_->text_);
+    }
+
     case Roles::AudioCaption: {
         auto it = static_cast<TDApi::messageAudio*>(d->messageData[mID]->content_.get());
 
@@ -559,6 +580,7 @@ QHash<int, QByteArray> MessagesStore::roleNames()
 
     roles[Roles::VideoSize] = "videoSize";
     roles[Roles::VideoThumbnail] = "videoThumbnail";
+    roles[Roles::VideoCaption] = "videoCaption";
 
     roles[Roles::AudioCaption] = "audioCaption";
     roles[Roles::AudioDuration] = "audioDuration";

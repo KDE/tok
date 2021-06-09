@@ -51,7 +51,7 @@
         <file>routes/messages/components/thin/PhotoMessage.qml</file>
         <file>routes/messages/components/thin/UserAddMessage.qml</file>
         <file alias="routes/messages/components/thin/Sticker.qml">routes/messages/components/Sticker.qml</file>
-        <!-- video message is used for thinmode too -->
+        <file>routes/messages/components/thin/VideoMessage.qml</file>
         <file>routes/messages/components/thin/AudioMessage.qml</file>
     </qresource>
 </RCC>

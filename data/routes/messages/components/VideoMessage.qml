@@ -7,133 +7,172 @@ import org.kde.Tok 1.0 as Tok
 
 import "qrc:/components" as Components
 
-Image {
-    id: image
+QQC2.Control {
+    id: videoRoot
 
-    source: videoData.data.videoThumbnail
+    topPadding: 0
+    bottomPadding: 0
+    leftPadding: tailSize
+    rightPadding: 0
 
-    readonly property real ratio: width / implicitWidth
+    readonly property int tailSize: Kirigami.Units.largeSpacing
 
-    Accessible.name: i18n("Photo message.")
+    Layout.maximumWidth: del.recommendedSize
 
-    smooth: true
-    mipmap: true
+    background: MessageBackground {
+        id: _background
+        tailSize: videoRoot.tailSize
 
-    HoverHandler {
-        cursorShape: Qt.PointingHandCursor
-    }
-    TapHandler {
-        onTapped: tClient.messagesStore.openVideo(del.mChatID, del.mID)
-    }
-
-    Image {
-        id: blurImage
-
-        source: videoData.data.videoThumbnail
         anchors.fill: parent
-
-        visible: false
     }
 
-    FastBlur {
-        anchors.fill: blurImage
-        source: blurImage
-        radius: 32
+    contentItem: ColumnLayout {
+        ReplyBlock {}
+        Image {
+            id: video
 
-        layer.enabled: true
-        layer.effect: OpacityMask {
-            maskSource: Item {
-                width: blurImage.width
-                height: blurImage.height
+            source: videoData.data.videoThumbnail
 
-                Rectangle {
-                    width: scrim.width
-                    height: scrim.height
-                    radius: scrim.radius
+            readonly property real ratio: width / implicitWidth
+            Layout.preferredHeight: video.implicitHeight * video.ratio
+            Layout.fillWidth: true
 
-                    anchors.centerIn: parent
+            Accessible.name: i18n("Photo message.")
+
+            smooth: true
+            mipmap: true
+
+            HoverHandler {
+                cursorShape: Qt.PointingHandCursor
+            }
+            TapHandler {
+                onTapped: tClient.messagesStore.openVideo(del.mChatID, del.mID)
+            }
+
+            Rectangle {
+                id: scrim
+
+                anchors.fill: icon
+                anchors.margins: -Kirigami.Units.largeSpacing
+
+                color: Qt.rgba(0, 0, 0, 0.3)
+
+                radius: width / 2
+            }
+
+            Kirigami.Icon {
+                id: icon
+
+                anchors.centerIn: parent
+
+                source: "media-playback-start"
+                Kirigami.Theme.textColor: "white"
+            }
+
+            Tok.RelationalListener {
+                id: videoData
+
+                model: tClient.messagesStore
+                key: [del.mChatID, del.mID]
+                shape: QtObject {
+                    required property size videoSize
+                    required property string videoThumbnail
+                    required property string videoCaption
                 }
-                Rectangle {
-                    width: timestamp.width
-                    height: timestamp.height
-                    x: timestamp.x
-                    y: timestamp.y
+            }
 
+            QQC2.Label {
+                text: messageData.data.timestamp
+
+                Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
+                Kirigami.Theme.inherit: false
+
+                font.pointSize: -1
+                font.pixelSize: Kirigami.Units.gridUnit * (2/3)
+
+                padding: Kirigami.Units.smallSpacing
+                leftPadding: Math.floor(Kirigami.Units.smallSpacing*(3/2))
+                rightPadding: Math.floor(Kirigami.Units.smallSpacing*(3/2))
+
+                visible: !textEdit.visible
+
+                anchors {
+                    bottom: parent.bottom
+                    right: parent.right
+                    margins: Kirigami.Units.largeSpacing
+                }
+                background: Rectangle {
+                    color: Kirigami.Theme.backgroundColor
+                    opacity: 0.7
                     radius: 3
                 }
             }
+
+            layer.enabled: true
+            layer.effect: OpacityMask {
+                maskSource: Rectangle {
+                    color: "red"
+                    radius: 4
+                    width: video.width
+                    height: video.height
+                }
+            }
+        }
+        TextEdit {
+            id: textEdit
+            text: videoData.data.videoCaption + paddingT
+            visible: videoData.data.videoCaption != ""
+
+            topPadding: Kirigami.Units.smallSpacing
+            bottomPadding: Kirigami.Units.largeSpacing
+            leftPadding: Kirigami.Units.largeSpacing
+            rightPadding: Kirigami.Units.largeSpacing
+
+            Connections {
+                id: conns
+
+                target: videoData.data
+                function onVideoCaptionChanged() {
+                    videoData.model.format(videoData.key, textEdit.textDocument, textEdit, textEdit.isEmojiOnly)
+                }
+            }
+            Component.onCompleted: conns.onVideoCaptionChanged()
+
+            readonly property string paddingT: " ".repeat(Math.ceil(_background.timestamp.implicitWidth / _background.dummy.implicitWidth)) + "⠀"
+
+            readOnly: true
+            selectByMouse: !Kirigami.Settings.isMobile
+            wrapMode: Text.Wrap
+
+            color: Kirigami.Theme.textColor
+            selectedTextColor: Kirigami.Theme.highlightedTextColor
+            selectionColor: Kirigami.Theme.highlightColor
+
+            function clamp() {
+                const l = length - paddingT.length
+                if (selectionEnd >= l && selectionStart >= l) {
+                    select(0, 0)
+                } else if (selectionEnd >= l) {
+                    select(selectionStart, l)
+                } else if (selectionStart >= l) {
+                    select(l, selectionEnd)
+                }
+            }
+
+            onSelectionStartChanged: clamp()
+            onSelectionEndChanged: clamp()
+
+            onLinkActivated: (mu) => {
+                Qt.openUrlExternally(mu)
+            }
+
+            HoverHandler {
+                acceptedButtons: Qt.NoButton
+                cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.IBeamCursor
+            }
+
+            Layout.fillWidth: true
         }
     }
 
-    Rectangle {
-        id: scrim
-
-        anchors.fill: icon
-        anchors.margins: -Kirigami.Units.largeSpacing
-
-        color: Qt.rgba(0, 0, 0, 0.3)
-
-        radius: width / 2
-    }
-
-    Kirigami.Icon {
-        id: icon
-
-        anchors.centerIn: parent
-
-        source: "media-playback-start"
-        Kirigami.Theme.textColor: "white"
-    }
-
-    Tok.RelationalListener {
-        id: videoData
-
-        model: tClient.messagesStore
-        key: [del.mChatID, del.mID]
-        shape: QtObject {
-            required property size videoSize
-            required property string videoThumbnail
-        }
-    }
-
-    QQC2.Label {
-        id: timestamp
-
-        text: messageData.data.timestamp
-
-        Kirigami.Theme.colorSet: Kirigami.Theme.Complementary
-        Kirigami.Theme.inherit: false
-
-        font.pointSize: -1
-        font.pixelSize: Kirigami.Units.gridUnit * (2/3)
-
-        padding: Kirigami.Units.smallSpacing
-        leftPadding: Math.floor(Kirigami.Units.smallSpacing*(3/2))
-        rightPadding: Math.floor(Kirigami.Units.smallSpacing*(3/2))
-
-        anchors {
-            bottom: parent.bottom
-            right: parent.right
-            margins: Kirigami.Units.largeSpacing
-        }
-        background: Rectangle {
-            color: Kirigami.Theme.backgroundColor
-            opacity: 0.7
-            radius: 3
-        }
-    }
-
-    layer.enabled: true
-    layer.effect: OpacityMask {
-        maskSource: Rectangle {
-            color: "red"
-            radius: 4
-            width: image.width
-            height: image.height
-        }
-    }
-
-    Layout.preferredHeight: implicitHeight * ratio
-    Layout.maximumWidth: settings.thinMode ? -1 : del.recommendedSize
-    Layout.leftMargin: Kirigami.Units.largeSpacing
 }
