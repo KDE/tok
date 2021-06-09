@@ -115,3 +115,8 @@ void Client::setOnline(bool online)
     d->online = online;
     call<TDApi::setOption>([](TDApi::setOption::ReturnType) {}, "online", TDApi::make_object<TDApi::optionValueBoolean>(online));
 }
+
+void Client::logOut()
+{
+    call<TDApi::logOut>(nullptr);
+}

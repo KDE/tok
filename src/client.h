@@ -126,4 +126,6 @@ public:
     Q_INVOKABLE void enterPhoneNumber(const QString& phoneNumber);
     Q_INVOKABLE void enterCode(const QString& code);
     Q_INVOKABLE void enterPassword(const QString& password);
+
+    Q_INVOKABLE void logOut();
 };

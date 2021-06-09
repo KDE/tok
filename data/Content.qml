@@ -143,7 +143,7 @@ Kirigami.PageRow {
     defaultColumnWidth: pageWidth
 
     readonly property bool shouldUseSidebars: (rootWindow.width-300) >= (rootRow.defaultPageWidth*2)
-    columnView.columnResizeMode: shouldUseSidebars ? Kirigami.ColumnView.FixedColumns : Kirigami.ColumnView.SingleColumn
+    columnView.columnResizeMode: shouldUseSidebars && rootRow.depth > 1 ? Kirigami.ColumnView.FixedColumns : Kirigami.ColumnView.SingleColumn
     anchors.rightMargin: rootRouter.pageHasSidebar ? 300 : 0
 
     property Settings settings: Settings {

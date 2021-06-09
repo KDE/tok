@@ -46,6 +46,10 @@ Kirigami.ScrollablePage {
                         text: i18nc("menu item that opens a UI element called the 'Quick Switcher', which offers a fast keyboard-based interface for switching in between chats.", "Quick Switcher")
                         onTriggered: quickView.open()
                     }
+                    QQC2.MenuItem {
+                        text: i18n("Log out")
+                        onTriggered: tClient.logOut()
+                    }
                     QQC2.Menu {
                         title: i18nc("menu item that has a submenu listing a bunch of colour schemes users can pick from", "Color schemes")
                         Repeater {
