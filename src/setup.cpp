@@ -2,6 +2,7 @@
 
 #include <QQmlEngine>
 #include <QQmlContext>
+#include <QQuickWindow>
 
 #include <KLocalizedContext>
 
@@ -49,6 +50,8 @@ void performSetup(QQmlEngine* eng, bool testMode)
     qmlRegisterType<ChatSortModel>("org.kde.Tok", 1, 0, "ChatSortModel");
     qmlRegisterType<UserSortModel>("org.kde.Tok", 1, 0, "UserSortModel");
     qmlRegisterType<TokQmlRelationalListener>("org.kde.Tok", 1, 0, "RelationalListener");
+
+    QQuickWindow::setDefaultAlphaBuffer(true);
 
     auto c = new Client(testMode);
 

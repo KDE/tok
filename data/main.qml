@@ -19,6 +19,7 @@ Kirigami.AbstractApplicationWindow {
     title: i18nc("window title", "Tok")
 
     color: content.settings.transparent ? "transparent" : Kirigami.Theme.backgroundColor
+    flags: content.settings.transparent ? Qt.WA_TranslucentBackground : 0
 
     onClosing: (e) => {
         content.closing(e)

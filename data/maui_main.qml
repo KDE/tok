@@ -17,6 +17,7 @@ Maui.ApplicationWindow {
     height: Kirigami.Units.gridUnit * 35
 
     color: cont.settings.transparent ? "transparent" : Kirigami.Theme.backgroundColor
+    flags: content.settings.transparent ? Qt.WA_TranslucentBackground : 0
     background.visible: false
 
     header: Item {}
