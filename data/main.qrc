@@ -5,6 +5,7 @@
         <file>Content.qml</file>
 
         <file>img/light background.png</file>
+        <file alias="img/org.kde.Tok.svg">../org.kde.Tok.svg</file>
 
         <file>components/qmldir</file>
         <file>components/AudioPlayer.qml</file>
