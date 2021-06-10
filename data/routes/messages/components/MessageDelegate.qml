@@ -118,6 +118,7 @@ QQC2.Control {
                 "messageSticker": Qt.resolvedUrl((settings.thinMode ? "thin/" : "") + "Sticker.qml"),
                 "messageAudio": Qt.resolvedUrl((settings.thinMode ? "thin/" : "") + "AudioMessage.qml"),
                 "messageVideo": Qt.resolvedUrl((settings.thinMode ? "thin/" : "") + "VideoMessage.qml"),
+                "messageAnimation": Qt.resolvedUrl((settings.thinMode ? "thin/" : "") + "GifMessage.qml"),
             }
             defaultCase: Qt.resolvedUrl("Unsupported.qml")
 

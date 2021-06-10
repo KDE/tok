@@ -49,6 +49,7 @@
         <file>routes/messages/components/Sticker.qml</file>
         <file>routes/messages/components/VideoMessage.qml</file>
         <file>routes/messages/components/AudioMessage.qml</file>
+        <file>routes/messages/components/GifMessage.qml</file>
 
         <file>routes/messages/components/thin/TextMessage.qml</file>
         <file>routes/messages/components/thin/FileMessage.qml</file>
@@ -57,5 +58,6 @@
         <file alias="routes/messages/components/thin/Sticker.qml">routes/messages/components/Sticker.qml</file>
         <file>routes/messages/components/thin/VideoMessage.qml</file>
         <file>routes/messages/components/thin/AudioMessage.qml</file>
+        <file>routes/messages/components/thin/GifMessage.qml</file>
     </qresource>
 </RCC>
