@@ -56,6 +56,11 @@ enum Roles {
     AudioSmallThumbnail,
     AudioLargeThumbnail,
     AudioFileID,
+
+    // GIF messages
+    AnimationFileID,
+    AnimationThumbnail,
+    AnimationCaption,
 };
 
 MessagesStore::MessagesStore(Client* parent) : c(parent), d(new Private)
@@ -113,6 +118,9 @@ void MessagesStore::format(const QVariant &key, QQuickTextDocument* doc, QQuickI
             format = it->caption_.get();
         endhandle
         handleCase(messageVideo, it)
+            format = it->caption_.get();
+        endhandle
+        handleCase(messageAnimation, it)
             format = it->caption_.get();
         endhandle
     endmatch
@@ -486,6 +494,28 @@ QVariant MessagesStore::data(const QVariant& key, int role)
         return QString::number(it->audio_->audio_->id_);
     }
 
+    case Roles::AnimationFileID: {
+        auto it = static_cast<TDApi::messageAnimation*>(d->messageData[mID]->content_.get());
+
+        return QString::number(it->animation_->animation_->id_);
+    }
+
+    case Roles::AnimationCaption: {
+        auto it = static_cast<TDApi::messageAnimation*>(d->messageData[mID]->content_.get());
+
+        return QString::fromStdString(it->caption_->text_);
+    }
+
+    case Roles::AnimationThumbnail: {
+        auto it = static_cast<TDApi::messageAnimation*>(d->messageData[mID]->content_.get());
+
+        if (it->animation_->thumbnail_ == nullptr) {
+            return QString();
+        }
+
+        return QString("image://telegram/%1").arg(it->animation_->thumbnail_->file_->id_);
+    }
+
     }
 
     Q_UNREACHABLE();
@@ -593,6 +623,10 @@ QHash<int, QByteArray> MessagesStore::roleNames()
     roles[Roles::AudioSmallThumbnail] = "audioSmallThumbnail";
     roles[Roles::AudioLargeThumbnail] = "audioLargeThumbnail";
     roles[Roles::AudioFileID] = "audioFileID";
+
+    roles[Roles::AnimationFileID] = "animationFileID";
+    roles[Roles::AnimationThumbnail] = "animationThumbnail";
+    roles[Roles::AnimationCaption] = "animationCaption";
 
     return roles;
 }
