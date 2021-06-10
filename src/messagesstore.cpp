@@ -548,7 +548,9 @@ void MessagesStore::fetchKey(const QVariant& key)
         return;
     }
     c->call<TDApi::getMessage>(
-        [](TDApi::getMessage::ReturnType) {},
+        [this](TDApi::getMessage::ReturnType r) {
+            newMessage(std::move(r));
+        },
         chat, msg
     );
 }

@@ -20,6 +20,7 @@ class MembersModel;
 class UserDataModel;
 class MessagesStore;
 class FileMangler;
+class SearchMessagesModel;
 
 class Client : public QObject
 {
@@ -126,6 +127,8 @@ public:
     Q_INVOKABLE void enterPhoneNumber(const QString& phoneNumber);
     Q_INVOKABLE void enterCode(const QString& code);
     Q_INVOKABLE void enterPassword(const QString& password);
+
+    Q_INVOKABLE SearchMessagesModel* searchMessagesModel(QJsonObject params);
 
     Q_INVOKABLE void logOut();
 };

@@ -8,7 +8,13 @@ import QtQuick.Dialogs 1.0 as Dialogues
 
 import "qrc:/components" as GlobalComponents
 
-QQC2.Control {
+QQC2.StackView {
+
+id: theView
+
+clip: true
+
+initialItem: QQC2.Control {
 
 id: root
 
@@ -31,7 +37,7 @@ contentItem: ColumnLayout {
             QQC2.ToolButton {
                 icon.name: "arrow-left"
                 onClicked: rootRow.layers.pop()
-                visible: root.parent instanceof QQC2.StackView
+                visible: theView.parent instanceof QQC2.StackView
             }
             Kirigami.Heading {
                 level: 4
@@ -72,6 +78,35 @@ contentItem: ColumnLayout {
                     Layout.fillWidth: true
                 }
 
+                Column {
+                    Kirigami.BasicListItem {
+                        text: i18n("Photos")
+                        reserveSpaceForSubtitle: true
+
+                        onClicked: {
+                            theView.push(Qt.resolvedUrl("PhotosView.qml"))
+                        }
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                    }
+
+                    Kirigami.BasicListItem {
+                        text: i18n("Videos")
+                        reserveSpaceForSubtitle: true
+
+                        onClicked: {
+                            theView.push(Qt.resolvedUrl("VideosView.qml"))
+                        }
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                    }
+                    Layout.fillWidth: true
+                }
+
+                Item {
+                    Layout.bottomMargin: Kirigami.Units.gridUnit * 2
+                }
+
                 width: root.width
             }
             delegate: Kirigami.BasicListItem {
@@ -109,6 +144,8 @@ contentItem: ColumnLayout {
         Layout.fillHeight: true
         Layout.fillWidth: true
     }
+}
+
 }
 
 }

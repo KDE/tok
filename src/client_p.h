@@ -12,6 +12,7 @@
 #include "messagesmodel.h"
 #include "membersmodel.h"
 #include "filemangler.h"
+#include "searchmessagesmodel.h"
 
 class Client::Private
 {
