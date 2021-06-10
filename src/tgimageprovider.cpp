@@ -17,7 +17,10 @@ TelegramImageProviderResponse::TelegramImageProviderResponse(Client* c, std::int
         Q_EMIT finished();
     };
     c->call<TDApi::downloadFile>(
-        [onFinished](TDApi::downloadFile::ReturnType t) {
+        [onFinished, it = QPointer(this)](TDApi::downloadFile::ReturnType t) {
+            if (it.isNull()) {
+                return;
+            }
             auto id = t->id_;
             onFinished(id, QSharedPointer<TDApi::file>(t.release()));
         },
