@@ -22,6 +22,10 @@ enum Roles {
     Timestamp,
     InReplyTo,
 
+    // Permissions
+    CanDeleteForSelf,
+    CanDeleteForOthers,
+
     // Text messages
     Content,
 
@@ -404,6 +408,13 @@ QVariant MessagesStore::data(const QVariant& key, int role)
         }
     }
 
+    case Roles::CanDeleteForSelf: {
+        return d->messageData[mID]->can_be_deleted_only_for_self_;
+    }
+    case Roles::CanDeleteForOthers: {
+        return d->messageData[mID]->can_be_deleted_for_all_users_;
+    }
+
     case Roles::AddedMembers: {
         auto it = static_cast<TDApi::messageChatAddMembers*>(d->messageData[mID]->content_.get());
         QVariantList l;
@@ -585,6 +596,12 @@ void MessagesStore::fetchKey(const QVariant& key)
     );
 }
 
+void MessagesStore::deleteMessage(const QString& chatID, const QString& messageID, bool deleteForAll)
+{
+    auto id = chatID.toLongLong();
+    TDApi::array<TDApi::int53> messageIDs = {messageID.toLongLong()};
+    c->call<TDApi::deleteMessages>(nullptr, id, messageIDs, deleteForAll);
+}
 
 QHash<int, QByteArray> MessagesStore::roleNames()
 {
@@ -595,6 +612,9 @@ QHash<int, QByteArray> MessagesStore::roleNames()
     roles[Roles::Kind] = "kind";
     roles[Roles::Timestamp] = "timestamp";
     roles[Roles::InReplyTo] = "inReplyTo";
+
+    roles[Roles::CanDeleteForSelf] = "canDeleteForSelf";
+    roles[Roles::CanDeleteForOthers] = "canDeleteForOthers";
 
     roles[Roles::Content] = "content";
 
