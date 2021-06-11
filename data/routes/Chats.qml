@@ -202,7 +202,7 @@ Kirigami.ScrollablePage {
 
                     horizontalAlignment: Qt.AlignHCenter
 
-                    Layout.preferredWidth: implicitHeight
+                    Layout.minimumWidth: implicitHeight
 
                     background: Rectangle {
                         color: Kirigami.Theme.focusColor
