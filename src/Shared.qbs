@@ -22,7 +22,7 @@ StaticLibrary {
         property var includeDirs
         configure: {
             var proc = new Process()
-            var exitCode = proc.exec(mu.src + "/extract_flags.sh", [
+            var exitCode = proc.exec("bash", [mu.src + "/extract_flags.sh",
                 "find_package(KF5Kirigami2 REQUIRED)\n"+
                 "find_package(KF5I18n REQUIRED)\n"+
                 "find_package(KF5Notifications REQUIRED)\n"+
