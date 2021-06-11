@@ -222,6 +222,71 @@ Kirigami.ScrollablePage {
             visible: parent.count === 0
         }
     }
+
+    // global stuff that doesn't need to be reconstructed per view or delegate
+    property Item whatever: Item {
+        QQC2.Popup {
+            id: deleteDialog
+
+            modal: true
+            parent: QQC2.Overlay.overlay
+            x: (QQC2.Overlay.overlay.width / 2) - (this.width / 2)
+            y: (QQC2.Overlay.overlay.height / 2) - (this.height / 2)
+
+            property string chatID
+            property string messageID
+            property bool canDeleteForSelf: false
+            property bool canDeleteForOthers: false
+
+            padding: Kirigami.Units.gridUnit
+
+            contentItem: ColumnLayout {
+                Kirigami.Heading {
+                    text: i18n("Do you want to delete this message?")
+                    level: 4
+
+                    Layout.bottomMargin: Kirigami.Units.gridUnit
+                }
+                QQC2.Label {
+                    visible: deleteDialog.canDeleteForSelf && !deleteDialog.canDeleteForOthers
+                    text: i18n("This will delete it just for you.")
+                }
+                QQC2.Label {
+                    visible: !deleteDialog.canDeleteForSelf && deleteDialog.canDeleteForOthers
+                    text: i18n("This will delete it for everyone in this chat.")
+                }
+                QQC2.CheckBox {
+                    id: deleteForAll
+
+                    checked: true
+                    text: chatData.key[0] == "-" ? i18n("Also delete for everyone") : i18n("Also delete for %1", chatData.data.mTitle)
+                    visible: deleteDialog.canDeleteForSelf && deleteDialog.canDeleteForOthers
+                }
+                // QQC2.CheckBox {
+                //     text: i18n("Report Spam")
+                // }
+                // QQC2.CheckBox {
+                //     text: i18n("Delete all from this user")
+                // }
+                RowLayout {
+                    Layout.topMargin: Kirigami.Units.gridUnit
+
+                    Item { Layout.fillWidth: true }
+                    QQC2.Button {
+                        text: i18n("Cancel")
+                        onClicked: deleteDialog.close()
+                    }
+                    QQC2.Button {
+                        text: i18n("Delete")
+                        onClicked: {
+                            tClient.messagesStore.deleteMessage(deleteDialog.chatID, deleteDialog.messageID, deleteForAll.checked)
+                            deleteDialog.close()
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 }
