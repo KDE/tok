@@ -1,3 +1,4 @@
+#include <QAudio>
 #include <QMediaPlayer>
 #include <QMediaMetaData>
 
