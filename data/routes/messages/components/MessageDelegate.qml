@@ -50,69 +50,18 @@ QQC2.Control {
     }
     Kirigami.Theme.inherit: false
 
-    QQC2.Popup {
-        id: deleteDialog
-
-        modal: true
-        parent: QQC2.Overlay.overlay
-        x: (QQC2.Overlay.overlay.width / 2) - (this.width / 2)
-        y: (QQC2.Overlay.overlay.height / 2) - (this.height / 2)
-
-        padding: Kirigami.Units.gridUnit
-
-        contentItem: ColumnLayout {
-            Kirigami.Heading {
-                text: i18n("Do you want to delete this message?")
-                level: 4
-
-                Layout.bottomMargin: Kirigami.Units.gridUnit
-            }
-            QQC2.Label {
-                visible: messageData.data.canDeleteForSelf && !messageData.data.canDeleteForOthers
-                text: i18n("This will delete it just for you.")
-            }
-            QQC2.Label {
-                visible: !messageData.data.canDeleteForSelf && messageData.data.canDeleteForOthers
-                text: i18n("This will delete it for everyone in this chat.")
-            }
-            QQC2.CheckBox {
-                id: deleteForAll
-
-                checked: true
-                text: chatData.key[0] == "-" ? i18n("Also delete for everyone") : i18n("Also delete for %1", chatData.data.mTitle)
-                visible: messageData.data.canDeleteForSelf && messageData.data.canDeleteForOthers
-            }
-            // QQC2.CheckBox {
-            //     text: i18n("Report Spam")
-            // }
-            // QQC2.CheckBox {
-            //     text: i18n("Delete all from this user")
-            // }
-            RowLayout {
-                Layout.topMargin: Kirigami.Units.gridUnit
-
-                Item { Layout.fillWidth: true }
-                QQC2.Button {
-                    text: i18n("Cancel")
-                    onClicked: deleteDialog.close()
-                }
-                QQC2.Button {
-                    text: i18n("Delete")
-                    onClicked: {
-                        tClient.messagesStore.deleteMessage(del.mChatID, del.mID, deleteForAll.checked)
-                        deleteDialog.close()
-                    }
-                }
-            }
-        }
-    }
-
     GlobalComponents.ResponsiveMenu {
         id: __responsiveMenu
         GlobalComponents.ResponsiveMenuItem {
             enabled: del.canDeleteMessage
             text: i18nc("popup menu for message", "Delete")
-            onTriggered: deleteDialog.open()
+            onTriggered: {
+                deleteDialog.chatID = del.mChatID
+                deleteDialog.messageID = del.mID
+                deleteDialog.canDeleteForSelf = messageData.data.canDeleteForSelf
+                deleteDialog.canDeleteForOthers = messageData.data.canDeleteForOthers
+                deleteDialog.open()
+            }
         }
         GlobalComponents.ResponsiveMenuItem {
             enabled: chatData.data.mCanSendMessages

@@ -11,7 +11,7 @@ StaticLibrary {
         }
         Depends { name: "cpp" }
         Depends { name: "rlottieplugin" }
-        Depends { name: "Qt"; submodules: ["widgets", "qml", "qml-private", "core-private", "quick", "concurrent", "multimedia"] }
+        Depends { name: "Qt"; submodules: ["widgets", "qml", "qml-private", "core-private", "quick", "quick-private", "concurrent", "multimedia"] }
         Depends { name: "icu-uc" }
     }
 
@@ -58,6 +58,6 @@ StaticLibrary {
 
     Depends { name: "cpp" }
     Depends { name: "rlottieplugin" }
-    Depends { name: "Qt"; submodules: ["widgets", "qml", "qml-private", "core-private", "quick", "concurrent", "multimedia"] }
+    Depends { name: "Qt"; submodules: ["widgets", "qml", "qml-private", "core-private", "quick", "quick-private", "concurrent", "multimedia"] }
     Depends { name: "icu-uc" }
 }

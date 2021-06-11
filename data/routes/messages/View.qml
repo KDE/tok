@@ -5,8 +5,6 @@ import org.kde.kirigami 2.14 as Kirigami
 import org.kde.Tok 1.0 as Tok
 import QtGraphicalEffects 1.15
 
-import QtQuick.Dialogs 1.0 as Dialogues
-
 import "components" as Components
 import "qrc:/components" as GlobalComponents
 
@@ -25,16 +23,6 @@ Kirigami.ScrollablePage {
 
     function doit() {
         txtField.forceActiveFocus()
-    }
-
-    Dialogues.FileDialog {
-        id: uploadDialog
-        title: messagesViewRoot.isPhoto ? i18nc("Dialog title", "Upload photo") : i18nc("Dialog title", "Upload file")
-        folder: messagesViewRoot.isPhoto ? shortcuts.pictures : shortcuts.home
-        onAccepted: {
-            messagesViewRoot.uploadPath = uploadDialog.fileUrl
-            composeRow.send()
-        }
     }
 
     onChatIDChanged: {
@@ -64,20 +52,27 @@ Kirigami.ScrollablePage {
 
             sourceComponent: Item {
                 anchors.fill: parent
-                Image {
-                    id: bgImg
 
-                    source: "qrc:/img/light background.png"
+                Loader {
                     anchors.fill: parent
-                    fillMode: Image.PreserveAspectCrop
-                    visible: settings.imageBackground
-                }
-                FastBlur {
-                    source: bgImg
-                    anchors.fill: parent
-                    cached: true
-                    radius: 64
-                    visible: settings.imageBackground
+                    active: settings.imageBackground
+                    sourceComponent: Item {
+                        Image {
+                            id: bgImg
+
+                            source: "qrc:/img/light background.png"
+                            anchors.fill: parent
+                            fillMode: Image.PreserveAspectCrop
+                            visible: settings.imageBackground
+                        }
+                        FastBlur {
+                            source: bgImg
+                            anchors.fill: parent
+                            cached: true
+                            radius: 64
+                            visible: settings.imageBackground
+                        }
+                    }
                 }
                 Rectangle {
                     color: Kirigami.Theme.backgroundColor
@@ -165,18 +160,44 @@ Kirigami.ScrollablePage {
     footer: QQC2.ToolBar {
         id: composeBar
 
-        Components.MentionBar {
+        Loader {
             id: autoCompleteThing
-            clip: true
-            visible: false
+            active: false
 
             parent: composeBar
 
-            height: 200
-            anchors {
-                bottom: parent.top
-                left: parent.left
-                right: parent.right
+            property string filter: ""
+            function up(event) {
+                if (this.item != null) {
+                    return this.item.up(event)
+                }
+                return false
+            }
+            function down(event) {
+                if (this.item != null) {
+                    return this.item.down(event)
+                }
+                return false
+            }
+            function tab(event) {
+                if (this.item != null) {
+                    return this.item.tab(event)
+                }
+                return false
+            }
+
+            sourceComponent: Components.MentionBar {
+                clip: true
+
+                parent: composeBar
+                height: 200
+                filter: autoCompleteThing.filter
+
+                anchors {
+                    bottom: parent.top
+                    left: parent.left
+                    right: parent.right
+                }
             }
         }
 
@@ -261,7 +282,10 @@ Kirigami.ScrollablePage {
                     icon.name: "photo"
                     onClicked: {
                         messagesViewRoot.isPhoto = true
-                        uploadDialog.open()
+                        Tok.Utils.pickFile(i18nc("Dialog title", "Upload photo"), "photo").then((url) => {
+                            messagesViewRoot.uploadPath = url
+                            composeRow.send()
+                        })
                     }
                 }
                 QQC2.ToolButton {
@@ -269,7 +293,10 @@ Kirigami.ScrollablePage {
                     icon.name: "mail-attachment"
                     onClicked: {
                         messagesViewRoot.isPhoto = false
-                        uploadDialog.open()
+                        Tok.Utils.pickFile(i18nc("Dialog title", "Upload file"), "file").then((url) => {
+                            messagesViewRoot.uploadPath = url
+                            composeRow.send()
+                        })
                     }
                 }
 
@@ -298,7 +325,7 @@ Kirigami.ScrollablePage {
                     }
 
                     function doAutocomplete() {
-                        autoCompleteThing.visible = Tok.Utils.wordAt(cursorPosition, text)[0] == '@'
+                        autoCompleteThing.active = Tok.Utils.wordAt(cursorPosition, text)[0] == '@'
                         autoCompleteThing.filter = Tok.Utils.wordAt(cursorPosition, text).slice(1)
                     }
 

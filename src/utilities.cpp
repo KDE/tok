@@ -1,6 +1,8 @@
 #include <QGuiApplication>
 #include <QQuickWindow>
 #include <KWindowEffects>
+#include <QFileDialog>
+#include <QStandardPaths>
 
 #include "utilities.h"
 
@@ -62,4 +64,24 @@ QString Utilities::wordAt(int pos, const QString& in)
     }
 
     return in.mid(first, last-first+1);
+}
+
+QIviPendingReplyBase Utilities::pickFile(const QString& title, const QString& standardLocation)
+{
+    QIviPendingReply<QUrl> it;
+
+    QFileDialog* dia = new QFileDialog;
+    dia->setWindowTitle(title);
+    dia->setDirectory(QStandardPaths::standardLocations(standardLocation == "photo" ? QStandardPaths::PicturesLocation : QStandardPaths::HomeLocation).last());
+
+    connect(dia, &QFileDialog::accepted, this, [it, dia]() mutable {
+        it.setSuccess(QUrl::fromLocalFile(dia->selectedFiles().last()));
+    });
+    connect(dia, &QFileDialog::rejected, this, [it]() mutable {
+        it.setFailed();
+    });
+
+    dia->open();
+
+    return it;
 }
