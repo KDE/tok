@@ -60,6 +60,7 @@ QQC2.Control {
                 deleteDialog.messageID = del.mID
                 deleteDialog.canDeleteForSelf = messageData.data.canDeleteForSelf
                 deleteDialog.canDeleteForOthers = messageData.data.canDeleteForOthers
+                deleteDialog.title = chatData.data.mTitle
                 deleteDialog.open()
             }
         }
