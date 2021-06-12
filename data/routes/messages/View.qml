@@ -255,6 +255,40 @@ Kirigami.ScrollablePage {
             }
 
             RowLayout {
+                Repeater {
+                    id: stickerRepeater
+                    model: tClient.recentStickersModel()
+                    delegate: AnimatedImage {
+                        id: del
+
+                        required property string stickerID
+                        required property int index
+
+                        onStickerIDChanged: {
+                            tClient.fileMangler.downloadFile(stickerID).then((url) => {
+                                this.source = "file://"+url
+                            })
+                        }
+
+                        HoverHandler {
+                            cursorShape: Qt.PointingHandCursor
+                        }
+                        TapHandler {
+                            onTapped: {
+                                stickerRepeater.model.send(del.index, messagesViewRoot.chatID)
+                            }
+                        }
+
+                        smooth: true
+                        mipmap: true
+
+                        Layout.preferredWidth: implicitWidth * (height/implicitHeight)
+                        Layout.maximumHeight: 64
+                    }
+                }
+            }
+
+            RowLayout {
                 id: composeRow
 
                 function send() {

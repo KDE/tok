@@ -120,3 +120,8 @@ void Client::logOut()
 {
     call<TDApi::logOut>(nullptr);
 }
+
+RecentStickersModel* Client::recentStickersModel()
+{
+    return new RecentStickersModel(this);
+}

@@ -21,6 +21,7 @@ class UserDataModel;
 class MessagesStore;
 class FileMangler;
 class SearchMessagesModel;
+class RecentStickersModel;
 
 class Client : public QObject
 {
@@ -123,6 +124,8 @@ public:
     {
         return membersModel(s.toLongLong(), kind);
     }
+
+    Q_INVOKABLE RecentStickersModel* recentStickersModel();
 
     Q_INVOKABLE void enterPhoneNumber(const QString& phoneNumber);
     Q_INVOKABLE void enterCode(const QString& code);

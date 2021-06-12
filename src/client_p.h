@@ -13,6 +13,7 @@
 #include "membersmodel.h"
 #include "filemangler.h"
 #include "searchmessagesmodel.h"
+#include "recentstickers.h"
 
 class Client::Private
 {
