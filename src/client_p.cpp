@@ -178,6 +178,10 @@ void Client::Private::handleUpdate(TDApi::object_ptr<TDApi::Object> update)
                 auto mv = TDApi::move_object_as<TDApi::Update>(update);
                 m_userDataModel->handleUpdate(std::move(mv));
             },
+            [this, &update](TDApi::updateUserChatAction &update_user_chat_action) {
+                auto mv = TDApi::move_object_as<TDApi::Update>(update);
+                q->chatsModel()->handleUpdate(std::move(mv));
+            },
 #ifdef Q_OS_LINUX
             [](TDApi::updateUnreadMessageCount& it) {
                 if (it.chat_list_->get_id() != TDApi::chatListMain::ID) {

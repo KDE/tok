@@ -2,6 +2,8 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+#include <KLocalizedString>
+
 #include "messagesmodel.h"
 #include "chatsstore_p.h"
 #include "overloader.h"
@@ -21,6 +23,8 @@ enum Roles {
     CanChangeInfo,
     CanInviteUsers,
     CanPinMessages,
+    CurrentActions,
+    HeaderText,
 };
 
 ChatsStore::ChatsStore(Client* parent) : TokAbstractRelationalModel(parent), c(parent), d(new Private)
@@ -94,6 +98,17 @@ void ChatsStore::handleUpdate(TDApi::object_ptr<TDApi::Update> u)
 
                 Q_EMIT keyDataChanged(to(id), {});
             },
+            [this](TDApi::updateUserChatAction &update_user_chat_action) {
+                auto cid = update_user_chat_action.chat_id_;
+                auto uid = update_user_chat_action.user_id_;
+
+                if (update_user_chat_action.action_->get_id() == TDApi::chatActionCancel::ID) {
+                    d->ensure(cid).erase(uid);
+                }
+
+                d->ensure(cid)[uid] = std::move(update_user_chat_action.action_);
+                Q_EMIT keyDataChanged(to(cid), {});
+            },
             [](auto& update) { qWarning() << "unhandled chatsmodel update" << QString::fromStdString(TDApi::to_string(update)); }));
 }
 
@@ -159,6 +174,20 @@ QVariant ChatsStore::data(const QVariant& key, int role)
     case Roles::CanChangeInfo: return d->chatData[chatID]->permissions_->can_change_info_;
     case Roles::CanInviteUsers: return d->chatData[chatID]->permissions_->can_invite_users_;
     case Roles::CanPinMessages: return d->chatData[chatID]->permissions_->can_pin_messages_;
+    case Roles::CurrentActions: {
+        return prepare(chatID);
+    }
+    case Roles::HeaderText: {
+        const auto id = d->chatData[chatID]->type_->get_id();
+        using namespace TDApi;
+        const auto map = QMap<std::int32_t, QString>{
+            {chatTypeBasicGroup::ID, i18n("Group")},
+            {chatTypePrivate::ID,    i18n("Private chat")},
+            {chatTypeSecret::ID,     i18n("Secret chat")},
+            {chatTypeSupergroup::ID, i18n("Group")},
+        };
+        return map[id];
+    }
     }
 
     return QVariant();
@@ -200,6 +229,8 @@ QHash<int,QByteArray> ChatsStore::roleNames()
     roles[int(Roles::CanPinMessages)] = "mCanPinMessages";
     roles[int(Roles::Kind)] = "mKind";
     roles[int(Roles::KindID)] = "mKindID";
+    roles[int(Roles::CurrentActions)] = "mCurrentActions";
+    roles[int(Roles::HeaderText)] = "mHeaderText";
 
     return roles;
 }

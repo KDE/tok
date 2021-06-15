@@ -155,6 +155,7 @@ Kirigami.ScrollablePage {
                     required property string mTitle
                     required property string mLastMessageID
                     required property string mPhoto
+                    required property var    mCurrentActions
                     required property int    mUnreadCount
                 }
             }
@@ -163,7 +164,7 @@ Kirigami.ScrollablePage {
             bottomPadding: Kirigami.Units.largeSpacing
 
             text: chatData.data.mTitle
-            subtitle: `${plaintext.hasAuthor ? plaintext.authorName + ": " : ""}${plaintext.onelinePlaintext}`
+            subtitle: chatData.data.mCurrentActions.any ? chatData.data.mCurrentActions.message : `${plaintext.hasAuthor ? plaintext.authorName + ": " : ""}${plaintext.onelinePlaintext}`
 
             Accessible.name: {
                 let strings = [`${chatData.data.mTitle}.`]

@@ -19,6 +19,8 @@ class ChatsStore : public TokAbstractRelationalModel
     friend class ChatsModel;
     friend class ChatSortModel;
 
+    QJsonValue prepare(TDApi::int53 chat);
+
 public:
     explicit ChatsStore(Client* parent);
     ~ChatsStore();

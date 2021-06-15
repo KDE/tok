@@ -43,6 +43,8 @@ Kirigami.ScrollablePage {
             required property string mTitle
             required property string mKind
             required property string mKindID
+            required property string mHeaderText
+            required property var mCurrentActions
             required property bool mCanSendMessages
         }
     }
@@ -106,16 +108,23 @@ Kirigami.ScrollablePage {
                 Layout.preferredHeight: backButton.implicitHeight
                 Layout.preferredWidth: Layout.preferredHeight
             }
-            Kirigami.Heading {
-                level: 4
-                text: chatData.data.mTitle
+            ColumnLayout {
+                spacing: 0
 
-                verticalAlignment: Text.AlignVCenter
-                elide: Text.ElideRight
+                QQC2.Label {
+                    text: chatData.data.mTitle
 
-                Layout.fillHeight: true
-                Layout.fillWidth: true
+                    elide: Text.ElideRight
+
+                    Layout.fillWidth: true
+                }
+                QQC2.Label {
+                    opacity: chatData.data.mCurrentActions.any ? 1.0 : 0.8
+                    color: chatData.data.mCurrentActions.any ? Kirigami.Theme.focusColor : Kirigami.Theme.textColor
+                    text: chatData.data.mCurrentActions.any ? chatData.data.mCurrentActions.message : chatData.data.mHeaderText
+                }
                 Layout.margins: Kirigami.Units.largeSpacing
+                Layout.fillHeight: true
             }
             QQC2.ToolButton {
                 icon.name: settings.userWantsSidebars ? "sidebar-collapse-right" : "sidebar-expand-right"
