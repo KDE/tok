@@ -2,45 +2,99 @@
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
-import QtQuick 2.10
+import QtQuick 2.15
 import org.kde.kirigami 2.14 as Kirigami
 import QtQuick.Controls 2.10 as QQC2
+
+import org.kde.Tok 1.0 as Tok
 
 QQC2.Popup {
 	id: imagePopup
 
 	anchors.centerIn: QQC2.Overlay.overlay
 	modal: true
-	property alias source: popupImage.source
+	property alias key: imageData.key
 
-	background: Item {}
+	Tok.RelationalListener {
+		id: imageData
+
+		model: tClient.messagesStore
+		key: [del.mChatID, del.mID]
+		shape: QtObject {
+			required property string imageURL
+			required property string imageCaption
+		}
+	}
+
+	background: Item {
+		TapHandler {
+			target: imagePopup.QQC2.Overlay.overlay
+			onTapped: imagePopup.close()
+		}
+
+		QQC2.Label {
+			id: raberu
+
+			parent: imagePopup.QQC2.Overlay.overlay
+			visible: imagePopup.visible && text !== ""
+			z: 999
+
+			text: imageData.data.imageCaption
+			color: "white"
+			padding: Kirigami.Units.gridUnit
+			background: Rectangle {
+				radius: 4
+				color: Qt.rgba(0, 0, 0, 0.3)
+			}
+
+			anchors {
+				bottom: parent.bottom
+				horizontalCenter: parent.horizontalCenter
+				margins: Kirigami.Units.gridUnit
+			}
+		}
+
+		// QQC2.Button {
+		// 	icon.name: "download"
+		// 	anchors {
+		// 		bottom: parent.bottom
+		// 		right: parent.right
+		// 		margins: Kirigami.Units.gridUnit
+		// 	}
+		// }
+
+		QQC2.Button {
+			icon.name: "dialog-close"
+			onClicked: imagePopup.close()
+			anchors {
+				top: parent.top
+				right: parent.right
+				margins: Kirigami.Units.gridUnit
+			}
+		}
+	}
 	Image {
 		id: popupImage
-		x: ((parent.QQC2.Overlay.overlay || {width: 0}).width / 2) - (this.implicitWidth / 2)
-		y: ((parent.QQC2.Overlay.overlay || {height: 0}).height / 2) - (this.implicitHeight / 2)
 
-		PinchArea {
-			anchors.fill: parent
-			pinch.target: popupImage
-			pinch.minimumRotation: -360
-			pinch.maximumRotation: 360
-			pinch.minimumScale: 0.1
-			pinch.maximumScale: 10
-			pinch.dragAxis: Pinch.XAndYAxis
+		source: imageData.data.imageURL
+		smooth: true
+		mipmap: true
+
+		fillMode: Image.PreserveAspectFit
+		horizontalAlignment: Image.AlignHCenter
+
+		anchors {
+			fill: parent
+			topMargin: Kirigami.Units.gridUnit*2
+			bottomMargin: (raberu.visible ? raberu.height : 0) + Kirigami.Units.gridUnit*2
 		}
+
 		MouseArea {
-			drag.target: parent
 			anchors.fill: parent
 			onWheel: {
 				if (wheel.modifiers & Qt.ControlModifier) {
-					popupImage.rotation += wheel.angleDelta.y / 120 * 5
-					if (Math.abs(popupImage.rotation) < 4)
-						popupImage.rotation = 0
-				} else {
-					popupImage.rotation += wheel.angleDelta.x / 120
 					if (Math.abs(popupImage.rotation) < 0.6)
 						popupImage.rotation = 0
-					var scaleBefore = popupImage.scale
 					popupImage.scale += popupImage.scale * wheel.angleDelta.y / 120 / 10
 				}
 			}

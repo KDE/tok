@@ -35,7 +35,7 @@ ColumnLayout {
 
         Components.ImagePopup {
             id: imagePopup
-            source: image.source
+            key: [del.mChatID, del.mID]
         }
 
         Tok.RelationalListener {

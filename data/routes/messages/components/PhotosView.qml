@@ -32,7 +32,7 @@ MediaView {
 
         GlobalComponents.ImagePopup {
             id: imagePopup
-            source: imageData.data.imageURL
+            key: [chatData.key, del.messageID]
         }
 
         Tok.RelationalListener {
