@@ -5,7 +5,7 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.10
 import QtQuick.Controls 2.12 as QQC2
-import org.kde.kirigami 2.14 as Kirigami
+import org.kde.kirigami 2.15 as Kirigami
 import org.kde.Tok 1.0 as Tok
 import QtGraphicalEffects 1.15
 
@@ -101,12 +101,29 @@ Kirigami.ScrollablePage {
                 visible: !rootRow.shouldUseSidebars
             }
             Kirigami.Avatar {
+                id: theAvatar
+
                 name: chatData.data.mTitle
                 source: chatData.data.mPhoto
 
                 visible: !rootRow.shouldUseSidebars
                 Layout.preferredHeight: backButton.implicitHeight
                 Layout.preferredWidth: Layout.preferredHeight
+
+                TapHandler {
+                    onTapped: {
+                        hero.destination = rootRow.layers.push(groupInfoComponent).avatar
+                        hero.open()
+                    }
+                }
+            }
+            QtObject {
+                property Kirigami.Hero hero: Kirigami.Hero {
+                    id: hero
+
+                    source: theAvatar
+                    destination: null
+                }
             }
             ColumnLayout {
                 spacing: 0
@@ -133,7 +150,10 @@ Kirigami.ScrollablePage {
             }
             QQC2.ToolButton {
                 icon.name: "documentinfo"
-                onClicked: rootRow.layers.push(groupInfoComponent)
+                onClicked: {
+                    hero.destination = rootRow.layers.push(groupInfoComponent).avatar
+                    hero.open()
+                }
                 visible: !rootRow.shouldUseSidebars
             }
         }

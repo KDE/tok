@@ -18,6 +18,8 @@ id: theView
 
 clip: true
 
+property Item avatar: theListView.headerItem.avatar
+
 initialItem: QQC2.Control {
 
 id: root
@@ -58,9 +60,14 @@ contentItem: ColumnLayout {
         QQC2.ScrollBar.horizontal.policy: QQC2.ScrollBar.AlwaysOff
 
         ListView {
+            id: theListView
             model: tClient.membersModel(chatData.data.mKindID, chatData.data.mKind)
             header: ColumnLayout {
+                property alias avatar: theOtherAvatar
+
                 Kirigami.Avatar {
+                    id: theOtherAvatar
+
                     source: chatData.data.mPhoto
                     name: chatData.data.mTitle
 
