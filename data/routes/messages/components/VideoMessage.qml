@@ -82,6 +82,24 @@ QQC2.Control {
                     required property size videoSize
                     required property string videoThumbnail
                     required property string videoCaption
+                    required property string videoID
+                }
+            }
+
+            Tok.RelationalListener {
+                id: videoFileData
+
+                model: tClient.fileMangler
+                key: videoData.data.videoID
+                shape: QtObject {
+                    required property int mFileSize
+                    required property int mExpectedFileSize
+                    required property string mLocalFilePath
+                    required property bool mLocalFileDownloadable
+                    required property bool mLocalFileDeletable
+                    required property bool mLocalFileIsDownloading
+                    required property bool mLocalFileDownloadCompleted
+                    required property int mLocalFileDownloadedSize
                 }
             }
 
@@ -110,6 +128,28 @@ QQC2.Control {
                     opacity: 0.7
                     radius: 3
                 }
+            }
+
+            QQC2.Label {
+                anchors {
+                    top: parent.top
+                    left: parent.left
+                    margins: Kirigami.Units.gridUnit
+                }
+                visible: videoFileData.data.mLocalFileIsDownloading
+                text: i18nc("file download progress", "%1 of %2 downloaded", Tok.Utils.humanSize(videoFileData.data.mLocalFileDownloadedSize), Tok.Utils.humanSize(videoFileData.data.mExpectedFileSize))
+            }
+
+            Rectangle {
+                anchors {
+                    bottom: parent.bottom
+                    left: parent.left
+                }
+                height: 8
+                color: Kirigami.Theme.highlightColor
+
+                visible: videoFileData.data.mLocalFileIsDownloading
+                width: parent.width * (videoFileData.data.mLocalFileDownloadedSize / videoFileData.data.mExpectedFileSize)
             }
 
             layer.enabled: true

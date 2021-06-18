@@ -89,3 +89,8 @@ QIviPendingReplyBase Utilities::pickFile(const QString& title, const QString& st
 
     return it;
 }
+
+QString Utilities::humanSize(int size)
+{
+    return QLocale().formattedDataSize(size, 1);
+}

@@ -53,6 +53,7 @@ enum Roles {
     VideoSize,
     VideoThumbnail,
     VideoCaption,
+    VideoID,
 
     // Audio messages
     AudioCaption,
@@ -451,6 +452,12 @@ QVariant MessagesStore::data(const QVariant& key, int role)
         return QString::fromStdString(it->caption_->text_);
     }
 
+    case Roles::VideoID: {
+        auto it = static_cast<TDApi::messageVideo*>(d->messageData[mID]->content_.get());
+
+        return QString::number(it->video_->video_->id_);
+    }
+
     case Roles::AudioCaption: {
         auto it = static_cast<TDApi::messageAudio*>(d->messageData[mID]->content_.get());
 
@@ -637,6 +644,7 @@ QHash<int, QByteArray> MessagesStore::roleNames()
     roles[Roles::VideoSize] = "videoSize";
     roles[Roles::VideoThumbnail] = "videoThumbnail";
     roles[Roles::VideoCaption] = "videoCaption";
+    roles[Roles::VideoID] = "videoID";
 
     roles[Roles::AudioCaption] = "audioCaption";
     roles[Roles::AudioDuration] = "audioDuration";
