@@ -20,6 +20,8 @@ clip: true
 
 property Item avatar: theListView.headerItem.avatar
 
+signal readyToDestroy()
+
 initialItem: QQC2.Control {
 
 id: root
@@ -40,9 +42,21 @@ background: Rectangle {
 contentItem: ColumnLayout {
     GlobalComponents.Header {
         RowLayout {
+            Layout.leftMargin: !rootRow.shouldUseSidebars ? rootRow.leftOffset+Kirigami.Units.largeSpacing : Kirigami.Units.largeSpacing
+            Layout.rightMargin: !rootRow.shouldUseSidebars ? rootRow.rightOffset+Kirigami.Units.largeSpacing : Kirigami.Units.largeSpacing
+
             QQC2.ToolButton {
                 icon.name: "arrow-left"
-                onClicked: rootRow.layers.pop()
+                onClicked: {
+                    theView.visible = false
+                    hero.close()
+                    destroyTimer.start()
+                }
+                Timer {
+                    id: destroyTimer
+                    interval: hero.duration
+                    onTriggered: theView.readyToDestroy()
+                }
                 visible: theView.parent instanceof QQC2.StackView
             }
             Kirigami.Heading {

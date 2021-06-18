@@ -112,7 +112,12 @@ Kirigami.ScrollablePage {
 
                 TapHandler {
                     onTapped: {
-                        hero.destination = rootRow.layers.push(groupInfoComponent).avatar
+                        let comp = groupInfoComponent.createObject(rootRow.layers)
+                        comp.readyToDestroy.connect(() => {
+                            hero.destination = null
+                            comp.destroy()
+                        })
+                        hero.destination = comp.avatar
                         hero.open()
                     }
                 }
@@ -151,7 +156,12 @@ Kirigami.ScrollablePage {
             QQC2.ToolButton {
                 icon.name: "documentinfo"
                 onClicked: {
-                    hero.destination = rootRow.layers.push(groupInfoComponent).avatar
+                    let comp = groupInfoComponent.createObject(rootRow.layers)
+                    comp.readyToDestroy.connect(() => {
+                        hero.destination = null
+                        comp.destroy()
+                    })
+                    hero.destination = comp.avatar
                     hero.open()
                 }
                 visible: !rootRow.shouldUseSidebars
