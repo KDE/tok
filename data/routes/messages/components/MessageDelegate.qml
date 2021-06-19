@@ -98,7 +98,7 @@ QQC2.Control {
             // visible yoinks from layout, which isn't what we want.
             opacity: del.showAvatar ? 1 : 0
 
-            visible: !settings.thinMode
+            visible: !settings.thinMode && !chatData.data.mIsChannel
 
             HoverHandler {
                 cursorShape: Qt.PointingHandCursor

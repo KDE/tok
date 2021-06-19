@@ -46,6 +46,7 @@ Kirigami.ScrollablePage {
             required property string mHeaderText
             required property var mCurrentActions
             required property bool mCanSendMessages
+            required property bool mIsChannel
         }
     }
 
