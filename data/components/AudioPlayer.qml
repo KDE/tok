@@ -8,5 +8,12 @@ import QtMultimedia 5.15
 Audio {
     objectName: "hallöchen"
 
-    property string thumbnail
+    property string thumbnail: ""
+    property string audioID: ""
+
+    function clear() {
+        thumbnail = ""
+        audioID = ""
+        source = ""
+    }
 }

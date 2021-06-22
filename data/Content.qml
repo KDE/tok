@@ -135,7 +135,7 @@ Kirigami.PageRow {
                     icon.name: "dialog-close"
                     icon.width: Kirigami.Units.iconSizes.small
                     icon.height: Kirigami.Units.iconSizes.small
-                    onClicked: Components.AudioPlayer.source = ""
+                    onClicked: Components.AudioPlayer.clear()
                 }
             }
         }

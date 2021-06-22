@@ -8,6 +8,7 @@ import QtGraphicalEffects 1.15
 import QtQuick.Controls 2.12 as QQC2
 import org.kde.kirigami 2.14 as Kirigami
 import org.kde.Tok 1.0 as Tok
+import QtMultimedia 5.15
 
 import "qrc:/components" as Components
 
@@ -95,7 +96,13 @@ QQC2.Control {
                     Kirigami.Icon {
                         anchors.centerIn: parent
 
-                        source: "media-playback-start"
+                        source: {
+                            if (Components.AudioPlayer.audioID != audioData.data.audioFileID) {
+                                return "media-playback-start"
+                            }
+
+                            return Components.AudioPlayer.playbackState == Audio.PlayingState ? "media-playback-pause" : "media-playback-start"
+                        }
                         Kirigami.Theme.textColor: "white"
                     }
 
@@ -137,6 +144,15 @@ QQC2.Control {
                 }
                 TapHandler {
                     onTapped: {
+                        if (Components.AudioPlayer.audioID == audioData.data.audioFileID) {
+                            if (Components.AudioPlayer.playbackState == Audio.PlayingState)
+                                Components.AudioPlayer.pause()
+                            else
+                                Components.AudioPlayer.play()
+
+                            return
+                        }
+
                         if (audioData.data.audioLargeThumbnail != "") {
                             tClient.fileMangler.downloadFile(audioData.data.audioLargeThumbnail).then((url) => {
                                 Components.AudioPlayer.thumbnail = "file://"+url
@@ -146,6 +162,7 @@ QQC2.Control {
                         }
                         tClient.fileMangler.downloadFile(audioData.data.audioFileID).then((url) => {
                             Components.AudioPlayer.source = "file://"+url
+                            Components.AudioPlayer.audioID = audioData.data.audioFileID
                             Components.AudioPlayer.play()
                         })
                     }
