@@ -11,6 +11,7 @@
 #include <QTextDocumentFragment>
 #include <QTextBoundaryFinder>
 #include <QFont>
+#include <QFontDatabase>
 #include <QGuiApplication>
 #include <QDesktopServices>
 
@@ -173,6 +174,12 @@ void MessagesStore::format(const QVariant &key, QQuickTextDocument* doc, QQuickI
             cfmt.setAnchorHref(curs.selectedText());
             cfmt.setFontUnderline(true);
             break;
+        }
+        case textEntityTypePre::ID:
+        case textEntityTypePreCode::ID:
+        case textEntityTypeCode::ID: {
+            const QFont fixedFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
+            cfmt.setFont(fixedFont);
         }
         }
         curs.setCharFormat(cfmt);
