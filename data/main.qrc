@@ -36,26 +36,27 @@
         <file>routes/messages/components/MentionBar.qml</file>
 
         <file>routes/messages/components/MessageDelegate.qml</file>
-        <file>routes/messages/components/MessageBackground.qml</file>
         <file>routes/messages/components/Unsupported.qml</file>
 
-        <file>routes/messages/components/ReplyBlock.qml</file>
-        <file alias="routes/messages/components/thin/ReplyBlock.qml">routes/messages/components/ReplyBlock.qml</file>
+        <file>routes/messages/components/normal/MessageBackground.qml</file>
 
-        <file>routes/messages/components/TextMessage.qml</file>
-        <file>routes/messages/components/FileMessage.qml</file>
-        <file>routes/messages/components/PhotoMessage.qml</file>
-        <file>routes/messages/components/UserAddMessage.qml</file>
-        <file>routes/messages/components/Sticker.qml</file>
-        <file>routes/messages/components/VideoMessage.qml</file>
-        <file>routes/messages/components/AudioMessage.qml</file>
-        <file>routes/messages/components/GifMessage.qml</file>
+        <file>routes/messages/components/normal/ReplyBlock.qml</file>
+        <file alias="routes/messages/components/thin/ReplyBlock.qml">routes/messages/components/normal/ReplyBlock.qml</file>
+
+        <file>routes/messages/components/normal/TextMessage.qml</file>
+        <file>routes/messages/components/normal/FileMessage.qml</file>
+        <file>routes/messages/components/normal/PhotoMessage.qml</file>
+        <file>routes/messages/components/normal/UserAddMessage.qml</file>
+        <file>routes/messages/components/normal/Sticker.qml</file>
+        <file>routes/messages/components/normal/VideoMessage.qml</file>
+        <file>routes/messages/components/normal/AudioMessage.qml</file>
+        <file>routes/messages/components/normal/GifMessage.qml</file>
 
         <file>routes/messages/components/thin/TextMessage.qml</file>
         <file>routes/messages/components/thin/FileMessage.qml</file>
         <file>routes/messages/components/thin/PhotoMessage.qml</file>
         <file>routes/messages/components/thin/UserAddMessage.qml</file>
-        <file alias="routes/messages/components/thin/Sticker.qml">routes/messages/components/Sticker.qml</file>
+        <file alias="routes/messages/components/thin/Sticker.qml">routes/messages/components/normal/Sticker.qml</file>
         <file>routes/messages/components/thin/VideoMessage.qml</file>
         <file>routes/messages/components/thin/AudioMessage.qml</file>
         <file>routes/messages/components/thin/GifMessage.qml</file>

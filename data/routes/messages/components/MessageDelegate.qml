@@ -122,14 +122,14 @@ QQC2.Control {
 
             value: messageData.data.kind
             cases: {
-                "messageText": Qt.resolvedUrl((settings.thinMode ? "thin/" : "") + "TextMessage.qml"),
-                "messagePhoto": Qt.resolvedUrl((settings.thinMode ? "thin/" : "") + "PhotoMessage.qml"),
-                "messageDocument": Qt.resolvedUrl((settings.thinMode ? "thin/" : "") + "FileMessage.qml"),
-                "messageChatAddMembers": Qt.resolvedUrl((settings.thinMode ? "thin/" : "") + "UserAddMessage.qml"),
-                "messageSticker": Qt.resolvedUrl((settings.thinMode ? "thin/" : "") + "Sticker.qml"),
-                "messageAudio": Qt.resolvedUrl((settings.thinMode ? "thin/" : "") + "AudioMessage.qml"),
-                "messageVideo": Qt.resolvedUrl((settings.thinMode ? "thin/" : "") + "VideoMessage.qml"),
-                "messageAnimation": Qt.resolvedUrl((settings.thinMode ? "thin/" : "") + "GifMessage.qml"),
+                "messageText": Qt.resolvedUrl((settings.thinMode ? "thin/" : "normal/") + "TextMessage.qml"),
+                "messagePhoto": Qt.resolvedUrl((settings.thinMode ? "thin/" : "normal/") + "PhotoMessage.qml"),
+                "messageDocument": Qt.resolvedUrl((settings.thinMode ? "thin/" : "normal/") + "FileMessage.qml"),
+                "messageChatAddMembers": Qt.resolvedUrl((settings.thinMode ? "thin/" : "normal/") + "UserAddMessage.qml"),
+                "messageSticker": Qt.resolvedUrl((settings.thinMode ? "thin/" : "normal/") + "Sticker.qml"),
+                "messageAudio": Qt.resolvedUrl((settings.thinMode ? "thin/" : "normal/") + "AudioMessage.qml"),
+                "messageVideo": Qt.resolvedUrl((settings.thinMode ? "thin/" : "normal/") + "VideoMessage.qml"),
+                "messageAnimation": Qt.resolvedUrl((settings.thinMode ? "thin/" : "normal/") + "GifMessage.qml"),
             }
             defaultCase: Qt.resolvedUrl("Unsupported.qml")
 
