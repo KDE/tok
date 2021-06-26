@@ -9,6 +9,7 @@
 
         <file>components/qmldir</file>
         <file>components/AudioPlayer.qml</file>
+        <file>components/EditMenu.qml</file>
         <file>components/Header.qml</file>
         <file>components/PlaintextMessage.qml</file>
         <file>components/LoaderPlus.qml</file>
@@ -29,6 +30,7 @@
         <file>routes/messages/NoView.qml</file>
 
         <file>routes/messages/View.qml</file>
+        <file>routes/messages/components/CompositionBar.qml</file>
         <file>routes/messages/components/GroupInformation.qml</file>
         <file>routes/messages/components/MediaView.qml</file>
         <file>routes/messages/components/PhotosView.qml</file>

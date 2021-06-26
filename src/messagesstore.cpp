@@ -103,6 +103,37 @@ void MessagesStore::messageIDChange(TDApi::int53 oldID, TDApi::object_ptr<TDApi:
     newMessage(std::move(msg));
 }
 
+void MessagesStore::applyFormat(const QVariant& data, QQuickTextDocument* to, QQuickItem* it, int fromChar, int toChar)
+{
+    Q_UNUSED(it)
+
+    auto doku = to->textDocument();
+
+    QTextCursor curs(doku);
+    curs.setPosition(fromChar, QTextCursor::MoveAnchor);
+    curs.setPosition(toChar, QTextCursor::KeepAnchor);
+
+    QTextCharFormat cfmt;
+    // QColor linkColor = QQmlProperty(it, "Kirigami.Theme.linkColor", qmlContext(it)).read().value<QColor>();
+
+    if (data == "bold") {
+        cfmt.setFontWeight(QFont::Bold);
+    } else if (data == "italic") {
+        cfmt.setFontItalic(true);
+    } else if (data == "underline") {
+        cfmt.setFontUnderline(true);
+    } else if (data == "strikethrough") {
+        cfmt.setFontStrikeOut(true);
+    } else if (data == "monospace") {
+        const QFont fixedFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
+        cfmt.setFont(fixedFont);
+    } else if (data == "normal") {
+        ;
+    }
+
+    curs.setCharFormat(cfmt);
+}
+
 void MessagesStore::format(const QVariant &key, QQuickTextDocument* doc, QQuickItem *it, bool emojiOnly)
 {
     if (!checkKey(key)) {

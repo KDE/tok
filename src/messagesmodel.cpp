@@ -2,6 +2,9 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+#include <QTextBlock>
+#include <QQuickTextDocument>
+
 #include "messagesmodel_p.h"
 #include "client.h"
 
@@ -200,6 +203,68 @@ static auto format(const QString& txt)
     return formattedText;
 }
 
+static auto format(QTextDocument* doku)
+{
+    auto formattedText = TDApi::make_object<TDApi::formattedText>();
+    formattedText->text_ = doku->toRawText().toStdString();
+
+    for (int block = 0; block < doku->blockCount(); block++) {
+        auto bloc = doku->findBlockByNumber(block);
+        auto fmts = bloc.textFormats();
+
+        for (const auto& fmt : fmts) {
+            if (fmt.format.fontWeight() == QFont::Bold) {
+                formattedText->entities_.push_back(TDApi::make_object<TDApi::textEntity>(fmt.start, fmt.length, TDApi::make_object<TDApi::textEntityTypeBold>()));
+            } else if (fmt.format.fontItalic()) {
+                formattedText->entities_.push_back(TDApi::make_object<TDApi::textEntity>(fmt.start, fmt.length, TDApi::make_object<TDApi::textEntityTypeItalic>()));
+            } else if (fmt.format.fontUnderline()) {
+                formattedText->entities_.push_back(TDApi::make_object<TDApi::textEntity>(fmt.start, fmt.length, TDApi::make_object<TDApi::textEntityTypeUnderline>()));
+            } else if (fmt.format.fontStrikeOut()) {
+                formattedText->entities_.push_back(TDApi::make_object<TDApi::textEntity>(fmt.start, fmt.length, TDApi::make_object<TDApi::textEntityTypeStrikethrough>()));
+            } else if (fmt.format.font() == QFontDatabase::systemFont(QFontDatabase::FixedFont)) {
+                formattedText->entities_.push_back(TDApi::make_object<TDApi::textEntity>(fmt.start, fmt.length, TDApi::make_object<TDApi::textEntityTypeCode>()));
+            }
+        }
+    }
+
+    return formattedText;
+}
+
+static auto isUserFormatted(QTextDocument* doku)
+{
+    for (int block = 0; block < doku->blockCount(); block++) {
+        auto bloc = doku->findBlockByNumber(block);
+        auto fmts = bloc.textFormats();
+
+        for (const auto& fmt : fmts) {
+            if (fmt.format.fontWeight() == QFont::Bold) {
+                return true;
+            } else if (fmt.format.fontItalic()) {
+                return true;
+            } else if (fmt.format.fontUnderline()) {
+                return true;
+            } else if (fmt.format.fontStrikeOut()) {
+                return true;
+            } else if (fmt.format.font() == QFontDatabase::systemFont(QFontDatabase::FixedFont)) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+static auto format(QQuickTextDocument* doku)
+{
+    auto doc = doku->textDocument();
+
+    if (isUserFormatted(doc)) {
+        return format(doc);
+    }
+
+    return format(doc->toRawText());
+}
+
 static TDApi::object_ptr<TDApi::InputFile> as_local_file(const QUrl& path) {
     return TDApi::make_object<TDApi::inputFileLocal>(path.toLocalFile().toStdString());
 }
@@ -215,19 +280,19 @@ void MessagesModel::send(SendData data)
 
     if (auto it = std::get_if<SendData::Text>(&data.contents)) {
         auto message_content = TDApi::make_object<TDApi::inputMessageText>();
-        message_content->text_ = format(it->s);
+        message_content->text_ = std::move(it->s);
 
         send_message->input_message_content_ = std::move(message_content);
     } else if (auto it = std::get_if<SendData::Photo>(&data.contents)) {
         auto message_content = TDApi::make_object<TDApi::inputMessagePhoto>();
         message_content->photo_ = as_local_file(it->p);
-        message_content->caption_ = format(it->s);
+        message_content->caption_ = std::move(it->s);
 
         send_message->input_message_content_ = std::move(message_content);
     } else if (auto it = std::get_if<SendData::File>(&data.contents)) {
         auto message_content = TDApi::make_object<TDApi::inputMessageDocument>();
         message_content->document_ = as_local_file(it->p);
-        message_content->caption_ = format(it->s);
+        message_content->caption_ = std::move(it->s);
         message_content->disable_content_type_detection_ = true;
 
         send_message->input_message_content_ = std::move(message_content);
@@ -239,26 +304,26 @@ void MessagesModel::send(SendData data)
     );
 }
 
-void MessagesModel::send(const QString& contents, const QString& inReplyTo)
+void MessagesModel::send(QQuickTextDocument* doku, const QString& inReplyTo)
 {
     send(SendData {
-        .contents = SendData::Text {contents},
+        .contents = SendData::Text {format(doku)},
         .replyToID = inReplyTo.toLongLong()
     });
 }
 
-void MessagesModel::sendFile(const QString& contents, QUrl url, const QString& inReplyTo)
+void MessagesModel::sendFile(QQuickTextDocument* doku, QUrl url, const QString& inReplyTo)
 {
     send(SendData {
-        .contents = SendData::File {contents, url},
+        .contents = SendData::File {format(doku), url},
         .replyToID = inReplyTo.toLongLong()
     });
 }
 
-void MessagesModel::sendPhoto(const QString& contents, QUrl url, const QString& inReplyTo)
+void MessagesModel::sendPhoto(QQuickTextDocument* doku, QUrl url, const QString& inReplyTo)
 {
     send(SendData {
-        .contents = SendData::Photo {contents, url},
+        .contents = SendData::Photo {format(doku), url},
         .replyToID = inReplyTo.toLongLong()
     });
 }

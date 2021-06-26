@@ -30,6 +30,7 @@ public:
     void deletedMessages(TDApi::int53 chatID, const TDApi::array<TDApi::int53>& msgIDs);
 
     Q_INVOKABLE void format(const QVariant& key, QQuickTextDocument* doc, QQuickItem* it, bool emojiOnly);
+    Q_INVOKABLE void applyFormat(const QVariant& key, QQuickTextDocument* to, QQuickItem* it, int fromChar, int toChar);
 
     QVariant data(const QVariant& key, int role = Qt::DisplayRole) override;
     bool checkKey(const QVariant& key) override;
@@ -72,9 +73,9 @@ public:
 
     QHash<int,QByteArray> roleNames() const override;
 
-    Q_INVOKABLE void send(const QString& contents, const QString& inReplyTo);
-    Q_INVOKABLE void sendFile(const QString& contents, QUrl url, const QString& inReplyTo);
-    Q_INVOKABLE void sendPhoto(const QString& contents, QUrl url, const QString& inReplyTo);
+    Q_INVOKABLE void send(QQuickTextDocument* doku, const QString& inReplyTo);
+    Q_INVOKABLE void sendFile(QQuickTextDocument* doku, QUrl url, const QString& inReplyTo);
+    Q_INVOKABLE void sendPhoto(QQuickTextDocument* doku, QUrl url, const QString& inReplyTo);
 
     Q_INVOKABLE void messagesInView(QVariantList list);
     Q_INVOKABLE void comingIn();

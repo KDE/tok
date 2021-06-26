@@ -22,9 +22,9 @@ struct MessagesStore::Private
 
 struct MessagesModel::SendData
 {
-    struct Text { QString s; };
-    struct Photo { QString s; QUrl p; };
-    struct File { QString s; QUrl p; };
+    struct Text { TDApi::object_ptr<TDApi::formattedText> s; };
+    struct Photo { TDApi::object_ptr<TDApi::formattedText> s; QUrl p; };
+    struct File { TDApi::object_ptr<TDApi::formattedText> s; QUrl p; };
 
     std::variant<Text,Photo,File> contents;
     TDApi::int53 replyToID;
