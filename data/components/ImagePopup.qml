@@ -62,16 +62,6 @@ QQC2.Popup {
 		// 		margins: Kirigami.Units.gridUnit
 		// 	}
 		// }
-
-		QQC2.Button {
-			icon.name: "dialog-close"
-			onClicked: imagePopup.close()
-			anchors {
-				top: parent.top
-				right: parent.right
-				margins: Kirigami.Units.gridUnit
-			}
-		}
 	}
 	Image {
 		id: popupImage
@@ -98,6 +88,16 @@ QQC2.Popup {
 					popupImage.scale += popupImage.scale * wheel.angleDelta.y / 120 / 10
 				}
 			}
+		}
+	}
+
+	QQC2.Button {
+		icon.name: "dialog-close"
+		onClicked: imagePopup.close()
+		anchors {
+			top: parent.top
+			right: parent.right
+			margins: Kirigami.Units.gridUnit
 		}
 	}
 
