@@ -170,6 +170,7 @@ QQC2.ToolBar {
                     id: editMenu
 
                     field: txtField
+                    showFormat: true
                 }
 
                 MouseArea {

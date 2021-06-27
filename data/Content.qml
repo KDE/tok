@@ -34,6 +34,10 @@ Kirigami.PageRow {
         value: rootWindow.active
     }
 
+    Loader {
+        source: Qt.resolvedUrl("components/GlobalMenu.qml")
+    }
+
     function tryit(fn, def) {
         try {
             return fn() ?? def

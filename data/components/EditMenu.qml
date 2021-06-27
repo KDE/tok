@@ -11,10 +11,11 @@ import org.kde.kirigami 2.15 as Kirigami
 Labs.Menu {
     id: editMenu
 
-    required property TextEdit field
+    required property Item field
+    required property bool showFormat
 
     Labs.MenuItem {
-        enabled: editMenu.field.canUndo
+        enabled: editMenu.field !== null && editMenu.field.canUndo
         text: i18nc("text editing menu action", "Undo")
         shortcut: StandardKey.Undo
         onTriggered: {
@@ -24,7 +25,7 @@ Labs.Menu {
     }
 
     Labs.MenuItem {
-        enabled: editMenu.field.canRedo
+        enabled: editMenu.field !== null && editMenu.field.canRedo
         text: i18nc("text editing menu action", "Redo")
         shortcut: StandardKey.Redo
         onTriggered: {
@@ -37,7 +38,7 @@ Labs.Menu {
     }
 
     Labs.MenuItem {
-        enabled: editMenu.field.selectedText
+        enabled: editMenu.field !== null && editMenu.field.selectedText
         text: i18nc("text editing menu action", "Cut")
         shortcut: StandardKey.Cut
         onTriggered: {
@@ -47,7 +48,7 @@ Labs.Menu {
     }
 
     Labs.MenuItem {
-        enabled: editMenu.field.selectedText
+        enabled: editMenu.field !== null && editMenu.field.selectedText
         text: i18nc("text editing menu action", "Copy")
         shortcut: StandardKey.Copy
         onTriggered: {
@@ -57,7 +58,7 @@ Labs.Menu {
     }
 
     Labs.MenuItem {
-        enabled: editMenu.field.canPaste
+        enabled: editMenu.field !== null && editMenu.field.canPaste
         text: i18nc("text editing menu action", "Paste")
         shortcut: StandardKey.Paste
         onTriggered: {
@@ -67,7 +68,7 @@ Labs.Menu {
     }
 
     Labs.MenuItem {
-        enabled: editMenu.field.selectedText !== ""
+        enabled: editMenu.field !== null && editMenu.field.selectedText !== ""
         text: i18nc("text editing menu action", "Delete")
         shortcut: ""
         onTriggered: {
@@ -77,62 +78,19 @@ Labs.Menu {
     }
 
     Labs.MenuSeparator {
+        visible: editMenu.showFormat
     }
 
-    Labs.Menu {
-        title: i18nc("text menu editing action", "Format")
-
-        Labs.MenuItem {
-            enabled: editMenu.field.selectedText !== ""
-            text: i18nc("text editing menu action; applies format", "Bold")
-            shortcut: "Ctrl+B"
-            onTriggered: tClient.messagesStore.applyFormat("bold", txtField.textDocument, txtField, txtField.selectionStart, txtField.selectionEnd)
-        }
-
-        Labs.MenuItem {
-            enabled: editMenu.field.selectedText !== ""
-            text: i18nc("text editing menu action; applies format", "Italic")
-            shortcut: "Ctrl+I"
-            onTriggered: tClient.messagesStore.applyFormat("italic", txtField.textDocument, txtField, txtField.selectionStart, txtField.selectionEnd)
-        }
-
-        Labs.MenuItem {
-            enabled: editMenu.field.selectedText !== ""
-            text: i18nc("text editing menu action; applies format", "Underline")
-            shortcut: "Ctrl+U"
-            onTriggered: tClient.messagesStore.applyFormat("underline", txtField.textDocument, txtField, txtField.selectionStart, txtField.selectionEnd)
-        }
-
-        Labs.MenuItem {
-            enabled: editMenu.field.selectedText !== ""
-            text: i18nc("text editing menu action; applies format", "Strikethrough")
-            shortcut: "Ctrl+Shift+X"
-            onTriggered: tClient.messagesStore.applyFormat("strikethrough", txtField.textDocument, txtField, txtField.selectionStart, txtField.selectionEnd)
-        }
-
-        Labs.MenuItem {
-            enabled: editMenu.field.selectedText !== ""
-            text: i18nc("text editing menu action; applies format", "Monospace")
-            shortcut: "Ctrl+Shift+M"
-            onTriggered: tClient.messagesStore.applyFormat("monospace", txtField.textDocument, txtField, txtField.selectionStart, txtField.selectionEnd)
-        }
-
-        Labs.MenuSeparator {
-        }
-
-        Labs.MenuItem {
-            enabled: editMenu.field.selectedText !== ""
-            text: i18nc("text editing menu action; applies format", "Normal")
-            shortcut: "Ctrl+Shift+N"
-            onTriggered: tClient.messagesStore.applyFormat("normal", txtField.textDocument, txtField, txtField.selectionStart, txtField.selectionEnd)
-        }
-
+    FormatMenu {
+        visible: editMenu.showFormat
+        field: editMenu.field
     }
 
     Labs.MenuSeparator {
     }
 
     Labs.MenuItem {
+        enabled: editMenu.field !== null
         text: i18nc("text editing menu action", "Select All")
         shortcut: StandardKey.SelectAll
         onTriggered: {
