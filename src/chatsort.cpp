@@ -3,17 +3,24 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include <QDebug>
+#include <QTimer>
 
 #include "chatsort.h"
 #include "chatsstore_p.h"
 
-ChatSortModel::ChatSortModel(QObject* parent) : QSortFilterProxyModel(parent), _store(nullptr), _folder(QString::number(TDApi::chatListMain::ID))
+ChatSortModel::ChatSortModel(QObject* parent) : QSortFilterProxyModel(parent), _store(nullptr), _folder(QString::number(TDApi::chatListMain::ID)), _sortTimer(new QTimer)
 {
     setDynamicSortFilter(true);
     setFilterRole(Qt::UserRole);
     setSortRole(Qt::UserRole);
     sort(0);
     invalidateFilter();
+
+    _sortTimer->setInterval(50);
+    _sortTimer->setSingleShot(true);
+    connect(_sortTimer, &QTimer::timeout, this, [=]() {
+        invalidate();
+    });
 }
 
 bool ChatSortModel::lessThan(const QModelIndex& lhs, const QModelIndex& rhs) const
@@ -100,8 +107,7 @@ void ChatSortModel::setStore(ChatsStore* store)
     }
 
     connect(store, &ChatsStore::keyDataChanged, this, [=]() {
-        sort(0);
-        invalidateFilter();
+        _sortTimer->start();
     });
 
     _store = store;
