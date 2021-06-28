@@ -43,6 +43,7 @@ enum Roles {
     FileCaption,
     FileID,
     FileIcon,
+    FileSizeHuman,
 
     // AddMembers messages
     AddedMembers,
@@ -376,6 +377,20 @@ QVariant MessagesStore::data(const QVariant& key, int role)
 
         return QString::fromStdString(file->document_->mime_type_).replace("/", "-");
     }
+    case Roles::FileSizeHuman: {
+        auto content = d->messageData[mID]->content_.get();
+        if (content->get_id() != TDApi::messageDocument::ID) {
+            return QString();
+        }
+
+        auto file = static_cast<TDApi::messageDocument*>(content);
+        if (file->document_ == nullptr || file->document_->document_ == nullptr) {
+            return QString();
+        }
+        const auto& doku = file->document_->document_;
+
+        return QLocale().formattedDataSize(doku->size_ == 0 ? doku->expected_size_ : doku->size_, 1);
+    }
 
     case Roles::AuthorID: {
         const auto idFrom = [](TDApi::MessageSender* s) {
@@ -674,6 +689,7 @@ QHash<int, QByteArray> MessagesStore::roleNames()
     roles[Roles::FileName] = "fileName";
     roles[Roles::FileID] = "fileID";
     roles[Roles::FileIcon] = "fileIcon";
+    roles[Roles::FileSizeHuman] = "fileSizeHuman";
 
     roles[Roles::AddedMembers] = "addedMembers";
 

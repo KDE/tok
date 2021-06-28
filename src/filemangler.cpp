@@ -74,6 +74,22 @@ bool FileMangler::checkKey(const QVariant& key)
     return d->fileData.contains(key.toString().toLong());
 }
 
+bool FileMangler::canFetchKey(const QVariant& key)
+{
+    Q_UNUSED(key)
+
+    return true;
+}
+
+void FileMangler::fetchKey(const QVariant& key)
+{
+    auto id = key.toString().toLong();
+    c->call<TDApi::getFile>([id, this](TDApi::getFile::ReturnType it) {
+        d->fileData[id] = QSharedPointer<TDApi::file>(it.release());
+        Q_EMIT keyDataChanged(QString::number(id), {});
+    }, id);
+}
+
 QHash<int,QByteArray> FileMangler::roleNames()
 {
     return {
@@ -88,13 +104,18 @@ QHash<int,QByteArray> FileMangler::roleNames()
     };
 }
 
+void FileMangler::stopDownloadingFile(const QString &id)
+{
+    c->call<TDApi::cancelDownloadFile>(nullptr, id.toLong(), false);
+}
+
 QIviPendingReplyBase FileMangler::downloadFile(const QString& id)
 {
     QIviPendingReply<QString> reply;
 
     auto it = id.toLong();
 
-    auto onFinished = [this, reply, downloadingID = it](qint32 id, QSharedPointer<TDApi::file> file) {
+    auto onFinished = [this, reply, downloadingID = it](qint32 id, QSharedPointer<TDApi::file> file) mutable {
         d->fileData[id] = file;
         Q_EMIT keyDataChanged(QString::number(file->id_), {});
 
@@ -106,12 +127,11 @@ QIviPendingReplyBase FileMangler::downloadFile(const QString& id)
             return;
         }
 
-        auto repl = reply;
-        repl.setSuccess(to(file->local_->path_));
+        reply.setSuccess(to(file->local_->path_));
     };
 
     c->call<TDApi::downloadFile>(
-        [onFinished](TDApi::downloadFile::ReturnType t) {
+        [onFinished](TDApi::downloadFile::ReturnType t) mutable {
             auto id = t->id_;
             onFinished(id, QSharedPointer<TDApi::file>(t.release()));
         },

@@ -26,9 +26,12 @@ public:
 
     QVariant data(const QVariant& key, int role = Qt::DisplayRole) override;
     bool checkKey(const QVariant& key) override;
+    bool canFetchKey(const QVariant& key) override;
+    void fetchKey(const QVariant& key) override;
 
     QHash<int,QByteArray> roleNames() override;
 
     Q_INVOKABLE QIviPendingReplyBase downloadFile(const QString& id);
+    Q_INVOKABLE void stopDownloadingFile(const QString& id);
 
 };

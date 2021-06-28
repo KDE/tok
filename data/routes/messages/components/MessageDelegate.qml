@@ -45,6 +45,13 @@ QQC2.Control {
             return Qt.lighter(messagesViewRoot.Kirigami.Theme.backgroundColor, 1.3)
     }
 
+    readonly property color nestedButtonColor: {
+        if (Kirigami.ColorUtils.brightnessForColor(messagesViewRoot.Kirigami.Theme.backgroundColor) == Kirigami.ColorUtils.Light)
+            return Qt.darker(Kirigami.Theme.backgroundColor, 1.1)
+        else
+            return Qt.lighter(Kirigami.Theme.backgroundColor, 1.3)
+    }
+
     Kirigami.Theme.colorSet: {
         return Kirigami.Theme.Button
         // if (Array.from(messagesSelectionModel.selectedIndexes).includes(modelIndex)) {

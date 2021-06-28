@@ -161,6 +161,7 @@ Kirigami.PageRow {
         property bool imageBackground: true
         property bool transparent: false
         property bool userWantsSidebars: true
+        property bool userHasDownloadedFile: false
         property int pageWidth: -1
 
         onTransparentChanged: {
