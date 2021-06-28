@@ -16,6 +16,16 @@ Kirigami.PageRoute {
 name: "Chats"
 
 Kirigami.ScrollablePage {
+    footer: Components.Header {
+        RowLayout {
+            Layout.fillWidth: true
+            Item { Layout.fillWidth: true }
+            QQC2.Button {
+                icon.name: "list-add"
+                text: i18nc("button", "New Chat...")
+            }
+        }
+    }
     header: Components.Header {
         RowLayout {
             Layout.margins: Kirigami.Units.largeSpacing
@@ -24,7 +34,7 @@ Kirigami.ScrollablePage {
 
             Layout.fillWidth: true
 
-            QQC2.ToolButton {
+            QQC2.Button {
                 QQC2.Menu {
                     id: settingsMenu
 
