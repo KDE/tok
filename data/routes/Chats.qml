@@ -146,20 +146,23 @@ Kirigami.ScrollablePage {
             Item {
                 implicitHeight: !rootRow.shouldUseSidebars && audioBar.active ? audioBar.item.height : 0
             }
-            ListView {
-                model: tClient.chatListModel
-                delegate: QQC2.TabButton {
-                    required property string name
-                    required property string chatListID
+            QQC2.ScrollView {
+                ListView {
+                    model: tClient.chatListModel
+                    delegate: QQC2.TabButton {
+                        required property string name
+                        required property string chatListID
 
-                    text: name
-                    checked: filter.folder == chatListID
+                        text: name
+                        checked: filter.folder == chatListID
 
-                    onClicked: filter.folder = chatListID
+                        onClicked: filter.folder = chatListID
+                    }
+                    orientation: ListView.Horizontal
                 }
-                orientation: ListView.Horizontal
 
-                implicitHeight: 30
+                contentHeight: 30
+                QQC2.ScrollBar.vertical.policy: QQC2.ScrollBar.AlwaysOff
                 Layout.fillWidth: true
             }
         }
