@@ -62,6 +62,6 @@ AnimatedImage {
     }
 
     Layout.preferredHeight: implicitHeight * ratio
-    Layout.maximumWidth: del.recommendedSize
+    Layout.maximumWidth: del.recommendedSmallSize
     Layout.leftMargin: Kirigami.Units.largeSpacing
 }
