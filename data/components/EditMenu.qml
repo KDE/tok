@@ -83,7 +83,7 @@ Labs.Menu {
 
     FormatMenu {
         visible: editMenu.showFormat
-        field: editMenu.field
+        field: editMenu.field instanceof TextEdit ? editMenu.field : null
     }
 
     Labs.MenuSeparator {
