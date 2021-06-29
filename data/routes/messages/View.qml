@@ -21,7 +21,9 @@ Kirigami.ScrollablePage {
     id: messagesViewRoot
 
     property string chatID
-    property string replyToID: ""
+    property string interactionID: ""
+    property string interactionKind: "reply"
+
     property url uploadPath: ""
     property bool isPhoto: false
 

@@ -19,6 +19,13 @@ QQC2.Control {
 
     readonly property int tailSize: Kirigami.Units.largeSpacing
 
+    Connections {
+        target: del
+        function onEdit() {
+            composeBar.text = textData.data.content
+        }
+    }
+
     Accessible.name: `${userData.data.name}: ${textData.data.content}. ${messageData.data.timestamp}`
 
     Tok.RelationalListener {

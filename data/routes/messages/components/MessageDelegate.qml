@@ -13,6 +13,8 @@ import "qrc:/components" as GlobalComponents
 QQC2.Control {
     id: del
 
+    signal edit()
+
     required property string mID
     required property string mChatID
     required property string mNextID
@@ -65,6 +67,23 @@ QQC2.Control {
     GlobalComponents.ResponsiveMenu {
         id: __responsiveMenu
         GlobalComponents.ResponsiveMenuItem {
+            enabled: chatData.data.mCanSendMessages && del.isOwnMessage && messageData.data.kind === "messageText"
+            text: i18nc("popup menu for message", "Edit")
+            onTriggered: {
+                messagesViewRoot.interactionID = del.mID
+                messagesViewRoot.interactionKind = "edit"
+                del.edit()
+            }
+        }
+        GlobalComponents.ResponsiveMenuItem {
+            enabled: chatData.data.mCanSendMessages
+            text: i18nc("popup menu for message", "Reply")
+            onTriggered: {
+                messagesViewRoot.interactionID = del.mID
+                messagesViewRoot.interactionKind = "reply"
+            }
+        }
+        GlobalComponents.ResponsiveMenuItem {
             enabled: del.canDeleteMessage
             text: i18nc("popup menu for message", "Delete")
             onTriggered: {
@@ -75,11 +94,6 @@ QQC2.Control {
                 deleteDialog.title = chatData.data.mTitle
                 deleteDialog.open()
             }
-        }
-        GlobalComponents.ResponsiveMenuItem {
-            enabled: chatData.data.mCanSendMessages
-            text: i18nc("popup menu for message", "Reply")
-            onTriggered: messagesViewRoot.replyToID = del.mID
         }
     }
 

@@ -13,6 +13,8 @@ import "qrc:/components" as GlobalComponents
 QQC2.ToolBar {
     id: composeBar
 
+    property alias text: txtField.text
+
     Loader {
         id: autoCompleteThing
         active: false
@@ -59,8 +61,8 @@ QQC2.ToolBar {
 
     contentItem: ColumnLayout {
         GlobalComponents.LoaderPlus {
-            active: messagesViewRoot.replyToID != ""
-            visible: messagesViewRoot.replyToID != ""
+            active: messagesViewRoot.interactionID != ""
+            visible: messagesViewRoot.interactionID != ""
 
             sourceComponent: QQC2.Control {
                 padding: 6
@@ -73,15 +75,15 @@ QQC2.ToolBar {
                         messagesModel: tClient.messagesStore
                         userModel: tClient.userDataModel
                         chatID: messagesViewRoot.chatID
-                        messageID: messagesViewRoot.replyToID
+                        messageID: messagesViewRoot.interactionID
                     }
                     Kirigami.Icon {
-                        source: "dialog-messages"
+                        source: messagesViewRoot.interactionKind === "reply" ? "dialog-messages" : "edit-entry"
                     }
                     ColumnLayout {
                         spacing: 1
                         QQC2.Label {
-                            text: repliedToData.authorName
+                            text: messagesViewRoot.interactionKind == "edit" ? i18n("Edit Message") : repliedToData.authorName
                             elide: Text.ElideRight
                             color: Kirigami.NameUtils.colorsFromString(repliedToData.authorName)
                             Layout.fillWidth: true
@@ -98,7 +100,13 @@ QQC2.ToolBar {
                     }
                     QQC2.ToolButton {
                         icon.name: "dialog-cancel"
-                        onClicked: messagesViewRoot.replyToID = ""
+                        onClicked: {
+                            messagesViewRoot.interactionID = ""
+                            if (messagesViewRoot.interactionKind == "edit") {
+                                txtField.text = ""
+                            }
+                            messagesViewRoot.interactionKind = ""
+                        }
                     }
 
                     Layout.fillWidth: true
@@ -111,21 +119,32 @@ QQC2.ToolBar {
             id: composeRow
 
             function send() {
+                if (messagesViewRoot.interactionKind === "edit") {
+                    lView.model.edit(txtField.textDocument, messagesViewRoot.interactionID)
+
+                    messagesViewRoot.uploadPath = ""
+                    txtField.text = ""
+                    messagesViewRoot.interactionID = ""
+                    messagesViewRoot.interactionKind = ""
+                    return
+                }
                 if (messagesViewRoot.uploadPath != "") {
                     if (messagesViewRoot.isPhoto) {
-                        lView.model.sendPhoto(txtField.textDocument, messagesViewRoot.uploadPath, messagesViewRoot.replyToID)
+                        lView.model.sendPhoto(txtField.textDocument, messagesViewRoot.uploadPath, messagesViewRoot.interactionID)
                     } else {
-                        lView.model.sendFile(txtField.textDocument, messagesViewRoot.uploadPath, messagesViewRoot.replyToID)
+                        lView.model.sendFile(txtField.textDocument, messagesViewRoot.uploadPath, messagesViewRoot.interactionID)
                     }
 
                     messagesViewRoot.uploadPath = ""
                     txtField.text = ""
-                    messagesViewRoot.replyToID = ""
+                    messagesViewRoot.interactionID = ""
+                    messagesViewRoot.interactionKind = ""
                     return
                 }
-                lView.model.send(txtField.textDocument, messagesViewRoot.replyToID)
+                lView.model.send(txtField.textDocument, messagesViewRoot.interactionID)
                 txtField.text = ""
-                messagesViewRoot.replyToID = ""
+                messagesViewRoot.interactionID = ""
+                messagesViewRoot.interactionKind = ""
             }
 
             Layout.fillWidth: true

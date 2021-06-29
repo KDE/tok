@@ -328,6 +328,16 @@ void MessagesModel::sendPhoto(QQuickTextDocument* doku, QUrl url, const QString&
     });
 }
 
+void MessagesModel::edit(QQuickTextDocument* doku, const QString& messageID)
+{
+    auto edit_message = TDApi::make_object<TDApi::editMessageText>();
+    edit_message->chat_id_ = d->id;
+    edit_message->message_id_ = messageID.toLongLong();
+    edit_message->input_message_content_ = TDApi::make_object<TDApi::inputMessageText>(format(doku), false, false);
+
+    c->callP<TDApi::editMessageText>(nullptr, std::move(edit_message));
+}
+
 void MessagesModel::comingIn()
 {
     c->call<TDApi::openChat>([](TDApi::openChat::ReturnType) {}, d->id);

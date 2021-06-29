@@ -77,6 +77,8 @@ public:
     Q_INVOKABLE void sendFile(QQuickTextDocument* doku, QUrl url, const QString& inReplyTo);
     Q_INVOKABLE void sendPhoto(QQuickTextDocument* doku, QUrl url, const QString& inReplyTo);
 
+    Q_INVOKABLE void edit(QQuickTextDocument* doku, const QString& messageID);
+
     Q_INVOKABLE void messagesInView(QVariantList list);
     Q_INVOKABLE void comingIn();
     Q_INVOKABLE void comingOut();
