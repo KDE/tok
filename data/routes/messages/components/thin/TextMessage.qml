@@ -8,6 +8,8 @@ import QtQuick.Controls 2.12 as QQC2
 import org.kde.kirigami 2.14 as Kirigami
 import org.kde.Tok 1.0 as Tok
 
+import "../" as Shared
+
 QQC2.Control {
     id: textMessageRoot
 
@@ -84,6 +86,11 @@ QQC2.Control {
             }
 
             Layout.fillWidth: true
+        }
+
+        Shared.WebPageBlock {
+            id: web
+            Layout.bottomMargin: _background.timestamp.height
         }
     }
 
