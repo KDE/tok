@@ -11,6 +11,7 @@
         <file>components/AudioPlayer.qml</file>
         <file>components/GlobalMenu.qml</file>
         <file>components/FormatMenu.qml</file>
+        <file>components/CreateNewMenu.qml</file>
         <file>components/EditMenu.qml</file>
         <file>components/Header.qml</file>
         <file>components/PlaintextMessage.qml</file>
@@ -20,6 +21,7 @@
         <file>components/UserDataSheet.qml</file>
         <file>components/ResponsiveMenu.qml</file>
         <file>components/ResponsiveMenuItem.qml</file>
+        <file>components/Sheet.qml</file>
 
         <file>routes/Chats.qml</file>
         <file>routes/chats components/QuickView.qml</file>

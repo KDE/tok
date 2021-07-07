@@ -167,6 +167,23 @@ Kirigami.ScrollablePage {
             }
         }
 
+        footer: RowLayout {
+            z: 100
+            width: parent.width
+            Item { Layout.fillWidth: true }
+            Components.CreateNewMenu {
+                id: createNew
+            }
+            QQC2.RoundButton {
+                icon.name: "list-add"
+                text: i18nc("button with menu", "Create New...")
+                onClicked: createNew.open()
+
+                Layout.margins: Kirigami.Units.gridUnit
+            }
+        }
+        footerPositioning: ListView.OverlayFooter
+
         delegate: Kirigami.BasicListItem {
             id: del
 

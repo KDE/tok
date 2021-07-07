@@ -139,3 +139,27 @@ QVariant ChatsModel::data(const QModelIndex& idx, int role) const
 
     return QVariant();
 }
+
+QIviPendingReplyBase ChatsModel::createChat(const QString& name, const QString& type)
+{
+    QIviPendingReply<bool> ret;
+
+    if (type == "publicGroup" or type == "channel") {
+        c->call<TDApi::createNewSupergroupChat>(
+            [ret](TDApi::createNewSupergroupChat::ReturnType r) mutable {
+                ret.setSuccess(true);
+            },
+            name.toStdString(), type == "channel", "", nullptr, false
+        );
+        return ret;
+    }
+
+    c->call<TDApi::createNewBasicGroupChat>(
+        [ret](TDApi::createNewBasicGroupChat::ReturnType r) mutable {
+            ret.setSuccess(true);
+        },
+        TDApi::array<TDApi::int32>{}, name.toStdString()
+    );
+
+    return ret;
+}

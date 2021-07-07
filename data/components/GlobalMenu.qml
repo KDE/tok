@@ -13,6 +13,12 @@ Labs.MenuBar {
     Labs.Menu {
         title: i18nc("menu", "File")
 
+        CreateNewMenu {
+        }
+        // Labs.MenuItem {
+        //     text: i18nc("menu", "Chat With…")
+        // }
+        Labs.MenuSeparator { }
         Labs.MenuItem {
             text: i18nc("menu", "Log Out")
             onTriggered: tClient.logOut()

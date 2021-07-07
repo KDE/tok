@@ -7,6 +7,7 @@
 #include <QAbstractListModel>
 
 #include "client.h"
+#include "yoinked from qt automotive/qivipendingreply.h"
 
 class ChatsModel : public QAbstractListModel
 {
@@ -36,4 +37,6 @@ public:
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
 
     QHash<int,QByteArray> roleNames() const override;
+
+    Q_INVOKABLE QIviPendingReplyBase createChat(const QString& name, const QString& type);
 };
