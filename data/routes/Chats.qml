@@ -15,7 +15,12 @@ Kirigami.PageRoute {
 
 name: "Chats"
 
-Kirigami.ScrollablePage {
+Kirigami.Page {
+    topPadding: 0
+    leftPadding: 0
+    rightPadding: 0
+    bottomPadding: 0
+
     header: Components.Header {
         RowLayout {
             Layout.margins: Kirigami.Units.largeSpacing
@@ -111,6 +116,50 @@ Kirigami.ScrollablePage {
 
     ChatsComponents.QuickView { id: quickView }
 
+    ColumnLayout {
+
+    anchors.fill: parent
+
+    Item {
+        implicitHeight: !rootRow.shouldUseSidebars && audioBar.active ? audioBar.item.height : 0
+    }
+
+    RowLayout {
+
+    QQC2.ScrollView {
+        visible: !Kirigami.Settings.isMobile && sidebarView.count > 0
+        contentWidth: Kirigami.Units.gridUnit*4
+        Layout.fillHeight: true
+
+        QQC2.ScrollBar.horizontal.policy: QQC2.ScrollBar.AlwaysOff
+
+        ListView {
+            id: sidebarView
+
+            width: Kirigami.Units.gridUnit*4
+            model: tClient.chatListModel
+            delegate: QQC2.ToolButton {
+                required property string name
+                required property string chatListID
+
+                height: Kirigami.Units.gridUnit*4
+                width: Kirigami.Units.gridUnit*4
+
+                text: name
+                checked: filter.folder == chatListID
+
+                onClicked: filter.folder = chatListID
+            }
+        }
+    }
+
+    QQC2.ScrollView {
+
+    QQC2.ScrollBar.horizontal.policy: QQC2.ScrollBar.AlwaysOff
+
+    Layout.fillHeight: true
+    Layout.fillWidth: true
+
     ListView {
         id: lView
 
@@ -139,15 +188,13 @@ Kirigami.ScrollablePage {
             filter: searchField.text
         }
 
-        header: ColumnLayout {
-            spacing: 0
-            width: parent.width
-
-            Item {
-                implicitHeight: !rootRow.shouldUseSidebars && audioBar.active ? audioBar.item.height : 0
-            }
+        Component {
+            id: mobileTabs
             QQC2.ScrollView {
+                visible: mobileChatListView.count > 0
+
                 ListView {
+                    id: mobileChatListView
                     model: tClient.chatListModel
                     delegate: QQC2.TabButton {
                         required property string name
@@ -167,6 +214,7 @@ Kirigami.ScrollablePage {
             }
         }
 
+        header: Kirigami.Settings.isMobile ? mobileTabs : null
         footer: RowLayout {
             z: 100
             width: parent.width
@@ -269,6 +317,12 @@ Kirigami.ScrollablePage {
 
             visible: parent.count === 0
         }
+    }
+
+    }
+
+    }
+
     }
 }
 
