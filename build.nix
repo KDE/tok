@@ -1,27 +1,28 @@
-{ devShell
-, stdenv
-, wrapQtAppsHook
-, makeWrapper
-, libsForQt5
-, qbs
-, cmake
-, tdlib
-, icu
-, zlib
-, rlottie
-, jq
-, bash
-}: stdenv.mkDerivation {
+{ mkDerivation, env, qtbase, qtdeclarative, qtmultimedia, kirigami2, ki18n
+, knotifications, kconfigwidgets, kwindowsystem, kitemmodels, pkg-config
+, qbs, cmake, tdlib, icu, zlib, rlottie, jq
+}:
+
+let
+  qtEnv = env "qt-tok-${qtbase.version}" [
+    qtbase qtdeclarative qtmultimedia
+  ];
+in mkDerivation {
   pname = "tok";
   version = "nightly";
 
-  buildInputs = [ icu.dev zlib tdlib rlottie ] ++ (with libsForQt5; [ full kirigami2 ki18n knotifications kconfigwidgets kwindowsystem ]);
-  nativeBuildInputs = [ wrapQtAppsHook makeWrapper qbs cmake jq bash ];
+  buildInputs = [
+    icu zlib tdlib rlottie 
+    qtEnv kirigami2 ki18n knotifications
+    kconfigwidgets kwindowsystem kitemmodels
+  ];
+
+  nativeBuildInputs = [ pkg-config qbs cmake jq ];
 
   src = ./.;
 
   configurePhase = ''
-    source ${devShell}
+    qbs resolve qbs.installPrefix:/
   '';
 
   buildPhase = ''
@@ -29,10 +30,6 @@
   '';
 
   installPhase = ''
-    mkdir -p $out
     qbs install --install-root $out
-    mv $out/usr/local/* $out
-
-    wrapProgram $out/bin/org.kde.Tok --set LD_LIBRARY_PATH $LD_LIBRARY_PATH
   '';
 }
