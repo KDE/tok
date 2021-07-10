@@ -51,6 +51,31 @@ QQC2.MenuBar {
             text: i18nc("menu item that opens a UI element called the 'Quick Switcher', which offers a fast keyboard-based interface for switching in between chats.", "Open Quick Switcher")
             onTriggered: quickView.open()
         }
+
+        QQC2.Menu {
+            id: colourSchemeMenu
+            title: i18nc("menu item offering access to more menu items to pick the colour scheme", "Set Color Scheme")
+
+            Instantiator {
+                model: Tok.ColorSchemer.model
+
+                onObjectAdded: (idx, obj) => {
+                    colourSchemeMenu.insertItem(idx, obj)
+                }
+                onObjectRemoved: (idx, obj) => {
+                    colourSchemeMenu.removeItem(obj)
+                }
+
+                delegate: QQC2.MenuItem {
+                    required property int index
+                    required property string colorSchemeName
+
+                    text: colorSchemeName
+
+                    onTriggered: Tok.ColorSchemer.apply(index)
+                }
+            }
+        }
     }
     FormatMenuInWindow {
         title: i18nc("menu", "Format")
