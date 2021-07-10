@@ -29,53 +29,56 @@ Kirigami.Page {
 
             Layout.fillWidth: true
 
-            QQC2.ToolButton {
-                QQC2.Menu {
-                    id: settingsMenu
-
-                    QQC2.MenuItem {
-                        text: i18nc("Checkable menu item to toggle between the default appearance and a more compact style", "Compact mode")
-                        checkable: true
-                        onToggled: settings.thinMode = checked
-                        checked: settings.thinMode
-                    }
-                    QQC2.MenuItem {
-                        text: i18nc("Checkable menu item to toggle between a photo background for the chat and using a solid colour", "Image background")
-                        checkable: true
-                        onToggled: settings.imageBackground = checked
-                        checked: settings.imageBackground
-                    }
-                    QQC2.MenuItem {
-                        text: i18nc("Checkable menu item to toggle viewing content underneath the window (transparent window bg)", "Window transparency")
-                        checkable: true
-                        onToggled: settings.transparent = checked
-                        checked: settings.transparent
-                    }
-                    QQC2.MenuItem {
-                        text: i18nc("menu item that opens a UI element called the 'Quick Switcher', which offers a fast keyboard-based interface for switching in between chats.", "Quick Switcher")
-                        onTriggered: quickView.open()
-                    }
-                    QQC2.MenuItem {
-                        text: i18n("Log out")
-                        onTriggered: tClient.logOut()
-                    }
+            Loader {
+                active: Kirigami.Settings.isMobile
+                sourceComponent: QQC2.ToolButton {
                     QQC2.Menu {
-                        title: i18nc("menu item that has a submenu listing a bunch of colour schemes users can pick from", "Color schemes")
-                        Repeater {
-                            model: Tok.ColorSchemer.model
-                            QQC2.MenuItem {
-                                required property int index
-                                required property string colorSchemeName
+                        id: settingsMenu
 
-                                text: colorSchemeName
+                        QQC2.MenuItem {
+                            text: i18nc("Checkable menu item to toggle between the default appearance and a more compact style", "Compact mode")
+                            checkable: true
+                            onToggled: settings.thinMode = checked
+                            checked: settings.thinMode
+                        }
+                        QQC2.MenuItem {
+                            text: i18nc("Checkable menu item to toggle between a photo background for the chat and using a solid colour", "Image background")
+                            checkable: true
+                            onToggled: settings.imageBackground = checked
+                            checked: settings.imageBackground
+                        }
+                        QQC2.MenuItem {
+                            text: i18nc("Checkable menu item to toggle viewing content underneath the window (transparent window bg)", "Window transparency")
+                            checkable: true
+                            onToggled: settings.transparent = checked
+                            checked: settings.transparent
+                        }
+                        QQC2.MenuItem {
+                            text: i18nc("menu item that opens a UI element called the 'Quick Switcher', which offers a fast keyboard-based interface for switching in between chats.", "Quick Switcher")
+                            onTriggered: quickView.open()
+                        }
+                        QQC2.MenuItem {
+                            text: i18n("Log out")
+                            onTriggered: tClient.logOut()
+                        }
+                        QQC2.Menu {
+                            title: i18nc("menu item that has a submenu listing a bunch of colour schemes users can pick from", "Color schemes")
+                            Repeater {
+                                model: Tok.ColorSchemer.model
+                                QQC2.MenuItem {
+                                    required property int index
+                                    required property string colorSchemeName
 
-                                onClicked: Tok.ColorSchemer.apply(index)
+                                    text: colorSchemeName
+
+                                    onClicked: Tok.ColorSchemer.apply(index)
+                                }
                             }
                         }
                     }
+                    icon.name: "application-menu"
+                    onClicked: settingsMenu.popup()
                 }
-                icon.name: "application-menu"
-                onClicked: settingsMenu.popup()
             }
 
             Kirigami.SearchField {
@@ -220,6 +223,8 @@ Kirigami.Page {
         footer: RowLayout {
             z: 100
             width: parent.width
+            visible: Kirigami.Settings.isMobile
+
             Item { Layout.fillWidth: true }
             Components.CreateNewMenu {
                 id: createNew
