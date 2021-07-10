@@ -1,0 +1,16 @@
+#!/usr/bin/env elvish
+
+items = [
+    CreateNewMenu
+    EditMenu
+    FormatMenu
+    GlobalMenu
+]
+
+for i [$@items] {
+    sed 's/Labs/QQC2/g' $i.qml > $i"InWindow.qml"
+    sed -i '/shortcut:/d' $i"InWindow.qml"
+    for ii [$@items] {
+        sed -i 's/'$ii'/'$ii'InWindow/g' $i"InWindow.qml"
+    }
+}

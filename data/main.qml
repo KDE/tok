@@ -22,6 +22,17 @@ Kirigami.AbstractApplicationWindow {
 
     title: i18nc("window title", "Tok")
 
+    menuBar: Components.GlobalMenuInWindow {
+        // dependency on frameworks new enough for
+        // hasPlatformMenuBar is optional, so we handle
+        // it being undefined gracefully
+        visible: Kirigami.Settings.hasPlatformMenuBar != undefined ?
+                !Kirigami.Settings.hasPlatformMenuBar && !Kirigami.Settings.isMobile :
+                !Kirigami.Settings.isMobile
+    }
+    property alias settings: content.settings
+    property alias rootRow: content
+
     color: content.settings.transparent ? "transparent" : Kirigami.Theme.backgroundColor
     flags: content.settings.transparent ? Qt.WA_TranslucentBackground : 0
 
