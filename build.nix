@@ -1,6 +1,7 @@
 { mkDerivation, env, qtbase, qtdeclarative, qtmultimedia, kirigami2, ki18n
-, knotifications, kconfigwidgets, kwindowsystem, kitemmodels, pkg-config
-, qbs, cmake, tdlib, icu, zlib, rlottie, jq
+, knotifications, kconfigwidgets, kwindowsystem, kitemmodels, mauikit
+, applet-window-buttons, pkg-config, qbs, cmake, tdlib, icu, zlib, rlottie
+, jq
 }:
 
 let
@@ -15,6 +16,7 @@ in mkDerivation {
     icu zlib tdlib rlottie 
     qtEnv kirigami2 ki18n knotifications
     kconfigwidgets kwindowsystem kitemmodels
+    mauikit applet-window-buttons
   ];
 
   nativeBuildInputs = [ pkg-config qbs cmake jq ];
