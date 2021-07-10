@@ -129,7 +129,7 @@ Kirigami.Page {
     spacing: 0
 
     QQC2.ScrollView {
-        visible: !Kirigami.Settings.isMobile && sidebarView.count > 0
+        visible: !Kirigami.Settings.isMobile && sidebarView.count > 1
         contentWidth: Kirigami.Units.gridUnit*4
         Layout.fillHeight: true
 
@@ -193,7 +193,7 @@ Kirigami.Page {
         Component {
             id: mobileTabs
             QQC2.ScrollView {
-                visible: mobileChatListView.count > 0
+                visible: mobileChatListView.count > 1
 
                 ListView {
                     id: mobileChatListView
