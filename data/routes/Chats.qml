@@ -126,6 +126,8 @@ Kirigami.Page {
 
     RowLayout {
 
+    spacing: 0
+
     QQC2.ScrollView {
         visible: !Kirigami.Settings.isMobile && sidebarView.count > 0
         contentWidth: Kirigami.Units.gridUnit*4
