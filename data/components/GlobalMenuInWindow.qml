@@ -11,13 +11,12 @@ import org.kde.kirigami 2.15 as Kirigami
 
 QQC2.MenuBar {
     QQC2.Menu {
-        title: i18nc("menu", "File")
+        title: i18nc("menu", "Tok")
 
-        CreateNewMenuInWindow {
+        QQC2.MenuItem {
+            text: i18nc("menu", "Preferences…")
+            onTriggered: settingsWindow.showNormal()
         }
-        // QQC2.MenuItem {
-        //     text: i18nc("menu", "Chat With…")
-        // }
         QQC2.MenuSeparator { }
         QQC2.MenuItem {
             text: i18nc("menu", "Log Out")
@@ -26,6 +25,15 @@ QQC2.MenuBar {
         QQC2.MenuItem {
             text: i18nc("menu", "Quit")
         }
+    }
+    QQC2.Menu {
+        title: i18nc("menu", "Chats")
+
+        CreateNewMenuInWindow {
+        }
+        // QQC2.MenuItem {
+        //     text: i18nc("menu", "Chat With…")
+        // }
     }
     EditMenuInWindow {
         title: i18nc("menu", "Edit")
