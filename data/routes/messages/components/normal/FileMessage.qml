@@ -13,8 +13,8 @@ QQC2.Control {
 
     topPadding: Kirigami.Units.largeSpacing
     bottomPadding: Kirigami.Units.largeSpacing
-    leftPadding: Kirigami.Units.largeSpacing+tailSize
-    rightPadding: Kirigami.Units.largeSpacing
+    leftPadding: Kirigami.Units.largeSpacing+2+tailSize
+    rightPadding: Kirigami.Units.largeSpacing+2
 
     readonly property int tailSize: Kirigami.Units.largeSpacing
 

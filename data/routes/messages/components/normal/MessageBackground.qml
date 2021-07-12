@@ -97,11 +97,21 @@ Item {
             bottom: parent.bottom
             right: mainBG.right
             margins: Kirigami.Units.smallSpacing
+            rightMargin: Kirigami.Units.largeSpacing+2
         }
         LayoutMirroring.enabled: Tok.Utils.isRTL(textData.data.content)
     }
     QQC2.Label {
         id: dummy
         text: " "
+    }
+    layer.enabled: true
+    layer.effect: DropShadow {
+        cached: true
+        horizontalOffset: 0
+        verticalOffset: 1
+        radius: 2.0
+        samples: 17
+        color: "#30000000"
     }
 }
