@@ -11,13 +11,12 @@ import org.kde.kirigami 2.15 as Kirigami
 
 Labs.MenuBar {
     Labs.Menu {
-        title: i18nc("menu", "File")
+        title: i18nc("menu", "Tok")
 
-        CreateNewMenu {
+        Labs.MenuItem {
+            text: i18nc("menu", "Preferences…")
+            onTriggered: settingsWindow.showNormal()
         }
-        // Labs.MenuItem {
-        //     text: i18nc("menu", "Chat With…")
-        // }
         Labs.MenuSeparator { }
         Labs.MenuItem {
             text: i18nc("menu", "Log Out")
@@ -26,6 +25,15 @@ Labs.MenuBar {
         Labs.MenuItem {
             text: i18nc("menu", "Quit")
         }
+    }
+    Labs.Menu {
+        title: i18nc("menu", "Chats")
+
+        CreateNewMenu {
+        }
+        // Labs.MenuItem {
+        //     text: i18nc("menu", "Chat With…")
+        // }
     }
     EditMenu {
         title: i18nc("menu", "Edit")

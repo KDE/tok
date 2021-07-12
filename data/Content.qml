@@ -17,6 +17,7 @@ import "routes/entry" as EntryRoutes
 import "routes/messages" as MessagesRoutes
 
 import "qrc:/components" as Components
+import "qrc:/routes/settings" as SettingsComponents
 
 Kirigami.PageRow {
     id: rootRow
@@ -214,6 +215,10 @@ Kirigami.PageRow {
         function onLoggedOut() {
             rootRouter.navigateToRoute("Entry/Welcome")
         }
+    }
+
+    SettingsComponents.Settings {
+        id: settingsWindow
     }
 
     QQC2.Popup {
