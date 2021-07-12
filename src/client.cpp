@@ -116,6 +116,11 @@ MembersModel* Client::membersModel(qint64 number, const QString& kind)
     return nullptr;
 }
 
+ContactsModel* Client::newContactsModel()
+{
+    return new ContactsModel(this);
+}
+
 void Client::setOnline(bool online)
 {
     d->online = online;

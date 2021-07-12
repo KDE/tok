@@ -16,8 +16,10 @@ QQC2.Dialog {
     rightPadding: Kirigami.Units.gridUnit * 2
     bottomPadding: Kirigami.Units.gridUnit
 
-    x: (QQC2.Overlay.overlay.width / 2) - (this.width / 2)
-    y: (QQC2.Overlay.overlay.height / 2) - (this.height / 2)
+    parent: rootRow
+
+    x: Math.round((QQC2.Overlay.overlay.width / 2) - (this.width / 2))
+    y: Math.round((QQC2.Overlay.overlay.height / 2) - (this.height / 2))
 
     height: contentItem.implicitHeight + topPadding + bottomPadding
 }

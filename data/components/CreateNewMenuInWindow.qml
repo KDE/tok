@@ -19,14 +19,13 @@ QQC2.Menu {
         property string codeKind: ""
 
         function doOpen(text, kind) {
+            contactsPicker.model = tClient.newContactsModel()
             nameField.text = ""
 
             this.kind = text
             this.codeKind = kind
             this.open()
         }
-
-        parent: rootRow
 
         contentItem: ColumnLayout {
             spacing: Kirigami.Units.gridUnit
@@ -42,6 +41,21 @@ QQC2.Menu {
                 Layout.fillWidth: true
             }
 
+            QQC2.ScrollView {
+                visible: nameGroup.codeKind === "privateGroup"
+
+                Layout.preferredHeight: Kirigami.Units.gridUnit * 20
+                Layout.fillWidth: true
+
+                QQC2.ScrollBar.horizontal.policy: QQC2.ScrollBar.AlwaysOff
+
+                ContactsPicker {
+                    id: contactsPicker
+                    isSelectMultiple: true
+                    reuseItems: true
+                }
+            }
+
             RowLayout {
                 Item { Layout.fillWidth: true }
                 QQC2.Button {
@@ -50,9 +64,10 @@ QQC2.Menu {
                 }
                 QQC2.Button {
                     text: i18n("Create")
+                    enabled: nameGroup.codeKind !== "privateGroup" || contactsPicker.model.selectedIDs.length > 0
                     onClicked: {
                         nameGroup.close()
-                        tClient.chatsModel.createChat(nameField.text, nameGroup.codeKind)
+                        tClient.chatsModel.createChat(nameField.text, nameGroup.codeKind, contactsPicker.model.selectedIDs)
                     }
                 }
             }
@@ -62,10 +77,10 @@ QQC2.Menu {
     // QQC2.MenuItem {
     //     text: i18nc("menu", "Secret Chat…")
     // }
-    // QQC2.MenuItem {
-    //     text: i18nc("menu", "Private Group…")
-    //     onTriggered: nameGroup.doOpen(i18nc("dialog title", "Create a private group"), "privateGroup")
-    // }
+    QQC2.MenuItem {
+        text: i18nc("menu", "Private Group…")
+        onTriggered: nameGroup.doOpen(i18nc("dialog title", "Create a private group"), "privateGroup")
+    }
     QQC2.MenuItem {
         text: i18nc("menu", "Public Group…")
         onTriggered: nameGroup.doOpen(i18nc("dialog title", "Create a public group"), "publicGroup")

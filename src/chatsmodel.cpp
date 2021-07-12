@@ -140,7 +140,7 @@ QVariant ChatsModel::data(const QModelIndex& idx, int role) const
     return QVariant();
 }
 
-QIviPendingReplyBase ChatsModel::createChat(const QString& name, const QString& type)
+QIviPendingReplyBase ChatsModel::createChat(const QString& name, const QString& type, const QStringList& ids)
 {
     QIviPendingReply<bool> ret;
 
@@ -154,11 +154,16 @@ QIviPendingReplyBase ChatsModel::createChat(const QString& name, const QString& 
         return ret;
     }
 
+    TDApi::array<TDApi::int32> it;
+    for (const auto& item : ids) {
+        it.push_back(item.toLongLong());
+    }
+
     c->call<TDApi::createNewBasicGroupChat>(
         [ret](TDApi::createNewBasicGroupChat::ReturnType r) mutable {
             ret.setSuccess(true);
         },
-        TDApi::array<TDApi::int32>{}, name.toStdString()
+        it, name.toStdString()
     );
 
     return ret;

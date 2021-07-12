@@ -22,6 +22,7 @@ class MessagesStore;
 class FileMangler;
 class SearchMessagesModel;
 class ChatListModel;
+class ContactsModel;
 
 class Client : public QObject
 {
@@ -100,6 +101,7 @@ public:
     MessagesStore* messagesStore() const;
     FileMangler* fileMangler() const;
     ChatListModel* chatListModel() const;
+    Q_INVOKABLE ContactsModel* newContactsModel();
     QString ownID() const;
 
     bool online() const;
