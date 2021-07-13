@@ -17,6 +17,10 @@ Labs.MenuBar {
             text: i18nc("menu", "Preferences…")
             onTriggered: settingsWindow.showNormal()
         }
+        Labs.MenuItem {
+            text: tClient.doNotDisturb ? i18nc("menu", "Enable Notifications") : i18nc("menu", "Disable Notifications")
+            onTriggered: tClient.doNotDisturb = !tClient.doNotDisturb
+        }
         Labs.MenuSeparator { }
         Labs.MenuItem {
             text: i18nc("menu", "Log Out")

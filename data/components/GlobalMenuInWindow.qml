@@ -17,6 +17,10 @@ QQC2.MenuBar {
             text: i18nc("menu", "Preferences…")
             onTriggered: settingsWindow.showNormal()
         }
+        QQC2.MenuItem {
+            text: tClient.doNotDisturb ? i18nc("menu", "Enable Notifications") : i18nc("menu", "Disable Notifications")
+            onTriggered: tClient.doNotDisturb = !tClient.doNotDisturb
+        }
         QQC2.MenuSeparator { }
         QQC2.MenuItem {
             text: i18nc("menu", "Log Out")

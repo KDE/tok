@@ -25,6 +25,9 @@ void NotificationManager::handleUpdateActiveNotifications(TDApi::object_ptr<TDAp
 
 void NotificationManager::handleUpdateNotificationGroup(TDApi::object_ptr<TDApi::updateNotificationGroup> notificationGroup)
 {
+    if (c->doNotDisturb()) {
+        return;
+    }
     for (auto& n : notificationGroup->added_notifications_) {
         using namespace TDApi;
 

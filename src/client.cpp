@@ -131,3 +131,18 @@ void Client::logOut()
 {
     call<TDApi::logOut>(nullptr);
 }
+
+bool Client::doNotDisturb() const
+{
+    return d->dnd;
+}
+
+void Client::setDoNotDisturb(bool dnd)
+{
+    if (d->dnd == dnd) {
+        return;
+    }
+
+    d->dnd = dnd;
+    Q_EMIT doNotDisturbChanged();
+}

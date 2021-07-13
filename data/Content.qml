@@ -90,6 +90,10 @@ Kirigami.PageRow {
 
         menu: Menu {
             MenuItem {
+                text: tClient.doNotDisturb ? i18nc("menu", "Enable Notifications") : i18nc("menu", "Disable Notifications")
+                onTriggered: tClient.doNotDisturb = !tClient.doNotDisturb
+            }
+            MenuItem {
                 text: i18nc("menu", "Quit")
                 onTriggered: Qt.quit()
             }

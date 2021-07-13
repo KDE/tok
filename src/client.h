@@ -35,6 +35,7 @@ class Client : public QObject
     Q_PROPERTY(FileMangler* fileMangler READ fileMangler CONSTANT)
     Q_PROPERTY(ChatListModel* chatListModel READ chatListModel CONSTANT)
     Q_PROPERTY(bool online READ online WRITE setOnline NOTIFY onlineChanged)
+    Q_PROPERTY(bool doNotDisturb READ doNotDisturb WRITE setDoNotDisturb NOTIFY doNotDisturbChanged)
     Q_PROPERTY(QString ownID READ ownID CONSTANT)
 
     class Private;
@@ -107,6 +108,10 @@ public:
     bool online() const;
     void setOnline(bool online);
     Q_SIGNAL void onlineChanged();
+
+    bool doNotDisturb() const;
+    void setDoNotDisturb(bool dnd);
+    Q_SIGNAL void doNotDisturbChanged();
 
     Q_SIGNAL void loggedIn();
     Q_SIGNAL void loggedOut();
