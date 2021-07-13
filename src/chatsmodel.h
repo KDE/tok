@@ -39,4 +39,6 @@ public:
     QHash<int,QByteArray> roleNames() const override;
 
     Q_INVOKABLE QIviPendingReplyBase createChat(const QString& name, const QString& type, const QStringList& ids);
+    Q_INVOKABLE QIviPendingReplyBase createSecretChat(const QString& withUser);
+    Q_INVOKABLE QIviPendingReplyBase createPrivateChat(const QString& withUser);
 };

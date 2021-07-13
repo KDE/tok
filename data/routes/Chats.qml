@@ -207,6 +207,7 @@ Kirigami.Page {
                     required property string mTitle
                     required property string mLastMessageID
                     required property string mPhoto
+                    required property string mKind
                     required property var    mCurrentActions
                     required property int    mUnreadCount
                 }
@@ -252,6 +253,10 @@ Kirigami.Page {
                 width: height
             }
             trailing: RowLayout {
+                Kirigami.Icon {
+                    visible: chatData.data.mKind === "secretChat"
+                    source: "lock"
+                }
                 QQC2.Label {
                     text: chatData.data.mUnreadCount
                     visible: chatData.data.mUnreadCount > 0

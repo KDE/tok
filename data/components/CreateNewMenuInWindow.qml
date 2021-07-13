@@ -74,9 +74,53 @@ QQC2.Menu {
         }
     }
 
-    // QQC2.MenuItem {
-    //     text: i18nc("menu", "Secret Chat…")
-    // }
+    Sheet {
+        id: secretGroup
+
+        function doOpen() {
+            otherContactsPicker.model = tClient.newContactsModel()
+
+            this.open()
+        }
+
+        contentItem: ColumnLayout {
+            spacing: Kirigami.Units.gridUnit
+
+            Kirigami.Heading {
+                text: i18nc("title", "Select someone to chat with")
+            }
+
+            QQC2.ScrollView {
+                Layout.preferredHeight: Kirigami.Units.gridUnit * 20
+                Layout.fillWidth: true
+
+                QQC2.ScrollBar.horizontal.policy: QQC2.ScrollBar.AlwaysOff
+
+                ContactsPicker {
+                    id: otherContactsPicker
+                    isSelectMultiple: false
+                    reuseItems: true
+
+                    onUserSelected: (withUser) => {
+                        tClient.chatsModel.createSecretChat(withUser)
+                    }
+                }
+            }
+
+            RowLayout {
+                Item { Layout.fillWidth: true }
+                QQC2.Button {
+                    text: i18n("Cancel")
+                    onClicked: secretGroup.close()
+                }
+            }
+        }
+    }
+
+    QQC2.MenuItem {
+        text: i18nc("menu", "Secret Chat…")
+        onTriggered: secretGroup.doOpen()
+    }
     QQC2.MenuItem {
         text: i18nc("menu", "Private Group…")
         onTriggered: nameGroup.doOpen(i18nc("dialog title", "Create a private group"), "privateGroup")

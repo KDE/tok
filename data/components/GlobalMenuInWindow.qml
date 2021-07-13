@@ -31,9 +31,57 @@ QQC2.MenuBar {
 
         CreateNewMenuInWindow {
         }
-        // QQC2.MenuItem {
-        //     text: i18nc("menu", "Chat With…")
-        // }
+
+        Sheet {
+            id: newPrivateDM
+
+            function doOpen() {
+                contactsPicker.model = tClient.newContactsModel()
+
+                this.open()
+            }
+
+            contentItem: ColumnLayout {
+                spacing: Kirigami.Units.gridUnit
+
+                Kirigami.Heading {
+                    text: i18nc("title", "Select someone to chat with")
+                }
+
+                QQC2.ScrollView {
+                    Layout.preferredHeight: Kirigami.Units.gridUnit * 20
+                    Layout.fillWidth: true
+
+                    QQC2.ScrollBar.horizontal.policy: QQC2.ScrollBar.AlwaysOff
+
+                    ContactsPicker {
+                        id: contactsPicker
+                        isSelectMultiple: false
+                        reuseItems: true
+
+                        onUserSelected: (withUser) => {
+                            tClient.chatsModel.createPrivateChat(withUser).then((chatID) => {
+                                rootRow.router.navigateToRoute(["Chats", { "route": "Messages/View", "chatID": chatID }])
+                                newPrivateDM.close()
+                            })
+                        }
+                    }
+                }
+
+                RowLayout {
+                    Item { Layout.fillWidth: true }
+                    QQC2.Button {
+                        text: i18n("Cancel")
+                        onClicked: newPrivateDM.close()
+                    }
+                }
+            }
+        }
+
+        QQC2.MenuItem {
+            text: i18nc("menu", "Chat With…")
+            onTriggered: newPrivateDM.doOpen()
+        }
     }
     EditMenuInWindow {
         title: i18nc("menu", "Edit")
