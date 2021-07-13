@@ -24,6 +24,7 @@ Labs.MenuBar {
         }
         Labs.MenuItem {
             text: i18nc("menu", "Quit")
+            onTriggered: Qt.quit()
         }
     }
     Labs.Menu {

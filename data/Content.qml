@@ -11,6 +11,7 @@ import QtGraphicalEffects 1.15
 import QtMultimedia 5.15
 
 import Qt.labs.settings 1.0
+import Qt.labs.platform 1.1
 
 import "routes" as Routes
 import "routes/entry" as EntryRoutes
@@ -48,7 +49,7 @@ Kirigami.PageRow {
     }
 
     function closing(event) {
-        if (Components.AudioPlayer.playbackState == Audio.PlayingState) {
+        if (Components.AudioPlayer.playbackState == Audio.PlayingState || settings.userWantsSystemTray) {
             event.accepted = false
             rootWindow.showMinimized()
         }
@@ -79,6 +80,18 @@ Kirigami.PageRow {
             } else if (mouse.x < _lastX) {
                 settings.pageWidth = Math.max((rootRow.defaultPageWidth - rootRow.leeway),
                     rootRow.pageWidth - (_lastX - mouse.x));
+            }
+        }
+    }
+
+    SystemTrayIcon {
+        visible: settings.userWantsSystemTray
+        icon.name: "org.kde.Tok"
+
+        menu: Menu {
+            MenuItem {
+                text: i18nc("menu", "Quit")
+                onTriggered: Qt.quit()
             }
         }
     }
@@ -163,6 +176,7 @@ Kirigami.PageRow {
         property bool transparent: false
         property bool userWantsSidebars: true
         property bool userHasDownloadedFile: false
+        property bool userWantsSystemTray: false
         property int pageWidth: -1
 
         onTransparentChanged: {

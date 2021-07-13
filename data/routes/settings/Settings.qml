@@ -40,6 +40,12 @@ Kirigami.ApplicationWindow {
             onToggled: settings.transparent = checked
             checked: settings.transparent
         }
+        QQC2.CheckBox {
+            text: i18nc("Checkable control to toggle a system tray icon and not closing the app when X is pressed, instead using the tray icon", "Minimize to system tray")
+            checkable: true
+            onToggled: settings.userWantsSystemTray = checked
+            checked: settings.userWantsSystemTray
+        }
         QQC2.Button {
             text: i18nc("Button that offers a menu to change the colour scheme", "Change Color Scheme")
             onClicked: menudo.popup()
