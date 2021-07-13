@@ -26,6 +26,7 @@ Kirigami.PageRow {
     globalToolBar.style: Kirigami.ApplicationHeaderStyle.None
 
     property alias router: rootRouter
+    property alias settingsWindow: settingsWindow
 
     property int rightOffset: 0
     property int leftOffset: 0
