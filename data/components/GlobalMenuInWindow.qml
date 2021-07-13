@@ -24,6 +24,7 @@ QQC2.MenuBar {
         }
         QQC2.MenuItem {
             text: i18nc("menu", "Quit")
+            onTriggered: Qt.quit()
         }
     }
     QQC2.Menu {
