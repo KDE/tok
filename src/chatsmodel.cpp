@@ -140,6 +140,34 @@ QVariant ChatsModel::data(const QModelIndex& idx, int role) const
     return QVariant();
 }
 
+QIviPendingReplyBase ChatsModel::createSecretChat(const QString& withUser)
+{
+    QIviPendingReply<bool> ret;
+
+    c->call<TDApi::createNewSecretChat>(
+        [ret](TDApi::createNewSecretChat::ReturnType r) mutable {
+            ret.setSuccess(true);
+        },
+        withUser.toLongLong()
+    );
+
+    return ret;
+}
+
+QIviPendingReplyBase ChatsModel::createPrivateChat(const QString& withUser)
+{
+    QIviPendingReply<QString> ret;
+
+    c->call<TDApi::createPrivateChat>(
+        [ret](TDApi::createPrivateChat::ReturnType r) mutable {
+            ret.setSuccess(QString::number(r->id_));
+        },
+        withUser.toLongLong(), false
+    );
+
+    return ret;
+}
+
 QIviPendingReplyBase ChatsModel::createChat(const QString& name, const QString& type, const QStringList& ids)
 {
     QIviPendingReply<bool> ret;
