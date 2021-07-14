@@ -31,7 +31,12 @@ QQC2.Control {
     }
 
     contentItem: ColumnLayout {
-        ReplyBlock {}
+        ReplyBlock {
+            Layout.topMargin: Kirigami.Units.smallSpacing
+            Layout.bottomMargin: Kirigami.Units.smallSpacing
+            Layout.leftMargin: Kirigami.Units.largeSpacing
+            Layout.rightMargin: Kirigami.Units.largeSpacing
+        }
         Image {
             id: video
 
