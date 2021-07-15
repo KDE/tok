@@ -67,6 +67,8 @@
         <file>routes/messages/components/normal/VideoMessage.qml</file>
         <file>routes/messages/components/normal/AudioMessage.qml</file>
         <file>routes/messages/components/normal/GifMessage.qml</file>
+        <file>routes/messages/components/normal/VoiceChatStarted.qml</file>
+        <file>routes/messages/components/normal/VoiceChatFinished.qml</file>
 
         <file>routes/messages/components/thin/TextMessage.qml</file>
         <file>routes/messages/components/thin/FileMessage.qml</file>
@@ -76,5 +78,7 @@
         <file>routes/messages/components/thin/VideoMessage.qml</file>
         <file>routes/messages/components/thin/AudioMessage.qml</file>
         <file>routes/messages/components/thin/GifMessage.qml</file>
+        <file>routes/messages/components/thin/VoiceChatStarted.qml</file>
+        <file>routes/messages/components/thin/VoiceChatFinished.qml</file>
     </qresource>
 </RCC>

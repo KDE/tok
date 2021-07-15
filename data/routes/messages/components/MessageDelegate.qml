@@ -152,6 +152,8 @@ QQC2.Control {
                 "messageAudio": Qt.resolvedUrl((settings.thinMode ? "thin/" : "normal/") + "AudioMessage.qml"),
                 "messageVideo": Qt.resolvedUrl((settings.thinMode ? "thin/" : "normal/") + "VideoMessage.qml"),
                 "messageAnimation": Qt.resolvedUrl((settings.thinMode ? "thin/" : "normal/") + "GifMessage.qml"),
+                "messageVoiceChatStarted": Qt.resolvedUrl((settings.thinMode ? "thin/" : "normal/") + "VoiceChatStarted.qml"),
+                "messageVoiceChatEnded": Qt.resolvedUrl((settings.thinMode ? "thin/" : "normal/") + "VoiceChatFinished.qml"),
             }
             defaultCase: Qt.resolvedUrl("Unsupported.qml")
 
