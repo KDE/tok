@@ -13,62 +13,66 @@ import "qrc:/components" as Components
 Kirigami.ApplicationWindow {
     visible: false
 
-    title: i18nc("window title", "Settings")
+    title: i18nc("window title", "Preferences")
 
-    width: Kirigami.Units.gridUnit * 15
+    width: Kirigami.Units.gridUnit * 30
     height: Kirigami.Units.gridUnit * 20
 
-    Kirigami.FormLayout {
-        id: form
+    header: Kirigami.Separator {
+        anchors {
+            left: parent.left
+            right: parent.right
+        }
+    }
 
+    RowLayout {
         anchors.fill: parent
+        spacing: 0
 
-        QQC2.CheckBox {
-            text: i18nc("Checkable control to toggle between the default appearance and a more compact style", "Compact mode")
-            checked: settings.thinMode
-            onToggled: settings.thinMode = checked
-        }
-        QQC2.CheckBox {
-            text: i18nc("Checkable control to toggle between a photo background for the chat and using a solid colour", "Image background")
-            checkable: true
-            onToggled: settings.imageBackground = checked
-            checked: settings.imageBackground
-        }
-        QQC2.CheckBox {
-            text: i18nc("Checkable control to toggle viewing content underneath the window (transparent window bg)", "Window transparency")
-            checkable: true
-            onToggled: settings.transparent = checked
-            checked: settings.transparent
-        }
-        QQC2.CheckBox {
-            text: i18nc("Checkable control to toggle a system tray icon and not closing the app when X is pressed, instead using the tray icon", "Minimize to system tray")
-            checkable: true
-            onToggled: settings.userWantsSystemTray = checked
-            checked: settings.userWantsSystemTray
-        }
-        QQC2.Button {
-            text: i18nc("Button that offers a menu to change the colour scheme", "Change Color Scheme")
-            onClicked: menudo.popup()
+        QQC2.ScrollView {
+            Layout.fillHeight: true
 
-            QQC2.Menu {
-                id: menudo
+            Kirigami.Theme.inherit: false
+            Kirigami.Theme.colorSet: Kirigami.Theme.View
 
-                Repeater {
-                    model: Tok.ColorSchemer.model
-                    QQC2.MenuItem {
-                        required property int index
-                        required property string colorSchemeName
+            background: Rectangle {
+                color: Kirigami.Theme.backgroundColor
+            }
 
-                        text: colorSchemeName
+            ColumnLayout {
+                spacing: 0
 
-                        onClicked: Tok.ColorSchemer.apply(index)
-                    }
+                SidebarItem {
+                    pageName: i18n("Account")
+                    accessibleDescription: i18nc("sidebar item accessible text", "Open account settings")
+                    icon.name: "preferences-system-users"
+                    page: Qt.resolvedUrl("AccountSettings.qml")
+                }
+                SidebarItem {
+                    pageName: i18n("Appearance")
+                    accessibleDescription: i18nc("sidebar item accessible text", "Open appearance settings")
+                    icon.name: "preferences-desktop-color"
+                    page: Qt.resolvedUrl("AppearanceSettings.qml")
+                }
+                SidebarItem {
+                    pageName: i18n("Behaviour")
+                    accessibleDescription: i18nc("sidebar item accessible text", "Open app behaviour settings")
+                    icon.name: "preferences"
+                    page: Qt.resolvedUrl("BehaviourSettings.qml")
                 }
             }
         }
-        QQC2.Button {
-            text: i18n("Log out")
-            onClicked: tClient.logOut()
+        Kirigami.Separator {
+            Layout.fillHeight: true
+        }
+        Loader {
+            id: pageLoader
+            source: Qt.resolvedUrl("AppearanceSettings.qml")
+            onStatusChanged: if (this.status == Loader.Error) Qt.quit(1)
+
+            Layout.margins: Kirigami.Units.largeSpacing
+            Layout.fillWidth: true
+            Layout.fillHeight: true
         }
     }
 }

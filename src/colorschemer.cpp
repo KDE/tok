@@ -4,11 +4,18 @@
 
 #include <KColorSchemeManager>
 #include <QAbstractItemModel>
+#include <QSettings>
 
 #include "colorschemer.h"
 
 ColorSchemer::ColorSchemer(QObject* parent) : QObject(parent), c(new KColorSchemeManager(this))
 {
+    QSettings sets;
+    auto it = sets.value("color-scheme");
+    if (it.isValid()) {
+        auto scheme = it.toString();
+        c->activateScheme(c->indexForScheme(scheme));
+    }
 }
 
 ColorSchemer::~ColorSchemer()
@@ -26,6 +33,9 @@ QAbstractItemModel* ColorSchemer::model() const
 
 void ColorSchemer::apply(int idx)
 {
+    QSettings sets;
+    sets.setValue("color-scheme", c->model()->data(c->model()->index(idx, 0), Qt::DisplayRole));
+
     c->activateScheme(c->model()->index(idx, 0));
 }
 

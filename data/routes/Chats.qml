@@ -32,7 +32,7 @@ Kirigami.Page {
             QQC2.ToolButton {
                 icon.name: "settings-configure"
                 visible: Kirigami.Settings.isMobile
-                onClicked: settingsWindow.showNormal()
+                onClicked: rootRow.layers.push(Qt.resolvedUrl("qrc:/routes/settings/mobile/Settings.qml"))
             }
 
             Kirigami.SearchField {
