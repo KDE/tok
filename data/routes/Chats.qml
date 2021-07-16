@@ -261,13 +261,14 @@ Kirigami.Page {
                     text: chatData.data.mUnreadCount
                     visible: chatData.data.mUnreadCount > 0
                     padding: Kirigami.Units.smallSpacing
+                    color: Kirigami.Theme.highlightedTextColor
 
                     horizontalAlignment: Qt.AlignHCenter
 
                     Layout.minimumWidth: implicitHeight
 
                     background: Rectangle {
-                        color: Kirigami.Theme.focusColor
+                        color: Kirigami.Theme.highlightColor
                         radius: height / 2
                     }
                 }
