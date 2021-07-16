@@ -7,6 +7,7 @@ import QtQuick.Layouts 1.10
 import QtQuick.Controls 2.12 as QQC2
 import org.kde.kirigami 2.14 as Kirigami
 import org.kde.Tok 1.0 as Tok
+import QtGraphicalEffects 1.15
 
 import "qrc:/components" as GlobalComponents
 
@@ -122,11 +123,20 @@ QQC2.Control {
 
             visible: !settings.thinMode && !chatData.data.mIsChannel
 
-            HoverHandler {
+            MouseArea {
+                anchors.fill: parent
                 cursorShape: Qt.PointingHandCursor
+                onClicked: __userDataSheet.open()
             }
-            TapHandler {
-                onTapped: __userDataSheet.open()
+
+            layer.enabled: true
+            layer.effect: DropShadow {
+                cached: true
+                horizontalOffset: 0
+                verticalOffset: 0
+                radius: 4.0
+                samples: 17
+                color: "#30000000"
             }
 
             GlobalComponents.UserDataSheet { id: __userDataSheet; userID: messageData.data.authorID || "" }
