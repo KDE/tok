@@ -1,6 +1,7 @@
 # Tok
 
-KDE's convergent Telegram client.
+KDE's Telegram client, featuring a desktop and mobile version.
+Explicitly not convergent.
 
 # Building
 
@@ -17,6 +18,10 @@ CMake is required in order to utilise Td.
 # Development Group
 
 Tok's development group is at https://t.me/kdetok.
+
+# FQA
+
+Tok has frequently questioned answers available at [FQA.md](FQA.md).
 
 # Translating Tok
 
