@@ -9,6 +9,7 @@
 #include <td/telegram/td_api.h>
 
 #include "userdata.h"
+#include "photoutils.h"
 
 enum Roles {
     Name = Qt::UserRole,
@@ -55,7 +56,7 @@ QVariant UserDataModel::data(const QVariant& key, int role)
         if (userData[id]->profile_photo_ == nullptr) {
             return QVariant();
         }
-        return QString("image://telegram/%1").arg(userData[id]->profile_photo_->small_->id_);
+        return imageToURL(userData[id]->profile_photo_->small_);
     case Roles::Username:
         return QString::fromStdString(userData[id]->username_);
     }

@@ -19,6 +19,7 @@
 #include <unicode/uchar.h>
 
 #include "messagesmodel_p.h"
+#include "photoutils.h"
 
 enum Roles {
     AuthorID = Qt::UserRole,
@@ -328,7 +329,7 @@ QVariant MessagesStore::data(const QVariant& key, int role)
         if (trueI == -1) {
             return QString();
         }
-        return QString("image://telegram/%1").arg(image->photo_->sizes_[trueI]->photo_->id_);
+        return imageToURL(image->photo_->sizes_[trueI]->photo_);
     }
     case Roles::ImageCaption: {
         auto content = d->messageData[mID]->content_.get();
@@ -559,7 +560,7 @@ QVariant MessagesStore::data(const QVariant& key, int role)
     case Roles::VideoThumbnail: {
         auto it = static_cast<TDApi::messageVideo*>(d->messageData[mID]->content_.get());
 
-        return QString("image://telegram/%1").arg(it->video_->thumbnail_->file_->id_);
+        return imageToURL(it->video_->thumbnail_->file_);
     }
 
     case Roles::VideoCaption: {
@@ -651,7 +652,7 @@ QVariant MessagesStore::data(const QVariant& key, int role)
             return QString();
         }
 
-        return QString("image://telegram/%1").arg(it->animation_->thumbnail_->file_->id_);
+        return imageToURL(it->animation_->thumbnail_->file_);
     }
 
     }

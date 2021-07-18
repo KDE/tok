@@ -7,6 +7,7 @@
 #include "messagesmodel.h"
 #include "chatsstore_p.h"
 #include "overloader.h"
+#include "photoutils.h"
 
 enum Roles {
     Title = Qt::UserRole,
@@ -131,7 +132,7 @@ QVariant ChatsStore::data(const QVariant& key, int role)
         if (d->chatData[chatID]->photo_ == nullptr) {
             return QString();
         }
-        return QString("image://telegram/%1").arg(d->chatData[chatID]->photo_->big_->id_);
+        return imageToURL(d->chatData[chatID]->photo_->big_);
     }
     case Roles::LastMessageID: {
         if (!d->chatData[chatID]->last_message_) {
