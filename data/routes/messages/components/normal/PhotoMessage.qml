@@ -41,9 +41,31 @@ QQC2.Control {
             id: image
 
             source: imageData.data.imageURL
+            sourceSize: imageData.data.imageDimensions
 
-            readonly property real ratio: width / implicitWidth
-            Layout.preferredHeight: image.implicitHeight * image.ratio
+            Rectangle {
+                color: Kirigami.Theme.backgroundColor
+                anchors.fill: image
+                visible: image.status !== Image.Ready
+
+                Loader {
+                    anchors.fill: parent
+                    active: image.status !== Image.Ready
+                    sourceComponent: Image {
+                        anchors.fill: parent
+                        source: imageData.data.imageMinithumbnail
+
+                        layer.enabled: true
+                        layer.effect: FastBlur {
+                            cached: true
+                            radius: 32
+                        }
+                    }
+                }
+            }
+
+            readonly property real ratio: width / sourceSize.width
+            Layout.preferredHeight: sourceSize.height * image.ratio
             Layout.fillWidth: true
 
             Accessible.name: i18n("Photo message.")
@@ -71,6 +93,8 @@ QQC2.Control {
                 shape: QtObject {
                     required property string imageURL
                     required property string imageCaption
+                    required property size imageDimensions
+                    required property string imageMinithumbnail
                 }
             }
 

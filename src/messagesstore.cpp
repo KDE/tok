@@ -49,6 +49,8 @@ enum Roles {
     // Photo messages
     ImageURL,
     ImageCaption,
+    ImageDimensions,
+    ImageMinithumbnail,
 
     // FileMessages
     FileName,
@@ -342,6 +344,48 @@ QVariant MessagesStore::data(const QVariant& key, int role)
             return QString();
         }
         return QString::fromStdString(image->caption_->text_);
+    }
+    case Roles::ImageDimensions: {
+        auto content = d->messageData[mID]->content_.get();
+        if (content->get_id() != TDApi::messagePhoto::ID) {
+            return QSize();
+        }
+
+        auto image = static_cast<TDApi::messagePhoto*>(content);
+        int sz = 0;
+        int trueI = -1;
+        int i = 0;
+        for (auto& size : image->photo_->sizes_) {
+            auto thisSz = size->height_ * size->width_;
+            if (sz < thisSz) {
+                sz = thisSz;
+                trueI = i;
+            }
+            i++;
+        }
+        if (trueI == -1) {
+            return QSize();
+        }
+
+        const auto& photo = image->photo_->sizes_[trueI];
+        return QSize(photo->width_, photo->height_);
+    }
+    case Roles::ImageMinithumbnail: {
+        auto content = d->messageData[mID]->content_.get();
+        if (content->get_id() != TDApi::messagePhoto::ID) {
+            return QVariant();
+        }
+
+        auto image = static_cast<TDApi::messagePhoto*>(content);
+        if (image->photo_->minithumbnail_ == nullptr) {
+            return QVariant();
+        }
+
+        QString img("data:image/jpg;base64,");
+        auto ba = QByteArray::fromStdString(image->photo_->minithumbnail_->data_);
+        img.append(QString::fromLatin1(ba.toBase64().data()));
+
+        return img;
     }
     case Roles::FileCaption: {
         auto content = d->messageData[mID]->content_.get();
@@ -748,6 +792,8 @@ QHash<int, QByteArray> MessagesStore::roleNames()
 
     roles[Roles::ImageURL] = "imageURL";
     roles[Roles::ImageCaption] = "imageCaption";
+    roles[Roles::ImageDimensions] = "imageDimensions";
+    roles[Roles::ImageMinithumbnail] = "imageMinithumbnail";
 
     roles[Roles::FileCaption] = "fileCaption";
     roles[Roles::FileName] = "fileName";

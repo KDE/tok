@@ -18,8 +18,28 @@ ColumnLayout {
         id: image
 
         source: imageData.data.imageURL
+        sourceSize: imageData.data.imageDimensions
 
-        readonly property real ratio: width / implicitWidth
+        Rectangle {
+            color: Kirigami.Theme.backgroundColor
+            anchors.fill: image
+            visible: image.status !== Image.Ready
+
+            Loader {
+                anchors.fill: parent
+                active: image.status !== Image.Ready
+                sourceComponent: Image {
+                    anchors.fill: parent
+                    source: imageData.data.imageMinithumbnail
+
+                    layer.enabled: true
+                    layer.effect: FastBlur {
+                        cached: true
+                        radius: 32
+                    }
+                }
+            }
+        }
 
         Accessible.name: i18n("Photo message.")
 
@@ -46,6 +66,8 @@ ColumnLayout {
             shape: QtObject {
                 required property string imageURL
                 required property string imageCaption
+                required property size imageDimensions
+                required property string imageMinithumbnail
             }
         }
 
@@ -84,8 +106,9 @@ ColumnLayout {
             }
         }
 
-        Layout.preferredHeight: implicitHeight * ratio
-        Layout.maximumWidth: implicitWidth
+        readonly property real ratio: width / sourceSize.width
+        Layout.preferredHeight: sourceSize.height * ratio
+        Layout.maximumWidth: sourceSize.width
         Layout.fillWidth: true
     }
     TextEdit {
