@@ -263,6 +263,11 @@ QQC2.ToolBar {
                         messagesViewRoot.uploadPath = clipboard.urls[0]
                         composeRow.send()
                         return true
+                    } else if (clipboard.hasImage) {
+                        messagesViewRoot.isPhoto = true
+                        messagesViewRoot.uploadPath = clipboard.imageUrl
+                        composeRow.send()
+                        return true
                     }
                 }
 

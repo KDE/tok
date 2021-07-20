@@ -4,6 +4,7 @@
 #include <QClipboard>
 #include <QGuiApplication>
 #include <QKeyEvent>
+#include <QImage>
 
 CopyInterceptor::CopyInterceptor(QObject* parent) : d(new Private)
 {
@@ -36,10 +37,22 @@ QJSValue CopyInterceptor::Private::generateJSValueFromClipboard()
         ret.setProperty("urls", paste.engine()->toScriptValue(QUrl::toStringList(mimedata->urls())));
     }
 
-    ret.setProperty("hasImage", mimedata->hasImage());
     if (mimedata->hasImage()) {
-        ret.setProperty("imageData", paste.engine()->toScriptValue(mimedata->imageData()));
+        QTemporaryFile fi;
+        if (!fi.open()) {
+            goto notImage;
+        }
+
+        fi.setAutoRemove(false);
+        fi.close();
+
+        auto img = mimedata->imageData().value<QImage>();
+        img.save(fi.fileName(), "png", 100);
+
+        ret.setProperty("hasImage", true);
+        ret.setProperty("imageUrl", paste.engine()->toScriptValue(QUrl::fromLocalFile(fi.fileName())));
     }
+notImage:
 
     ret.setProperty("hasColor", mimedata->hasColor());
     if (mimedata->hasColor()) {
