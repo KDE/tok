@@ -8,6 +8,11 @@
 #include <QFileDialog>
 #include <QStandardPaths>
 
+#include <KWayland/Client/connection_thread.h>
+#include <KWayland/Client/plasmashell.h>
+#include <KWayland/Client/registry.h>
+#include <KWayland/Client/surface.h>
+
 #include "utilities.h"
 
 bool Utilities::isRTL(const QString& str)
@@ -88,6 +93,62 @@ QIviPendingReplyBase Utilities::pickFile(const QString& title, const QString& st
     dia->open();
 
     return it;
+}
+
+static KWayland::Client::Registry* getRegistry()
+{
+    static QPointer<KWayland::Client::Registry> m_registry = {};
+    if (m_registry) {
+        return m_registry;
+    }
+
+    KWayland::Client::ConnectionThread *connection = KWayland::Client::ConnectionThread::fromApplication(qApp);
+    if (!connection) {
+        return nullptr;
+    }
+
+    m_registry = new KWayland::Client::Registry(qApp);
+    m_registry->create(connection);
+    m_registry->setup();
+
+    connection->roundtrip();
+
+    return m_registry;
+}
+
+static KWayland::Client::PlasmaShell *getPlasmaIface()
+{
+    auto reg = getRegistry();
+    static QPointer<KWayland::Client::PlasmaShell> pshell = {};
+
+    if (!pshell && reg) {
+        const KWayland::Client::Registry::AnnouncedInterface interface = reg->interface(KWayland::Client::Registry::Interface::PlasmaShell);
+
+        if (interface.name == 0) {
+            return nullptr;
+        }
+
+        pshell = reg->createPlasmaShell(interface.name, interface.version, qApp);
+
+        QObject::connect(pshell, &KWayland::Client::PlasmaShell::removed, pshell, []() {
+            pshell->deleteLater();
+        });
+    }
+
+    return pshell;
+}
+
+void Utilities::setWindowPosition(QQuickWindow* win, int x, int y)
+{
+    auto surf = KWayland::Client::Surface::fromWindow(win);
+    if (!surf) {
+        return;
+    }
+    auto psurf = getPlasmaIface()->createSurface(surf);
+    if (!psurf) {
+        return;
+    }
+    psurf->setPosition(QPoint(x, y));
 }
 
 QString Utilities::humanSize(int size)

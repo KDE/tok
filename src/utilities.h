@@ -16,6 +16,7 @@ class Utilities : public QObject
 
 public:
 
+    Q_INVOKABLE void setWindowPosition(QQuickWindow* win, int x, int y);
     Q_INVOKABLE bool isRTL(const QString& str);
     Q_INVOKABLE void setBlur(QQuickItem* item, bool doit);
     Q_INVOKABLE QString humanSize(int size);
