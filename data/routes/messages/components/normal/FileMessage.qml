@@ -188,8 +188,6 @@ QQC2.Control {
                         text: fileData.data.fileName
                         wrapMode: Text.Wrap
 
-                        readonly property string paddingT: " ".repeat(Math.ceil(_background.timestamp.implicitWidth / _background.dummy.implicitWidth)) + "⠀"
-
                         Layout.fillWidth: true
                     }
                     QQC2.Label {
@@ -220,11 +218,9 @@ QQC2.Control {
             Layout.fillWidth: true
         }
         QQC2.Label {
-            text: fileData.data.fileCaption + paddingT
+            text: fileData.data.fileCaption + _background.textPadding
             wrapMode: Text.Wrap
             visible: fileData.data.fileCaption != ""
-
-            readonly property string paddingT: " ".repeat(Math.ceil(_background.timestamp.implicitWidth / _background.dummy.implicitWidth)) + "⠀"
 
             Layout.fillWidth: true
         }

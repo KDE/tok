@@ -27,6 +27,7 @@ enum Roles {
     Kind,
     Timestamp,
     InReplyTo,
+    SendingState,
 
     // web pages
     HasWebPage,
@@ -298,6 +299,24 @@ QVariant MessagesStore::data(const QVariant& key, int role)
     };
 
     switch (Roles(role)) {
+    case Roles::SendingState: {
+        auto& content = d->messageData[mID];
+        if (content->sending_state_ == nullptr) {
+            return QString("sent");
+        }
+        match (content->sending_state_)
+            handleCase(TDApi::messageSendingStatePending, p)
+                Q_UNUSED(p)
+
+                return QString("pending");
+            endhandle
+            handleCase(TDApi::messageSendingStateFailed, p)
+                Q_UNUSED(p)
+
+                return QString("failed");
+            endhandle
+        endmatch
+    }
     case Roles::InReplyTo:
         return QString::number(d->messageData[mID]->reply_to_message_id_);
     case Roles::Timestamp: {
@@ -784,6 +803,7 @@ QHash<int, QByteArray> MessagesStore::roleNames()
     roles[Roles::Kind] = "kind";
     roles[Roles::Timestamp] = "timestamp";
     roles[Roles::InReplyTo] = "inReplyTo";
+    roles[Roles::SendingState] = "sendingState";
 
     roles[Roles::CanDeleteForSelf] = "canDeleteForSelf";
     roles[Roles::CanDeleteForOthers] = "canDeleteForOthers";

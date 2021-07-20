@@ -58,7 +58,7 @@ QQC2.Control {
         ReplyBlock {}
         TextEdit {
             id: textEdit
-            text: textData.data.content + paddingT
+            text: textData.data.content + _background.textPadding
 
             Connections {
                 id: conns
@@ -73,8 +73,6 @@ QQC2.Control {
             readonly property var isEmoji: /^(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])+$/
             readonly property bool isEmojiOnly: isEmoji.test(textData.data.content)
 
-            readonly property string paddingT: (web.visible ? "" : " ".repeat(Math.ceil(_background.timestamp.implicitWidth / _background.dummy.implicitWidth)) + "⠀")
-
             readOnly: true
             selectByMouse: !Kirigami.Settings.isMobile
             wrapMode: Text.Wrap
@@ -84,7 +82,7 @@ QQC2.Control {
             selectionColor: Kirigami.Theme.highlightColor
 
             function clamp() {
-                const l = length - paddingT.length
+                const l = length - _background.textPadding.length
                 if (selectionEnd >= l && selectionStart >= l) {
                     select(0, 0)
                 } else if (selectionEnd >= l) {

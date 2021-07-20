@@ -137,7 +137,7 @@ QQC2.Control {
         }
         TextEdit {
             id: textEdit
-            text: imageData.data.imageCaption + paddingT
+            text: imageData.data.imageCaption + _background.textPadding
             visible: imageData.data.imageCaption != ""
 
             topPadding: Kirigami.Units.smallSpacing
@@ -155,8 +155,6 @@ QQC2.Control {
             }
             Component.onCompleted: conns.onImageCaptionChanged()
 
-            readonly property string paddingT: " ".repeat(Math.ceil(_background.timestamp.implicitWidth / _background.dummy.implicitWidth)) + "⠀"
-
             readOnly: true
             selectByMouse: !Kirigami.Settings.isMobile
             wrapMode: Text.Wrap
@@ -166,7 +164,7 @@ QQC2.Control {
             selectionColor: Kirigami.Theme.highlightColor
 
             function clamp() {
-                const l = length - paddingT.length
+                const l = length - _background.textPadding.length
                 if (selectionEnd >= l && selectionStart >= l) {
                     select(0, 0)
                 } else if (selectionEnd >= l) {

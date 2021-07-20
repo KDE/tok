@@ -193,6 +193,7 @@ QQC2.Control {
             required property string authorID
             required property string kind
             required property string timestamp
+            required property string sendingState
 
             required property bool canDeleteForSelf
             required property bool canDeleteForOthers

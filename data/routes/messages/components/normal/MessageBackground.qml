@@ -13,8 +13,8 @@ Item {
     id: backgroundRoot
 
     required property int tailSize
-    property alias dummy: dummy
-    property alias timestamp: timestamp
+    property alias timestamp: _row
+    readonly property string textPadding: " ".repeat(Math.ceil(_row.width / dummy.implicitWidth)) + "⠀"
 
     clip: true
 
@@ -86,20 +86,51 @@ Item {
         anchors.fill: parent
         anchors.leftMargin: backgroundRoot.tailSize
     }
-    QQC2.Label {
-        id: timestamp
-        text: messageData.data.timestamp
-        opacity: 0.5
+    Row {
+        id: _row
+        spacing: 2
 
-        font.pointSize: -1
-        font.pixelSize: Kirigami.Units.gridUnit * (2/3)
+        LayoutMirroring.enabled: {
+            try {
+                return Tok.Utils.isRTL(textData.data.content)
+            } catch (e) {
+                return Qt.application.layoutDirection == Qt.RightToLeft
+            }
+        }
         anchors {
             bottom: parent.bottom
             right: mainBG.right
             margins: Kirigami.Units.smallSpacing
             rightMargin: Kirigami.Units.largeSpacing+2
         }
-        LayoutMirroring.enabled: Tok.Utils.isRTL(textData.data.content)
+        Kirigami.Icon {
+            source: {
+                const states = {
+                    "pending": "clock",
+                    "failed": "emblem-error",
+                    "sent": "emblem-ok-symbolic",
+                }
+                return states[messageData.data.sendingState]
+            }
+
+            width: 16
+            height: 16
+            opacity: 0.5
+
+            visible: messageData.data.authorID === tClient.ownID
+
+            anchors {
+                bottom: timestamp.bottom
+            }
+        }
+        QQC2.Label {
+            id: timestamp
+            text: messageData.data.timestamp
+            opacity: 0.5
+
+            font.pointSize: -1
+            font.pixelSize: Kirigami.Units.gridUnit * (2/3)
+        }
     }
     QQC2.Label {
         id: dummy

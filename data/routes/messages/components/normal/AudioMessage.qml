@@ -172,11 +172,9 @@ QQC2.Control {
             Layout.fillWidth: true
         }
         QQC2.Label {
-            text: audioData.data.audioCaption + paddingT
+            text: audioData.data.audioCaption + _background.textPadding
             wrapMode: Text.Wrap
             visible: audioData.data.audioCaption != ""
-
-            readonly property string paddingT: " ".repeat(Math.ceil(_background.timestamp.implicitWidth / _background.dummy.implicitWidth)) + "⠀"
 
             Layout.fillWidth: true
         }
