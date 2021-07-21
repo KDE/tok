@@ -94,3 +94,56 @@ QString Utilities::humanSize(int size)
 {
     return QLocale().formattedDataSize(size, 1);
 }
+
+#include <QMimeDatabase>
+#include <QMimeType>
+#include <QImageReader>
+
+QJsonObject Utilities::fileData(const QString& url)
+{
+    QFileInfo fi(QUrl(url).toLocalFile());
+
+    QMimeDatabase db;
+    QMimeType mime = db.mimeTypeForFile(url);
+
+    QJsonObject obj;
+    obj["size"] = fi.size();
+    obj["name"] = fi.baseName();
+    obj["type"] = typeOfFile(url);
+    obj["icon"] = mime.iconName();
+
+    return obj;
+}
+
+QString Utilities::typeOfFile(const QUrl& url)
+{
+    QMimeDatabase db;
+    QMimeType mime = db.mimeTypeForFile(url.toLocalFile());
+
+    if (mime.inherits("video/mp4")) {
+        return "video";
+    } else if (mime.inherits("image/jpeg") || mime.inherits("image/png") || mime.inherits("image/png")) {
+        QImageReader reader(url.toLocalFile());
+
+        auto size = reader.size();
+        auto width = size.width(), height = size.height();
+        if (width+height > 10000) {
+            goto breakout;
+        }
+        if (width > height*20 or height > width*20) {
+            goto breakout;
+        }
+
+        QFile it(url.toLocalFile());
+        if (it.size() > 10000000) {
+            goto breakout;
+        }
+
+        return "image";
+    } else if (mime.inherits("audio/mpeg")) {
+        return "audio";
+    }
+
+breakout:
+    return "file";
+}

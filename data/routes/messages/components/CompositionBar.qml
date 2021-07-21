@@ -159,9 +159,10 @@ QQC2.ToolBar {
                         composeRow.send()
                     })
                 }
+                visible: Kirigami.Settings.isMobile
             }
             QQC2.ToolButton {
-                Accessible.name: i18n("Upload file")
+                Accessible.name: i18n("Upload media")
                 icon.name: "mail-attachment"
                 onClicked: {
                     messagesViewRoot.isPhoto = false
@@ -170,6 +171,17 @@ QQC2.ToolBar {
                         composeRow.send()
                     })
                 }
+                visible: Kirigami.Settings.isMobile
+            }
+
+            QQC2.ToolButton {
+                Accessible.name: i18n("Attach file")
+                icon.name: "mail-attachment"
+                onClicked: {
+                    desktopPicker.chatID = messagesViewRoot.chatID
+                    desktopPicker.pick()
+                }
+                visible: !Kirigami.Settings.isMobile
             }
 
             TextEdit {
@@ -260,13 +272,16 @@ QQC2.ToolBar {
 
                 Tok.Clipboard.paste: function(clipboard) {
                     if (clipboard.hasUrls) {
-                        messagesViewRoot.uploadPath = clipboard.urls[0]
-                        composeRow.send()
+                        desktopPicker.chatID = messagesViewRoot.chatID
+                        desktopPicker.source = clipboard.urls[0]
+                        desktopPicker.open()
+
                         return true
                     } else if (clipboard.hasImage) {
                         messagesViewRoot.isPhoto = true
                         messagesViewRoot.uploadPath = clipboard.imageUrl
                         composeRow.send()
+
                         return true
                     }
                 }

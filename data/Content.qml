@@ -20,6 +20,8 @@ import "routes/messages" as MessagesRoutes
 import "qrc:/components" as Components
 import "qrc:/routes/settings" as SettingsComponents
 
+import "qrc:/components/upload/desktop" as Desktop
+
 Kirigami.PageRow {
     id: rootRow
 
@@ -238,6 +240,9 @@ Kirigami.PageRow {
 
     SettingsComponents.Settings {
         id: settingsWindow
+    }
+    Desktop.UploadDialog {
+        id: desktopPicker
     }
 
     QQC2.Popup {

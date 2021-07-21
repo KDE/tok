@@ -296,6 +296,18 @@ void MessagesModel::send(SendData data)
         message_content->disable_content_type_detection_ = true;
 
         send_message->input_message_content_ = std::move(message_content);
+    } else if (auto it = std::get_if<SendData::Video>(&data.contents)) {
+        auto message_content = TDApi::make_object<TDApi::inputMessageVideo>();
+        message_content->video_ = as_local_file(it->p);
+        message_content->caption_ = std::move(it->s);
+
+        send_message->input_message_content_ = std::move(message_content);
+    } else if (auto it = std::get_if<SendData::Audio>(&data.contents)) {
+        auto message_content = TDApi::make_object<TDApi::inputMessageAudio>();
+        message_content->audio_ = as_local_file(it->p);
+        message_content->caption_ = std::move(it->s);
+
+        send_message->input_message_content_ = std::move(message_content);
     }
 
     c->callP<TDApi::sendMessage>(
@@ -310,6 +322,29 @@ void MessagesModel::send(QQuickTextDocument* doku, const QString& inReplyTo)
         .contents = SendData::Text {format(doku)},
         .replyToID = inReplyTo.toLongLong()
     });
+}
+
+void MessagesModel::sendAttachment(QQuickTextDocument* doku, QUrl url, const QString& kind)
+{
+    if (kind == "video") {
+        send(SendData {
+            .contents = SendData::Video {format(doku), url},
+        });
+    } else if (kind == "image") {
+        send(SendData {
+            .contents = SendData::Photo {format(doku), url},
+        });
+    } else if (kind == "audio") {
+        send(SendData {
+            .contents = SendData::Audio {format(doku), url},
+        });
+    } else if (kind == "file") {
+        send(SendData {
+            .contents = SendData::File {format(doku), url},
+        });
+    } else {
+        Q_UNREACHABLE();
+    }
 }
 
 void MessagesModel::sendFile(QQuickTextDocument* doku, QUrl url, const QString& inReplyTo)

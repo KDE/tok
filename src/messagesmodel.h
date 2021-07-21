@@ -73,9 +73,11 @@ public:
 
     QHash<int,QByteArray> roleNames() const override;
 
-    Q_INVOKABLE void send(QQuickTextDocument* doku, const QString& inReplyTo);
-    Q_INVOKABLE void sendFile(QQuickTextDocument* doku, QUrl url, const QString& inReplyTo);
-    Q_INVOKABLE void sendPhoto(QQuickTextDocument* doku, QUrl url, const QString& inReplyTo);
+    Q_INVOKABLE [[deprecated]] void send(QQuickTextDocument* doku, const QString& inReplyTo);
+    Q_INVOKABLE [[deprecated]] void sendFile(QQuickTextDocument* doku, QUrl url, const QString& inReplyTo);
+    Q_INVOKABLE [[deprecated]] void sendPhoto(QQuickTextDocument* doku, QUrl url, const QString& inReplyTo);
+
+    Q_INVOKABLE void sendAttachment(QQuickTextDocument* doku, QUrl url, const QString& kind);
 
     Q_INVOKABLE void edit(QQuickTextDocument* doku, const QString& messageID);
 

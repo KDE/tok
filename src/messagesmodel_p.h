@@ -25,7 +25,9 @@ struct MessagesModel::SendData
     struct Text { TDApi::object_ptr<TDApi::formattedText> s; };
     struct Photo { TDApi::object_ptr<TDApi::formattedText> s; QUrl p; };
     struct File { TDApi::object_ptr<TDApi::formattedText> s; QUrl p; };
+    struct Video { TDApi::object_ptr<TDApi::formattedText> s; QUrl p; };
+    struct Audio { TDApi::object_ptr<TDApi::formattedText> s; QUrl p; };
 
-    std::variant<Text,Photo,File> contents;
+    std::variant<Text,Photo,File,Video,Audio> contents;
     TDApi::int53 replyToID;
 };
