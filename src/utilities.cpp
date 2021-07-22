@@ -115,6 +115,14 @@ QJsonObject Utilities::fileData(const QString& url)
     return obj;
 }
 
+QString Utilities::fileIcon(const QUrl &url)
+{
+    QMimeDatabase db;
+    QMimeType mime = db.mimeTypeForFile(url.toLocalFile());
+
+    return mime.iconName();
+}
+
 QString Utilities::typeOfFile(const QUrl& url)
 {
     QMimeDatabase db;

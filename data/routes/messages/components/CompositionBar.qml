@@ -150,38 +150,17 @@ QQC2.ToolBar {
             Layout.fillWidth: true
 
             QQC2.ToolButton {
-                Accessible.name: i18n("Upload photo")
-                icon.name: "photo"
-                onClicked: {
-                    messagesViewRoot.isPhoto = true
-                    Tok.Utils.pickFile(i18nc("Dialog title", "Upload photo"), "photo").then((url) => {
-                        messagesViewRoot.uploadPath = url
-                        composeRow.send()
-                    })
-                }
-                visible: Kirigami.Settings.isMobile
-            }
-            QQC2.ToolButton {
-                Accessible.name: i18n("Upload media")
-                icon.name: "mail-attachment"
-                onClicked: {
-                    messagesViewRoot.isPhoto = false
-                    Tok.Utils.pickFile(i18nc("Dialog title", "Upload file"), "file").then((url) => {
-                        messagesViewRoot.uploadPath = url
-                        composeRow.send()
-                    })
-                }
-                visible: Kirigami.Settings.isMobile
-            }
-
-            QQC2.ToolButton {
                 Accessible.name: i18n("Attach file")
                 icon.name: "mail-attachment"
                 onClicked: {
-                    desktopPicker.chatID = messagesViewRoot.chatID
-                    desktopPicker.pick()
+                    if (Kirigami.Settings.isMobile) {
+                        mobilePicker.chatID = messagesViewRoot.chatID
+                        mobilePicker.pick()
+                    } else {
+                        desktopPicker.chatID = messagesViewRoot.chatID
+                        desktopPicker.pick()
+                    }
                 }
-                visible: !Kirigami.Settings.isMobile
             }
 
             TextEdit {
