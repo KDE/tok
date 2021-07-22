@@ -21,6 +21,7 @@ import "qrc:/components" as Components
 import "qrc:/routes/settings" as SettingsComponents
 
 import "qrc:/components/upload/desktop" as Desktop
+import "qrc:/components/upload/mobile" as Mobile
 
 Kirigami.PageRow {
     id: rootRow
@@ -243,6 +244,9 @@ Kirigami.PageRow {
     }
     Desktop.UploadDialog {
         id: desktopPicker
+    }
+    Mobile.UploadDialog {
+        id: mobilePicker
     }
 
     QQC2.Popup {

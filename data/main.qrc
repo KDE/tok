@@ -30,8 +30,9 @@
         <file>components/ResponsiveMenuItem.qml</file>
         <file>components/Sheet.qml</file>
 
+        <file>components/upload/RichTextArea.qml</file>
         <file>components/upload/desktop/UploadDialog.qml</file>
-        <file>components/upload/desktop/RichTextArea.qml</file>
+        <file>components/upload/mobile/UploadDialog.qml</file>
 
         <file>routes/Chats.qml</file>
         <file>routes/chats components/QuickView.qml</file>

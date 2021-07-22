@@ -9,6 +9,7 @@ import org.kde.kirigami 2.15 as Kirigami
 import QtQuick.Dialogs 1.3
 import "qrc:/components" as GlobalComponents
 import QtMultimedia 5.15
+import "qrc:/components/upload" as UploadComponents
 
 Dialog {
     id: _uploadDialogDesktop
@@ -104,7 +105,7 @@ contentItem: QQC2.Control {
                 checked: true
             }
 
-            RichTextArea { id: richTextArea }
+            UploadComponents.RichTextArea { id: richTextArea }
             ButtonsRow {
                 textArea: richTextArea
                 forceFile: !compressionBox.checked
@@ -144,7 +145,7 @@ contentItem: QQC2.Control {
                 }
             }
 
-            RichTextArea { id: richTextArea }
+            UploadComponents.RichTextArea { id: richTextArea }
             ButtonsRow { textArea: richTextArea }
         }
     }
@@ -169,7 +170,7 @@ contentItem: QQC2.Control {
                 }
             }
 
-            RichTextArea { id: richTextArea }
+            UploadComponents.RichTextArea { id: richTextArea }
             ButtonsRow { textArea: richTextArea }
         }
     }
@@ -194,7 +195,7 @@ contentItem: QQC2.Control {
                 }
             }
 
-            RichTextArea { id: richTextArea }
+            UploadComponents.RichTextArea { id: richTextArea }
             ButtonsRow { textArea: richTextArea }
         }
     }
