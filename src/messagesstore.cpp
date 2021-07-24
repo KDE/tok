@@ -227,36 +227,53 @@ void MessagesStore::format(const QVariant &key, QQuickTextDocument* doc, QQuickI
         case textEntityTypeCode::ID: {
             const QFont fixedFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
             cfmt.setFont(fixedFont);
+            break;
+        }
+        case textEntityTypeMention::ID: {
+            cfmt.setForeground(linkColor);
+            cfmt.setAnchor(true);
+            cfmt.setAnchorHref(curs.selectedText());
+            break;
+        }
+        case textEntityTypeMentionName::ID: {
+            auto it = static_cast<const textEntityTypeMentionName*>(ent->type_.get());
+
+            cfmt.setForeground(linkColor);
+            cfmt.setAnchor(true);
+            cfmt.setAnchorHref(QString("@%1").arg(it->user_id_));
+            break;
         }
         }
+
         curs.setCharFormat(cfmt);
-    }
 
-    QTextBoundaryFinder finder(QTextBoundaryFinder::Grapheme, doku->toRawText());
-    int pos = 0;
-    while (finder.toNextBoundary() != -1) {
-        auto range = finder.position();
+        QTextBoundaryFinder finder(QTextBoundaryFinder::Grapheme, doku->toRawText());
+        int pos = 0;
+        while (finder.toNextBoundary() != -1) {
+            auto range = finder.position();
 
-        auto first = doku->toRawText().mid(pos, range-pos).toUcs4()[0];
+            auto first = doku->toRawText().mid(pos, range-pos).toUcs4()[0];
 
-        if (u_hasBinaryProperty(first, UCHAR_EMOJI_PRESENTATION)) {
-            curs.setPosition(pos, QTextCursor::MoveAnchor);
-            curs.setPosition(range, QTextCursor::KeepAnchor);
+            if (u_hasBinaryProperty(first, UCHAR_EMOJI_PRESENTATION)) {
+                curs.setPosition(pos, QTextCursor::MoveAnchor);
+                curs.setPosition(range, QTextCursor::KeepAnchor);
 
-            QTextCharFormat cfmt;
-            auto font = QGuiApplication::font();
-            font.setFamily("emoji");
-            if (emojiOnly) {
-                font.setPointSize(font.pointSize()*8);
-            } else {
-                font.setPointSizeF(font.pointSizeF()*1.2);
+                QTextCharFormat cfmt;
+                auto font = QGuiApplication::font();
+                font.setFamily("emoji");
+                if (emojiOnly) {
+                    font.setPointSize(font.pointSize()*8);
+                } else {
+                    font.setPointSizeF(font.pointSizeF()*1.2);
+                }
+                cfmt.setFont(font);
+
+                curs.setCharFormat(cfmt);
             }
-            cfmt.setFont(font);
 
-            curs.setCharFormat(cfmt);
+            pos = range;
         }
 
-        pos = range;
     }
 
     return;

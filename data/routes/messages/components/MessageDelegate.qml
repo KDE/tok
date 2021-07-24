@@ -126,7 +126,10 @@ QQC2.Control {
             MouseArea {
                 anchors.fill: parent
                 cursorShape: Qt.PointingHandCursor
-                onClicked: __userDataSheet.open()
+                onClicked: {
+                    globalUserDataSheet.userID = messageData.data.authorID
+                    globalUserDataSheet.open()
+                }
             }
 
             layer.enabled: true
@@ -138,8 +141,6 @@ QQC2.Control {
                 samples: 17
                 color: "#30000000"
             }
-
-            GlobalComponents.UserDataSheet { id: __userDataSheet; userID: messageData.data.authorID || "" }
 
             Layout.alignment: Qt.AlignBottom
             Layout.leftMargin: Kirigami.Units.largeSpacing

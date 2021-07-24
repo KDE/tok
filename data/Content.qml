@@ -248,6 +248,7 @@ Kirigami.PageRow {
     Mobile.UploadDialog {
         id: mobilePicker
     }
+    Components.UserDataSheet { id: globalUserDataSheet; userID: "" }
 
     QQC2.Popup {
         id: deleteDialog

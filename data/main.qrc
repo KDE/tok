@@ -63,6 +63,8 @@
         <file>routes/messages/components/WebPageBlock.qml</file>
         <file>routes/messages/components/MentionBar.qml</file>
 
+        <file>routes/messages/components/link_activation.mjs</file>
+
         <file>routes/messages/components/MessageDelegate.qml</file>
         <file>routes/messages/components/Unsupported.qml</file>
 

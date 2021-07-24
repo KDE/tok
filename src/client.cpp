@@ -70,6 +70,44 @@ void Client::enterPhoneNumber(const QString& phoneNumber)
     d->enterPhoneNumber(phoneNumber);
 }
 
+QIviPendingReplyBase Client::searchPublicChat(const QString& username)
+{
+    QIviPendingReply<QJsonObject> data;
+
+    call<TDApi::searchPublicChat>(
+        [data](TDApi::searchPublicChat::ReturnType r) mutable {
+            using namespace TDApi;
+
+            QJsonObject it;
+            it["id"] = QString::number(r->id_);
+
+            match (r->type_)
+                handleCase(chatTypeBasicGroup, basic)
+                    it["type"] = "basicgroup";
+                    it["chatID"] = QString::number(basic->basic_group_id_);
+                endhandle
+                handleCase(chatTypeSupergroup, supergroup)
+                    it["type"] = "supergroup";
+                    it["chatID"] = QString::number(supergroup->supergroup_id_);
+                endhandle
+                handleCase(chatTypeSecret, secret)
+                    it["type"] = "secret";
+                    it["chatID"] = QString::number(secret->secret_chat_id_);
+                endhandle
+                handleCase(chatTypePrivate, priv)
+                    it["type"] = "private";
+                    it["chatID"] = QString::number(priv->user_id_);
+                endhandle
+            endmatch
+
+            data.setSuccess(it);
+        },
+        username.toStdString()
+    );
+
+    return data;
+}
+
 QString Client::ownID() const
 {
     return QString::number(d->m_ownID);

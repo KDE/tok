@@ -9,6 +9,7 @@ import org.kde.kirigami 2.14 as Kirigami
 import org.kde.Tok 1.0 as Tok
 
 import "../" as Shared
+import "../link_activation.mjs" as LinkActivation
 
 QQC2.Control {
     id: textMessageRoot
@@ -76,9 +77,7 @@ QQC2.Control {
             selectedTextColor: Kirigami.Theme.highlightedTextColor
             selectionColor: Kirigami.Theme.highlightColor
 
-            onLinkActivated: (mu) => {
-                Qt.openUrlExternally(mu)
-            }
+            onLinkActivated: (mu) => LinkActivation.handle(mu, globalUserDataSheet, tClient)
 
             HoverHandler {
                 acceptedButtons: Qt.NoButton
