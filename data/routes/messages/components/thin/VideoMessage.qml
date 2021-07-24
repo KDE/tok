@@ -6,6 +6,7 @@ import org.kde.kirigami 2.12 as Kirigami
 import org.kde.Tok 1.0 as Tok
 
 import "qrc:/components" as Components
+import "../link_activation.mjs" as LinkActivation
 
 ColumnLayout {
     Layout.leftMargin: Kirigami.Units.largeSpacing
@@ -129,9 +130,7 @@ ColumnLayout {
         selectedTextColor: Kirigami.Theme.highlightedTextColor
         selectionColor: Kirigami.Theme.highlightColor
 
-        onLinkActivated: (mu) => {
-            Qt.openUrlExternally(mu)
-        }
+        onLinkActivated: (mu) => LinkActivation.handle(mu, globalUserDataSheet, tClient)
 
         HoverHandler {
             acceptedButtons: Qt.NoButton

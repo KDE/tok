@@ -7,6 +7,7 @@ import QtMultimedia 5.15
 import org.kde.Tok 1.0 as Tok
 
 import "qrc:/components" as Components
+import "../link_activation.mjs" as LinkActivation
 
 QQC2.Control {
     id: photoRoot
@@ -153,9 +154,7 @@ QQC2.Control {
             onSelectionStartChanged: clamp()
             onSelectionEndChanged: clamp()
 
-            onLinkActivated: (mu) => {
-                Qt.openUrlExternally(mu)
-            }
+            onLinkActivated: (mu) => LinkActivation.handle(mu, globalUserDataSheet, tClient)
 
             HoverHandler {
                 acceptedButtons: Qt.NoButton

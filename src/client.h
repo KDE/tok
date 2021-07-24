@@ -12,6 +12,7 @@
 #include <td/tl/TlObject.h>
 
 #include "defs.h"
+#include "yoinked from qt automotive/qivipendingreply.h"
 
 class ChatsModel;
 class ChatsStore;
@@ -112,6 +113,8 @@ public:
     bool doNotDisturb() const;
     void setDoNotDisturb(bool dnd);
     Q_SIGNAL void doNotDisturbChanged();
+
+    Q_INVOKABLE QIviPendingReplyBase searchPublicChat(const QString& username);
 
     Q_SIGNAL void loggedIn();
     Q_SIGNAL void loggedOut();
