@@ -193,10 +193,17 @@ Kirigami.Page {
         }
         footerPositioning: ListView.OverlayFooter
 
-        delegate: Kirigami.BasicListItem {
+        delegate: QQC2.ItemDelegate {
             id: del
 
             required property string mID
+
+            width: (parent || {width: 0}).width
+
+            topPadding: Kirigami.Units.largeSpacing
+            bottomPadding: Kirigami.Units.largeSpacing
+
+            onClicked: lView.triggerPage(del.mID)
 
             Tok.RelationalListener {
                 id: chatData
@@ -213,11 +220,15 @@ Kirigami.Page {
                 }
             }
 
-            topPadding: Kirigami.Units.largeSpacing
-            bottomPadding: Kirigami.Units.largeSpacing
+            Components.PlaintextMessage {
+                id: plaintext
 
-            text: chatData.data.mTitle
-            subtitle: chatData.data.mCurrentActions.any ? chatData.data.mCurrentActions.message : `${plaintext.hasAuthor ? plaintext.authorName + ": " : ""}${plaintext.onelinePlaintext}`
+                messagesModel: tClient.messagesStore
+                userModel: tClient.userDataModel
+
+                chatID: del.mID
+                messageID: chatData.data.mLastMessageID
+            }
 
             Accessible.name: {
                 let strings = [`${chatData.data.mTitle}.`]
@@ -232,49 +243,137 @@ Kirigami.Page {
                 return strings.join(" ")
             }
 
-            Components.PlaintextMessage {
-                id: plaintext
+            background: Rectangle {
+                readonly property color bgColor: {
+                    if (Kirigami.PageRouter.router.params.chatID === del.mID)
+                        return Kirigami.Theme.highlightColor
 
-                messagesModel: tClient.messagesStore
-                userModel: tClient.userDataModel
+                    if (del.hovered || del.visualFocus)
+                        return Kirigami.ColorUtils.adjustColor(Kirigami.Theme.highlightColor, {alpha: 15})
 
-                chatID: del.mID
-                messageID: chatData.data.mLastMessageID
-            }
-
-            checked: Kirigami.PageRouter.router.params.chatID === del.mID
-            checkable: Kirigami.PageRouter.router.params.chatID === del.mID
-            highlighted: false
-
-            leading: Kirigami.Avatar {
-                name: chatData.data.mTitle
-                source: chatData.data.mPhoto
-
-                width: height
-            }
-            trailing: RowLayout {
-                Kirigami.Icon {
-                    visible: chatData.data.mKind === "secretChat"
-                    source: "lock"
+                    return Kirigami.Theme.backgroundColor
                 }
-                QQC2.Label {
-                    text: chatData.data.mUnreadCount
-                    visible: chatData.data.mUnreadCount > 0
-                    padding: Kirigami.Units.smallSpacing
-                    color: Kirigami.Theme.highlightedTextColor
+                color: Kirigami.ColorUtils.adjustColor(bgColor, {alpha: 80})
+                border.color: bgColor
+                border.width: 1
+                radius: 3
 
-                    horizontalAlignment: Qt.AlignHCenter
+                Kirigami.Separator {
+                    visible: Kirigami.PageRouter.router.params.chatID !== del.mID
+                    anchors {
+                        left: parent.left
+                        right: parent.right
+                        bottom: parent.bottom
+                        leftMargin: Kirigami.Units.largeSpacing
+                        rightMargin: Kirigami.Units.largeSpacing
+                    }
+                    weight: Kirigami.Separator.Weight.Light
+                }
+            }
 
-                    Layout.minimumWidth: implicitHeight
+            contentItem: RowLayout {
+                spacing: 6
 
-                    background: Rectangle {
-                        color: Kirigami.Theme.highlightColor
-                        radius: height / 2
+                Kirigami.Avatar {
+                    name: chatData.data.mTitle
+                    source: chatData.data.mPhoto
+
+                    Layout.preferredHeight: Math.round(Kirigami.Units.gridUnit * 2.5)
+                    Layout.preferredWidth: Layout.preferredHeight
+                }
+
+                ColumnLayout {
+                    Layout.fillWidth: true
+
+                    spacing: 4
+
+                    RowLayout {
+                        Layout.fillWidth: true
+
+                        spacing: 0
+
+                        Kirigami.Icon {
+                            visible: chatData.data.mKind === "secretChat"
+                            source: "lock"
+
+                            color: Kirigami.Theme.positiveTextColor
+
+                            Layout.preferredWidth: 16
+                            Layout.preferredHeight: 16
+                        }
+
+                        QQC2.Label {
+                            text: chatData.data.mTitle
+                            elide: Text.ElideMiddle
+                            color: chatData.data.mKind === "secretChat" ? Kirigami.Theme.positiveTextColor : Kirigami.Theme.textColor
+
+                            Layout.fillWidth: true
+                        }
+
+                        Kirigami.Icon {
+                            source: {
+                                const states = {
+                                    "pending": "clock",
+                                    "failed": "emblem-error",
+                                    "sent": "emblem-ok-symbolic",
+                                }
+                                return states[plaintext.universalData.data.sendingState]
+                            }
+                            color: Kirigami.Theme.textColor
+
+                            Layout.preferredWidth: 16
+                            Layout.preferredHeight: 16
+                            Layout.rightMargin: 4
+
+                            opacity: 0.5
+
+                            visible: plaintext.isOwn
+                        }
+
+                        QQC2.Label {
+                            opacity: 0.4
+                            color: Kirigami.Theme.textColor
+
+                            text: plaintext.timestamp
+                        }
+                    }
+
+                    RowLayout {
+                        Layout.fillWidth: true
+
+                        spacing: 2
+
+                        QQC2.Label {
+                            id: textLabel
+
+                            text: chatData.data.mCurrentActions.any ? chatData.data.mCurrentActions.message : `${plaintext.hasAuthor ? plaintext.authorName + ": " : ""}${plaintext.onelinePlaintext}`
+                            opacity: 0.7
+                            elide: Text.ElideRight
+                            color: Kirigami.Theme.textColor
+
+                            Layout.fillWidth: true
+                        }
+
+                        QQC2.Label {
+                            text: chatData.data.mUnreadCount
+                            visible: chatData.data.mUnreadCount > 0
+                            color: Kirigami.Theme.highlightedTextColor
+
+                            horizontalAlignment: Qt.AlignHCenter
+                            fontSizeMode: Text.VerticalFit
+
+                            Layout.maximumHeight: textLabel.implicitHeight
+                            Layout.preferredWidth: textLabel.implicitHeight
+                            Layout.fillHeight: true
+
+                            background: Rectangle {
+                                color: Kirigami.Theme.highlightColor
+                                radius: height / 2
+                            }
+                        }
                     }
                 }
             }
-
-            onClicked: lView.triggerPage(del.mID)
         }
 
         Kirigami.PlaceholderMessage {

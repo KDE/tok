@@ -16,6 +16,10 @@ QtObject {
 
     readonly property bool hasAuthor: universalData.data.authorKind === "user" && (plaintext.chatID != universalData.data.authorID)
 
+    readonly property string timestamp: universalData.data.timestamp
+
+    readonly property bool isOwn: tClient.ownID == universalData.data.authorID
+
     readonly property string authorName: tClient.ownID == universalData.data.authorID ? i18n("You") : authorData.data.name
     readonly property string onelinePlaintext: this.plaintext.split("\n")[0]
     readonly property string plaintext: {
@@ -98,6 +102,7 @@ QtObject {
             required property string authorKind
             required property string kind
             required property string timestamp
+            required property string sendingState
         }
     }
     property var authorData: Tok.RelationalListener {
