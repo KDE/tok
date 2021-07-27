@@ -10,6 +10,23 @@
 
 #include "yoinked from qt automotive/qivipendingreply.h"
 
+struct Span
+{
+
+    Q_GADGET
+
+    Q_PROPERTY(int start MEMBER start)
+    Q_PROPERTY(int length MEMBER length)
+
+public:
+
+    Span(int start = 0, int length = 0) : start(start), length(length) {}
+
+    int start;
+    int length;
+
+};
+
 class Utilities : public QObject
 {
 
@@ -25,5 +42,6 @@ public:
     Q_INVOKABLE QString humanSize(int size);
     Q_INVOKABLE QIviPendingReplyBase pickFile(const QString& title, const QString& standardLocation);
     Q_INVOKABLE QString wordAt(int pos, const QString& in);
+    Q_INVOKABLE Span wordBounds(int pos, const QString& in);
 
 };

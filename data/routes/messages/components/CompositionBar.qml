@@ -7,6 +7,7 @@ import QtQuick.Layouts 1.10
 import QtQuick.Controls 2.12 as QQC2
 import org.kde.kirigami 2.15 as Kirigami
 import org.kde.Tok 1.0 as Tok
+import QtGraphicalEffects 1.15
 
 import "qrc:/components" as GlobalComponents
 
@@ -273,8 +274,63 @@ QQC2.ToolBar {
                 }
 
                 function doAutocomplete() {
-                    autoCompleteThing.active = Tok.Utils.wordAt(cursorPosition, text)[0] == '@'
-                    autoCompleteThing.filter = Tok.Utils.wordAt(cursorPosition, text).slice(1)
+                    const wort = Tok.Utils.wordAt(cursorPosition, text)
+
+                    autoCompleteThing.active = wort[0] == '@'
+                    autoCompleteThing.filter = wort.slice(1)
+
+                    tClient.searchEmojis(wort.slice(1)).then((resp) => {
+                        if (wort[0] === ':') {
+                            emojiRepeater.model = resp
+                        } else {
+                            emojiRepeater.model = []
+                        }
+                    })
+                }
+
+                function replaceWord(mit) {
+                    let span = Tok.Utils.wordBounds(this.cursorPosition, this.text)
+                    this.remove(span.start, span.start+span.length)
+                    this.insert(span.start, mit)
+                }
+
+                QQC2.Control {
+                    x: txtField.cursorRectangle.x
+                    y: txtField.cursorRectangle.y - height
+
+                    visible: emojiRepeater.model.length > 0
+
+                    background: Rectangle {
+                        color: Kirigami.Theme.backgroundColor
+                        radius: 3
+
+                        layer.enabled: true
+                        layer.effect: DropShadow {
+                            cached: true
+                            horizontalOffset: 0
+                            verticalOffset: 1
+                            radius: 2.0
+                            samples: 17
+                            color: "#30000000"
+                        }
+                    }
+                    contentItem: Row {
+                        Repeater {
+                            id: emojiRepeater
+                            model: []
+                            delegate: QQC2.Label {
+                                font.family: "emoji"
+                                font.pixelSize: 32
+                                text: modelData
+                                TapHandler {
+                                    onTapped: {
+                                        txtField.replaceWord(modelData)
+                                        emojiRepeater.model = []
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
 
                 Keys.onMenuPressed: editMenu.open()
@@ -289,6 +345,11 @@ QQC2.ToolBar {
                 Keys.onUpPressed: (event) => autoCompleteThing.up(event)
                 Keys.onDownPressed: (event) => autoCompleteThing.down(event)
                 Keys.onTabPressed: (event) => {
+                    if (emojiRepeater.model.length > 0) {
+                        txtField.replaceWord(emojiRepeater.model[0])
+                        emojiRepeater.model = []
+                        return
+                    }
                     if (autoCompleteThing.tab(event)) {
                         return
                     }

@@ -70,6 +70,46 @@ void Client::enterPhoneNumber(const QString& phoneNumber)
     d->enterPhoneNumber(phoneNumber);
 }
 
+QIviPendingReplyBase Client::searchEmojis(const QString& emoji)
+{
+    QIviPendingReply<QStringList> data;
+
+    QLocale l;
+    const auto langs = l.uiLanguages();
+
+    TDApi::array<TDApi::string> locales;
+    locales.reserve(langs.length());
+    for (const auto& lang : langs) {
+        locales.push_back(lang.toStdString());
+    }
+
+    call<TDApi::searchEmojis>(
+        [data](TDApi::searchEmojis::ReturnType r) mutable {
+            if (r->emojis_.empty()) {
+                data.setSuccess(QStringList{});
+                return;
+            }
+
+            QStringList it;
+            it.reserve(qMax((int)r->emojis_.size(), 5));
+            int i = 0;
+
+            for (const auto& em : r->emojis_) {
+                if (i >= 5) {
+                    break;
+                }
+                it << QString::fromStdString(em);
+                i++;
+            }
+
+            data.setSuccess(it);
+        },
+        emoji.toStdString(), false, locales
+    );
+
+    return data;
+}
+
 QIviPendingReplyBase Client::searchPublicChat(const QString& username)
 {
     QIviPendingReply<QJsonObject> data;

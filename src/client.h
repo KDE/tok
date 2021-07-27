@@ -115,6 +115,7 @@ public:
     Q_SIGNAL void doNotDisturbChanged();
 
     Q_INVOKABLE QIviPendingReplyBase searchPublicChat(const QString& username);
+    Q_INVOKABLE QIviPendingReplyBase searchEmojis(const QString& term);
 
     Q_SIGNAL void loggedIn();
     Q_SIGNAL void loggedOut();

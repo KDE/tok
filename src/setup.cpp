@@ -42,6 +42,7 @@ void performSetup(QQmlEngine* eng, bool testMode)
     Executor::instance();
 
     qRegisterMetaType<ChatsModel*>();
+    qRegisterMetaType<Span>();
     qRegisterMetaType<MessagesModel*>();
     qRegisterMetaType<MessagesStore*>();
     qRegisterMetaType<UserDataModel*>();
