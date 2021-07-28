@@ -4,6 +4,7 @@
 
 import QtQuick 2.15
 import QtQuick.Layouts 1.10
+import QtGraphicalEffects 1.15
 import QtQuick.Controls 2.12 as QQC2
 import org.kde.kirigami 2.14 as Kirigami
 import org.kde.Tok 1.0 as Tok
@@ -42,6 +43,16 @@ Item {
 
             Kirigami.Theme.colorSet: Kirigami.Theme.Window
             color: Kirigami.Theme.backgroundColor
+
+            layer.enabled: true
+            layer.effect: DropShadow {
+                cached: true
+                horizontalOffset: 0
+                verticalOffset: 1
+                radius: 2.0
+                samples: 17
+                color: "#30000000"
+            }
         }
     }
 
