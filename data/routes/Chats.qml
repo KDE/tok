@@ -359,11 +359,14 @@ Kirigami.Page {
                             visible: chatData.data.mUnreadCount > 0
                             color: Kirigami.Theme.highlightedTextColor
 
+                            leftPadding: 4
+                            rightPadding: 4
+
                             horizontalAlignment: Qt.AlignHCenter
                             fontSizeMode: Text.VerticalFit
 
                             Layout.maximumHeight: textLabel.implicitHeight
-                            Layout.preferredWidth: textLabel.implicitHeight
+                            Layout.minimumWidth: textLabel.implicitHeight
                             Layout.fillHeight: true
 
                             background: Rectangle {
