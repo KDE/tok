@@ -187,7 +187,7 @@ Kirigami.ScrollablePage {
             modal: false
             interactive: false
             position: 1
-            edge: Qt.RightEdge
+            edge: Qt.application.layoutDirection == Qt.RightToLeft ? Qt.LeftEdge : Qt.RightEdge
 
             background: Item {
                 Kirigami.Separator {

@@ -23,6 +23,9 @@ Item {
         clip: true
         visible: false
 
+        LayoutMirroring.enabled: _row.rtl
+        LayoutMirroring.childrenInherit: true
+
         anchors {
             top: parent.top
             bottom: parent.bottom
@@ -43,6 +46,9 @@ Item {
         id: tailMask
         clip: true
         visible: false
+
+        LayoutMirroring.enabled: _row.rtl
+        LayoutMirroring.childrenInherit: true
 
         anchors {
             top: parent.top
@@ -89,6 +95,8 @@ Item {
     Row {
         id: _row
         spacing: 2
+
+        readonly property bool rtl: LayoutMirroring.enabled
 
         LayoutMirroring.enabled: {
             try {
