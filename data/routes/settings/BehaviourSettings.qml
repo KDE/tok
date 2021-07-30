@@ -23,6 +23,19 @@ Item {
             onToggled: settings.userWantsSystemTray = checked
             checked: settings.userWantsSystemTray
         }
+
+        QQC2.CheckBox {
+            text: i18nc("Checkable control to toggle a feature that makes the user able to interact with Telegram without others knowing they are doing so; like a ghost, hence the metaphor. Translate using a metaphor that makes sense, not literally", "Enable Ghost Mode")
+            checkable: true
+            onToggled: settings.ghostMode = checked
+            checked: settings.ghostMode
+        }
+
+        QQC2.Label {
+            text: i18nc("Explanation for the Ghost Mode checkbox", "Ghost Mode allows you to read messages without telling Telegram or other users that you're reading messages. Note that this means that the unread message counter does not change when you read messages in Ghost Mode.")
+            wrapMode: Text.Wrap
+            width: parent.width
+        }
     }
 
     Layout.fillHeight: true

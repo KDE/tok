@@ -185,6 +185,7 @@ Kirigami.PageRow {
         property bool userWantsSidebars: true
         property bool userHasDownloadedFile: false
         property bool userWantsSystemTray: false
+        property bool ghostMode: false
         property int pageWidth: -1
 
         onTransparentChanged: {

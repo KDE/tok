@@ -47,6 +47,19 @@ Kirigami.ScrollablePage {
             Layout.fillWidth: true
         }
 
+        Kirigami.BasicListItem {
+            text: i18nc("Checkable control to toggle Ghost Mode. Keep the text no longer than a few letters longer than the source string due to screen size constraints. Reword heavily if needed.", "Enable Ghost Mode")
+            subtitle: i18nc("Explanation for the Ghost Mode toggle", "Ghost Mode allows you to read messages without telling Telegram or other users that you're reading messages. Note that this means that unread message counters in the chat list do not change when you read messages in Ghost Mode.")
+            subtitleItem.wrapMode: Text.Wrap
+            subtitleItem.elide: Text.ElideNone
+            onClicked: settings.ghostMode = !settings.ghostMode
+
+            trailing: QQC2.CheckBox {
+                checked: settings.ghostMode
+                enabled: false
+            }
+        }
+
         Item { Layout.preferredHeight: Kirigami.Units.gridUnit * 2 }
 
         Kirigami.BasicListItem {
