@@ -129,9 +129,9 @@ Kirigami.Page {
                 return
             }
             if (Kirigami.PageRouter.router.params.chatID !== undefined) {
-                if (!settings.ghostMode) tClient.messagesModel(Kirigami.PageRouter.router.params.chatID).comingOut()
+                tClient.messagesModel(Kirigami.PageRouter.router.params.chatID).comingOut()
             }
-            if (!settings.ghostMode) tClient.messagesModel(chatID).comingIn()
+            tClient.messagesModel(chatID).comingIn()
             Kirigami.PageRouter.pushFromHere({ "route": "Messages/View", "chatID": chatID })
             Kirigami.PageRouter.router.pageStack.currentItem.doit()
         }

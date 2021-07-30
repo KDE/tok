@@ -217,7 +217,7 @@ Kirigami.ScrollablePage {
         property var visibleItems: []
 
         onVisibleItemsChanged: {
-            if (!settings.ghostMode) lView.model.messagesInView(visibleItems)
+            lView.model.messagesInView(visibleItems)
         }
 
         delegate: Components.MessageDelegate {
