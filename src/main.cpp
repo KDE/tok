@@ -11,6 +11,8 @@
 #include <QQmlProperty>
 #include <QMediaPlayer>
 
+#include <KLocalizedString>
+
 #include "setup.h"
 #include "mprissetup.h"
 
@@ -22,6 +24,7 @@ int main(int argc, char* argv[])
 
     QApplication app(argc, argv);
     app.setDesktopFileName("org.kde.Tok.desktop");
+    KLocalizedString::setApplicationDomain("tok");
 
     QQmlApplicationEngine engine;
 
