@@ -349,7 +349,7 @@ Kirigami.Page {
                             text: chatData.data.mCurrentActions.any ? chatData.data.mCurrentActions.message : `${plaintext.hasAuthor ? plaintext.authorName + ": " : ""}${plaintext.onelinePlaintext}`
                             opacity: 0.7
                             elide: Text.ElideRight
-                            color: Kirigami.Theme.textColor
+                            color: chatData.data.mCurrentActions.any ? Kirigami.Theme.focusColor : Kirigami.Theme.textColor
 
                             Layout.fillWidth: true
                         }
