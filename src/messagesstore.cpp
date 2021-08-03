@@ -185,10 +185,11 @@ void MessagesStore::format(const QVariant &key, QQuickTextDocument* doc, QQuickI
     auto doku = doc->textDocument();
     QTextCursor curs(doku);
 
-    QTextCharFormat cfmt;
     QColor linkColor = QQmlProperty(it, "Kirigami.Theme.linkColor", qmlContext(it)).read().value<QColor>();
 
     for (const auto& ent : format->entities_) {
+        QTextCharFormat cfmt;
+
         curs.setPosition(ent->offset_, QTextCursor::MoveAnchor);
         curs.setPosition(ent->offset_ + ent->length_, QTextCursor::KeepAnchor);
 
