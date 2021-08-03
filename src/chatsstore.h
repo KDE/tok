@@ -13,15 +13,16 @@ class ChatsStore : public TokAbstractRelationalModel
 
     Client* c;
 
-    struct Private;
-    std::unique_ptr<Private> d;
-
     friend class ChatsModel;
     friend class ChatSortModel;
 
     QJsonValue prepare(TDApi::int53 chat);
 
 public:
+
+    struct Private;
+    std::unique_ptr<Private> d;
+
     explicit ChatsStore(Client* parent);
     ~ChatsStore();
 

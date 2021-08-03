@@ -8,6 +8,8 @@
 
 #include "extractinator.h"
 #include "notificationmanager_p.h"
+#include "chatsstore.h"
+#include "chatsstore_p.h"
 
 NotificationManager::NotificationManager(Client* c) : c(c), d(new Private)
 {
@@ -37,15 +39,48 @@ void NotificationManager::handleUpdateNotificationGroup(TDApi::object_ptr<TDApi:
             handleCase (notificationTypeNewMessage, msg)
 
                 notif = new KNotification("newMessage");
-                auto [title, body] = Extractinator::extract(c, msg->message_.get());
-                notif->setTitle(title);
-                notif->setText(body);
+                auto [author, body] = Extractinator::extract(c, msg->message_.get());
+                notif->setText(QString("<b>%1</b>\n%2").arg(author, body));
+
+                if (c->chatsStore()->d->chatData.contains(msg->message_->chat_id_)) {
+                    const auto& data = c->chatsStore()->d->chatData[msg->message_->chat_id_];
+                    notif->setTitle(QString::fromStdString(data->title_));
+
+                    if (data->type_->get_id() == chatTypePrivate::ID || data->type_->get_id() == chatTypeSecret::ID) {
+                        notif->setTitle(author);
+                        notif->setText(body);
+                    }
+
+                    if (!data->photo_) {
+                        goto brk;
+                    }
+
+                    QPixmap pix;
+
+                    if (data->photo_->small_->local_->is_downloading_completed_) {
+                        pix = QPixmap(QString::fromStdString(data->photo_->small_->local_->path_), "jpeg");
+                    } else if (data->photo_->big_->local_->is_downloading_completed_) {
+                        pix = QPixmap(QString::fromStdString(data->photo_->big_->local_->path_), "jpeg");
+                    } else if (data->photo_->minithumbnail_) {
+                        QString img("data:image/jpg;base64,");
+                        auto ba = QByteArray::fromStdString(data->photo_->minithumbnail_->data_);
+                        img.append(QString::fromLatin1(ba.toBase64().data()));
+
+                        pix = QPixmap(img);
+                    } else {
+                        goto brk;
+                    }
+
+                    notif->setPixmap(pix);
+                } else {
+                    notif->setTitle(author);
+                    notif->setText(body);
+                }
+                brk:
 
                 auto reply = std::make_unique<KNotificationReplyAction>(i18nc("button action", "Reply"));
-                reply->setPlaceholderText(i18nc("placeholder text", "Reply to %1…", title));
+                reply->setPlaceholderText(i18nc("placeholder text", "Reply to %1…", author));
                 QObject::connect(reply.get(), &KNotificationReplyAction::replied, c, [this, chatID = msg->message_->chat_id_](const QString& reply) {
-                    qDebug() << "replied!";
-
                     auto send_message = TDApi::make_object<TDApi::sendMessage>();
                     send_message->chat_id_ = chatID;
                     auto message_content = TDApi::make_object<TDApi::inputMessageText>();
