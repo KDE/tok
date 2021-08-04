@@ -47,6 +47,13 @@ Kirigami.ScrollablePage {
             Layout.fillWidth: true
         }
 
+        Kirigami.BasicListItem {
+            text: i18n("Proxy")
+            onClicked: rootRow.layers.push(Qt.resolvedUrl("ProxySettings.qml"))
+
+            Layout.fillWidth: true
+        }
+
         Item { Layout.preferredHeight: Kirigami.Units.gridUnit * 2 }
 
         Kirigami.BasicListItem {

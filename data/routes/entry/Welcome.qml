@@ -22,6 +22,15 @@ Kirigami.ScrollablePage {
 
                 onClicked: Kirigami.PageRouter.navigateToRoute("Entry/PhoneNumber")
             }
+
+            QQC2.Button {
+                text: i18n("Configure Proxy…")
+                visible: Kirigami.Settings.isMobile
+
+                onClicked: rootRow.layers.push(Qt.resolvedUrl("qrc:/routes/settings/mobile/ProxySettings.qml"))
+
+                Layout.alignment: Qt.AlignHCenter
+            }
         }
         
     }

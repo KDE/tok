@@ -81,6 +81,17 @@ Kirigami.Page {
             }
             Layout.alignment: Qt.AlignHCenter
         }
+
+        Item { implicitHeight: Kirigami.Units.largeSpacing }
+
+        QQC2.Button {
+            text: i18n("Configure Proxy…")
+            visible: Kirigami.Settings.isMobile
+
+            onClicked: rootRow.layers.push(Qt.resolvedUrl("qrc:/routes/settings/mobile/ProxySettings.qml"))
+
+            Layout.alignment: Qt.AlignHCenter
+        }
     }
 }
 

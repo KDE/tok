@@ -60,6 +60,12 @@ Kirigami.ApplicationWindow {
                     icon.name: "preferences"
                     page: Qt.resolvedUrl("BehaviourSettings.qml")
                 }
+                SidebarItem {
+                    pageName: i18n("Proxy")
+                    accessibleDescription: i18nc("sidebar item accessible text", "Open proxy settings")
+                    icon.name: "preferences-system-network-proxy"
+                    page: Qt.resolvedUrl("ProxySettings.qml")
+                }
             }
         }
         Kirigami.Separator {
@@ -70,7 +76,7 @@ Kirigami.ApplicationWindow {
             source: Qt.resolvedUrl("AppearanceSettings.qml")
             onStatusChanged: if (this.status == Loader.Error) Qt.quit(1)
 
-            Layout.margins: Kirigami.Units.largeSpacing
+            Layout.margins: item && item.noMargin ? 0 : Kirigami.Units.largeSpacing
             Layout.fillWidth: true
             Layout.fillHeight: true
         }

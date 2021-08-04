@@ -24,6 +24,7 @@ class FileMangler;
 class SearchMessagesModel;
 class ChatListModel;
 class ContactsModel;
+class ProxyModel;
 
 class Client : public QObject
 {
@@ -35,6 +36,7 @@ class Client : public QObject
     Q_PROPERTY(MessagesStore* messagesStore READ messagesStore CONSTANT)
     Q_PROPERTY(FileMangler* fileMangler READ fileMangler CONSTANT)
     Q_PROPERTY(ChatListModel* chatListModel READ chatListModel CONSTANT)
+    Q_PROPERTY(ProxyModel* proxyModel READ proxyModel CONSTANT)
     Q_PROPERTY(bool online READ online WRITE setOnline NOTIFY onlineChanged)
     Q_PROPERTY(bool doNotDisturb READ doNotDisturb WRITE setDoNotDisturb NOTIFY doNotDisturbChanged)
     Q_PROPERTY(QString ownID READ ownID CONSTANT)
@@ -103,6 +105,7 @@ public:
     MessagesStore* messagesStore() const;
     FileMangler* fileMangler() const;
     ChatListModel* chatListModel() const;
+    ProxyModel* proxyModel() const;
     Q_INVOKABLE ContactsModel* newContactsModel();
     QString ownID() const;
 

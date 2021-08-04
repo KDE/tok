@@ -25,6 +25,7 @@ Client::Client(bool testing)
     d->m_notificationManager.reset(new NotificationManager(this));
     d->m_fileMangler.reset(new FileMangler(this));
     d->m_chatListModel.reset(new ChatListModel(this));
+    d->m_proxyModel.reset(new ProxyModel(this));
 
     d->poll();
 
@@ -176,6 +177,11 @@ FileMangler* Client::fileMangler() const
 ChatListModel* Client::chatListModel() const
 {
     return d->m_chatListModel.get();
+}
+
+ProxyModel* Client::proxyModel() const
+{
+    return d->m_proxyModel.get();
 }
 
 bool Client::online() const

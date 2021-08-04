@@ -27,6 +27,7 @@
 #include "usersortmodel.h"
 #include "searchmessagesmodel.h"
 #include "chatlistmodel.h"
+#include "proxymodel.h"
 
 #include "internallib/qquickrelationallistener.h"
 
@@ -51,6 +52,7 @@ void performSetup(QQmlEngine* eng, bool testMode)
     qRegisterMetaType<Utilities*>();
     qRegisterMetaType<ColorSchemer*>();
     qRegisterMetaType<FileMangler*>();
+    qRegisterMetaType<ProxyModel*>();
     qRegisterMetaType<SearchMessagesModel*>();
     qRegisterMetaType<ChatListModel*>();
     qRegisterMetaType<ContactsModel*>();

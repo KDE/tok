@@ -15,6 +15,7 @@
 #include "filemangler.h"
 #include "searchmessagesmodel.h"
 #include "contactsmodel.h"
+#include "proxymodel.h"
 
 class Client::Private
 {
@@ -46,6 +47,7 @@ class Client::Private
     std::unique_ptr<MessagesStore> m_messagesStore;
     std::unique_ptr<FileMangler> m_fileMangler;
     std::unique_ptr<NotificationManager> m_notificationManager;
+    std::unique_ptr<ProxyModel> m_proxyModel;
     std::map<TDApi::int53, std::unique_ptr<MessagesModel>> m_messageModels;
 
     // functions
