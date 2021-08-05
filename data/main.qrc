@@ -98,6 +98,8 @@
         <file>routes/messages/components/normal/GifMessage.qml</file>
         <file>routes/messages/components/normal/VoiceChatStarted.qml</file>
         <file>routes/messages/components/normal/VoiceChatFinished.qml</file>
+        <file>routes/messages/components/normal/LocationMessage.qml</file>
+        <file>routes/messages/components/normal/VenueMessage.qml</file>
 
         <file>routes/messages/components/thin/TextMessage.qml</file>
         <file>routes/messages/components/thin/FileMessage.qml</file>
@@ -108,5 +110,7 @@
         <file>routes/messages/components/thin/GifMessage.qml</file>
         <file>routes/messages/components/thin/VoiceChatStarted.qml</file>
         <file>routes/messages/components/thin/VoiceChatFinished.qml</file>
+        <file>routes/messages/components/thin/LocationMessage.qml</file>
+        <file>routes/messages/components/thin/VenueMessage.qml</file>
     </qresource>
 </RCC>
