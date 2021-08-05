@@ -22,13 +22,13 @@ Kirigami.AbstractApplicationWindow {
 
     title: i18nc("window title", "Tok")
 
-    menuBar: Components.GlobalMenuInWindow {
-        // dependency on frameworks new enough for
-        // hasPlatformMenuBar is optional, so we handle
-        // it being undefined gracefully
-        visible: Kirigami.Settings.hasPlatformMenuBar != undefined ?
+    menuBar: Loader {
+        active: Kirigami.Settings.hasPlatformMenuBar != undefined ?
                 !Kirigami.Settings.hasPlatformMenuBar && !Kirigami.Settings.isMobile :
                 !Kirigami.Settings.isMobile
+
+        sourceComponent: Components.GlobalMenuInWindow {
+        }
     }
     property alias settings: content.settings
     property alias rootRow: content

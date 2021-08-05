@@ -74,6 +74,7 @@ Kirigami.ApplicationWindow {
         Loader {
             id: pageLoader
             source: Qt.resolvedUrl("AppearanceSettings.qml")
+            asynchronous: true
             onStatusChanged: if (this.status == Loader.Error) Qt.quit(1)
 
             Layout.margins: item && item.noMargin ? 0 : Kirigami.Units.largeSpacing
