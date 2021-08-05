@@ -73,15 +73,18 @@ void Client::Private::handleAuthorizationStateUpdate(TDApi::updateAuthorizationS
                     m_ownID = static_cast<TDApi::optionValueInteger*>(ret.get())->value_;
 
                     Q_EMIT q->loggedIn();
+                    Q_EMIT q->isLoggedInChanged();
                 }, "my_id");
                 if (q->testing) {
                     Q_EMIT q->loggedIn();
+                    Q_EMIT q->isLoggedInChanged();
                 }
             },
             [this](TDApi::authorizationStateLoggingOut&) {
                 m_loggedIn = false;
 
                 Q_EMIT q->loggedOut();
+                Q_EMIT q->isLoggedInChanged();
             },
             [](TDApi::authorizationStateClosing&) {
                 qDebug() << "Closing";

@@ -189,6 +189,11 @@ bool Client::online() const
     return d->online;
 }
 
+bool Client::isLoggedIn() const
+{
+    return d->m_loggedIn;
+}
+
 MembersModel* Client::membersModel(qint64 number, const QString& kind)
 {
     if (kind == "basicGroup") {

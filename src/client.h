@@ -39,6 +39,7 @@ class Client : public QObject
     Q_PROPERTY(ProxyModel* proxyModel READ proxyModel CONSTANT)
     Q_PROPERTY(bool online READ online WRITE setOnline NOTIFY onlineChanged)
     Q_PROPERTY(bool doNotDisturb READ doNotDisturb WRITE setDoNotDisturb NOTIFY doNotDisturbChanged)
+    Q_PROPERTY(bool isLoggedIn READ isLoggedIn NOTIFY isLoggedInChanged)
     Q_PROPERTY(QString ownID READ ownID CONSTANT)
 
     class Private;
@@ -116,6 +117,9 @@ public:
     bool doNotDisturb() const;
     void setDoNotDisturb(bool dnd);
     Q_SIGNAL void doNotDisturbChanged();
+
+    bool isLoggedIn() const;
+    Q_SIGNAL void isLoggedInChanged();
 
     Q_INVOKABLE QIviPendingReplyBase searchPublicChat(const QString& username);
     Q_INVOKABLE QIviPendingReplyBase searchEmojis(const QString& term);

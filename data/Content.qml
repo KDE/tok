@@ -200,6 +200,16 @@ Kirigami.PageRow {
         }
     }
 
+    Component.onCompleted: {
+        if (!tClient.isLoggedIn) return
+
+        if (!Kirigami.Settings.isMobile) {
+            rootRouter.navigateToRoute(["Chats", "Messages/NoView"])
+        } else {
+            rootRouter.navigateToRoute("Chats")
+        }
+    }
+
     property Rectangle focusRect: Rectangle {
         parent: rootWindow.contentItem
         visible: rootWindow.activeFocusItem !== null && Boolean(rootWindow.activeFocusItem.showFocusRing)

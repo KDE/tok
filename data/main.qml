@@ -30,16 +30,23 @@ Kirigami.AbstractApplicationWindow {
         sourceComponent: Components.GlobalMenuInWindow {
         }
     }
-    property alias settings: content.settings
-    property alias rootRow: content
+    property var settings: content.item.settings
+    property var rootRow: content.item
 
-    color: content.settings.transparent ? "transparent" : Kirigami.Theme.backgroundColor
-    flags: content.settings.transparent ? Qt.WA_TranslucentBackground : 0
+    color: content.item.settings.transparent ? "transparent" : Kirigami.Theme.backgroundColor
+    flags: content.item.settings.transparent ? Qt.WA_TranslucentBackground : 0
 
     onClosing: (e) => {
-        content.closing(e)
+        content.item.closing(e)
     }
 
-    Content { id: content; anchors.fill: parent }
+    Loader {
+        id: content
+
+        asynchronous: true
+        sourceComponent: Content { anchors.fill: parent }
+
+        anchors.fill: parent
+    }
 
 }
