@@ -7,6 +7,8 @@
 
 #include "messagesmodel_p.h"
 #include "client.h"
+#include "chatsstore.h"
+#include "chatsstore_p.h"
 
 enum Roles {
     NextID,
@@ -31,6 +33,8 @@ MessagesModel::MessagesModel(Client* parent, TDApi::int53 id) : QAbstractListMod
 {
     d->id = id;
 
+    d->messages.push_back(c->chatsStore()->d->chatData[id]->last_read_inbox_message_id_);
+
     fetch();
 }
 
@@ -52,12 +56,28 @@ void MessagesModel::fetch()
 {
     c->call<TDApi::getChatHistory>(
         [=, this](TDApi::getChatHistory::ReturnType resp) {
-            beginInsertRows(QModelIndex(), d->messages.size(), d->messages.size()+resp->messages_.size()-1);
-            for (auto& msg : resp->messages_) {
-                if (std::find(d->messages.cbegin(), d->messages.cend(), msg->id_) != d->messages.cend()) {
-                    continue;
+            bool alreadyHasAll = true;
+            for (const auto& msg : resp->messages_) {
+                if (std::find(d->messages.cbegin(), d->messages.cend(), msg->id_) == d->messages.cend()) {
+                    alreadyHasAll = false;
+                    break;
                 }
+            }
 
+            if (alreadyHasAll) {
+                return;
+            }
+
+            TDApi::array<TDApi::object_ptr<TDApi::message>> msgs;
+
+            for (auto& msg : resp->messages_) {
+                if (std::find(d->messages.cbegin(), d->messages.cend(), msg->id_) == d->messages.cend()) {
+                    msgs.push_back(std::move(msg));
+                }
+            }
+
+            beginInsertRows(QModelIndex(), d->messages.size(), d->messages.size()+msgs.size()-1);
+            for (auto& msg : msgs) {
                 d->messages.push_back(msg->id_);
                 c->messagesStore()->newMessage(std::move(msg));
             }
@@ -68,10 +88,63 @@ void MessagesModel::fetch()
     );
 }
 
+void MessagesModel::fetchBack()
+{
+    if (d->isFetchingBack || !d->canFetchBack) {
+        return;
+    }
+
+    d->isFetchingBack = true;
+    c->call<TDApi::getChatHistory>(
+        [=, this](TDApi::getChatHistory::ReturnType resp) {
+            d->isFetchingBack = false;
+
+            bool alreadyHasAll = true;
+            for (const auto& msg : resp->messages_) {
+                if (std::find(d->messages.cbegin(), d->messages.cend(), msg->id_) == d->messages.cend()) {
+                    alreadyHasAll = false;
+                    break;
+                }
+            }
+
+            if (alreadyHasAll) {
+                d->canFetchBack = false;
+                return;
+            }
+
+            TDApi::array<TDApi::object_ptr<TDApi::message>> msgs;
+
+            for (auto& msg : resp->messages_) {
+                if (std::find(d->messages.cbegin(), d->messages.cend(), msg->id_) == d->messages.cend()) {
+                    msgs.push_back(std::move(msg));
+                }
+            }
+
+            std::reverse(msgs.begin(), msgs.end());
+
+            beginInsertRows(QModelIndex(), 0, msgs.size()-1);
+            for (auto& msg : msgs) {
+                d->messages.push_front(msg->id_);
+                c->messagesStore()->newMessage(std::move(msg));
+            }
+            endInsertRows();
+
+            auto it = msgs.size();
+            dataChanged(index(it), index(it), {Roles::PreviousID, Roles::NextID});
+        },
+        d->id, d->messages[0], -50, 50, false
+    );
+}
+
 QVariant MessagesModel::data(const QModelIndex& idx, int role) const
 {
     if (!checkIndex(idx, CheckIndexOption::IndexIsValid)) {
         return QVariant();
+    }
+
+    // first item in a listview is always loaded for reasons
+    if (idx.row() <= 5 && idx.row() > 0) {
+        const_cast<MessagesModel*>(this)->fetchBack();
     }
 
     auto mID = d->messages[idx.row()];
@@ -154,6 +227,8 @@ void MessagesModel::messageIDChanged(TDApi::int53 oldID, TDApi::int53 newID)
 
 void MessagesModel::newMessage(TDApi::int53 msg)
 {
+    if (d->canFetchBack) return;
+
     if (std::find(d->messages.cbegin(), d->messages.cend(), msg) != d->messages.cend()) {
         return;
     }
@@ -381,4 +456,57 @@ void MessagesModel::comingIn()
 void MessagesModel::comingOut()
 {
     c->call<TDApi::closeChat>([](TDApi::openChat::ReturnType) {}, d->id);
+}
+
+QIviPendingReplyBase MessagesModel::hopBackToMessage(const QString& id)
+{
+    QIviPendingReply<int> ret;
+
+    auto mid = id.toLongLong();
+
+    auto idx = std::find(d->messages.cbegin(), d->messages.cend(), mid);
+    if (idx != d->messages.cend()) {
+        auto msg = idx - d->messages.cbegin();
+        ret.setSuccess(msg);
+        return ret;
+    }
+
+    c->call<TDApi::getChatHistory>(
+        [mid, ret, this](TDApi::getChatHistory::ReturnType resp) mutable {
+            const auto oldSize = d->messages.size();
+
+            beginInsertRows(QModelIndex(), d->messages.size(), d->messages.size()+resp->messages_.size()-1);
+            for (auto& msg : resp->messages_) {
+                d->messages.push_back(msg->id_);
+                c->messagesStore()->newMessage(std::move(msg));
+            }
+            endInsertRows();
+            dataChanged(index(0), index(0), {Roles::PreviousID, Roles::NextID});
+
+            auto idx = std::find(d->messages.cbegin(), d->messages.cend(), mid);
+            auto msg = idx - d->messages.cbegin();
+            ret.setSuccess(msg);
+
+            QTimer::singleShot(110, [oldSize, this]() {
+                beginRemoveRows(QModelIndex(), 0, oldSize-1);
+
+                int i = oldSize-1;
+                quint32 itemsRemoved = 0;
+                while (i >= 0) {
+                    i--;
+                    itemsRemoved++;
+                    d->messages.pop_front();
+                }
+
+                d->canFetchBack = true;
+
+                Q_ASSERT(itemsRemoved == oldSize);
+
+                endRemoveRows();
+            });
+        },
+        d->id, mid, -25, 50, false
+    );
+
+    return ret;
 }

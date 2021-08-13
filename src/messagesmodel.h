@@ -8,6 +8,7 @@
 
 #include "client.h"
 #include "internallib/qabstractrelationalmodel.h"
+#include "yoinked from qt automotive/qivipendingreply.h"
 
 class QQuickTextDocument;
 class QQuickItem;
@@ -61,6 +62,7 @@ public:
     ~MessagesModel();
 
     void fetch();
+    void fetchBack();
     void newMessage(TDApi::int53 msgID);
     void deletedMessages(const TDApi::array<TDApi::int53>& msgIDs);
     void messageIDChanged(TDApi::int53 oldID, TDApi::int53 newID);
@@ -84,4 +86,6 @@ public:
     Q_INVOKABLE void messagesInView(QVariantList list);
     Q_INVOKABLE void comingIn();
     Q_INVOKABLE void comingOut();
+
+    Q_INVOKABLE QIviPendingReplyBase hopBackToMessage(const QString& id);
 };

@@ -261,6 +261,11 @@ Kirigami.ScrollablePage {
             Component.onDestruction: remove()
             ListView.onPooled: remove()
         }
+
+        highlightMoveDuration: 100
+        highlightMoveVelocity: -1
+        highlightRangeMode: ListView.ApplyRange
+        Component.onCompleted: currentIndex = 0
     }
 }
 

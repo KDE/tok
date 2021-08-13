@@ -13,6 +13,9 @@ struct MessagesModel::Private
     std::deque<TDApi::int53> messages;
 
     TDApi::int53 id;
+
+    bool isFetchingBack = false;
+    bool canFetchBack = true;
 };
 
 struct MessagesStore::Private

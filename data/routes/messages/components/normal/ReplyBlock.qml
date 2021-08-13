@@ -17,6 +17,14 @@ QQC2.Control {
     rightPadding: 0
     bottomPadding: 0
 
+    TapHandler {
+        onTapped: {
+            lView.model.hopBackToMessage(replyData.data.inReplyTo).then((idx) => {
+                lView.currentIndex = idx
+            })
+        }
+    }
+
     Tok.RelationalListener {
         id: replyData
 
