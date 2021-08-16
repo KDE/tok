@@ -1,0 +1,71 @@
+app-id: org.kde.Tok
+runtime: org.kde.Platform
+runtime-version: "5.15"
+sdk: org.kde.Sdk
+command: org.kde.Tok
+finish-args:
+  - --share=ipc
+  - --device=dri
+  - --socket=fallback-x11
+  - --socket=wayland
+  - --socket=pulseaudio
+  - --share=network
+  - --filesystem=xdg-config/kdeglobals:ro
+  - --filesystem=home
+cleanup:
+  - /bin/a*
+  - /bin/grpc*
+  - /bin/protoc*
+  - /bin/qbs*
+  - /include
+  - /lib/*.a
+  - /lib/cmake
+  - /lib/pkgconfig
+  - /lib/qbs
+  - /lib/libqbs*
+  - /libexec
+  - /share/ECM
+  - /share/man
+  - /share/pkgconfig
+  - /share/qbs
+
+modules:
+# qbs
+  - name: qbs
+    buildsystem: qmake
+    config-opts:
+    - QBS_INSTALL_PREFIX=/app
+    sources:
+      - type: git
+        url: https://code.qt.io/qbs/qbs.git
+        branch: "1.19"
+# td
+  - name: td
+    buildsystem: cmake-ninja
+    builddir: true
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+    sources:
+      - type: git
+        url: https://github.com/tdlib/td.git
+        commit: 5bd0c2c46ded5c75a641829cfe84c0b5fead5bfc
+# rlottie
+  - name: rlottie
+    buildsystem: meson
+    config-opts:
+      - -Dexample=false
+      - -Dbuildtype=release
+    sources:
+      - type: git
+        url: https://github.com/Samsung/rlottie.git
+        commit: c0e16e571b3f2bb046bd38de65b53cd7aa9e2bbc
+# the app
+  - name: tok
+    buildsystem: simple
+    build-commands:
+      - qbs build -j${FLATPAK_BUILDER_N_JOBS} --no-install modules.cpp.libraryPaths:/app/lib qbs.buildVariant:release qbs.installPrefix:/app
+      - qbs install --no-build --install-root /
+    sources:
+      - type: git
+        url: https://invent.kde.org/network/tok.git
+        branch: dev
