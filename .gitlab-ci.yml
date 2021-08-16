@@ -1,0 +1,23 @@
+variables:
+  BUNDLE: org.kde.Tok.flatpak
+
+flatpak:
+  # most convenient docker image for the job
+  image: bilelmoussaoui/flatpak-github-actions:kde-5.15
+  stage: build
+  tags:
+    - flatpak
+  script:
+    - flatpak-builder --keep-build-dirs --install-deps-from=flathub --repo=repo app ${MANIFEST_PATH}
+    - flatpak build-bundle repo ${BUNDLE} ${APP_ID}
+  artifacts:
+    paths:
+      - ${BUNDLE}
+    expire_in: 1 week
+  variables:
+    MANIFEST_PATH: flatpak/org.kde.Tok.yml
+    APP_ID: org.kde.Tok
+    FLATPAK_MODULE: tok
+  cache:
+    paths:
+      - .flatpak-builder
