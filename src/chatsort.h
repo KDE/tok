@@ -16,7 +16,6 @@ class ChatSortModel : public QSortFilterProxyModel
 
     QString _filter;
     QString _folder;
-    QTimer* _sortTimer;
     ChatsStore* _store = nullptr;
     Q_PROPERTY(ChatsStore* store READ store WRITE setStore NOTIFY storeChanged)
     Q_PROPERTY(QString filter READ filter WRITE setFilter NOTIFY filterChanged)
