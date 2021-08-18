@@ -52,6 +52,7 @@ Kirigami.Page {
     // yes, the decrement goes up and the increment goes down visually.
     Shortcut {
         sequence: "Alt+Up"
+        context: Qt.ApplicationShortcut
         onActivated: {
             lView.decrementCurrentIndex()
             lView.itemAtIndex(lView.currentIndex).clicked()
@@ -59,6 +60,7 @@ Kirigami.Page {
     }
     Shortcut {
         sequence: "Alt+Down"
+        context: Qt.ApplicationShortcut
         onActivated: {
             lView.incrementCurrentIndex()
             lView.itemAtIndex(lView.currentIndex).clicked()
@@ -66,6 +68,7 @@ Kirigami.Page {
     }
     Shortcut {
         sequence: "Ctrl+K"
+        context: Qt.ApplicationShortcut
         onActivated: {
             quickView.open()
         }
