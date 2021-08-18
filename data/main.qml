@@ -28,6 +28,7 @@ Kirigami.AbstractApplicationWindow {
                 !Kirigami.Settings.isMobile
 
         sourceComponent: Components.GlobalMenuInWindow {
+            Kirigami.Theme.colorSet: Kirigami.Theme.Header
         }
     }
     property alias settings: content.settings

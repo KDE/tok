@@ -199,7 +199,16 @@ Kirigami.ScrollablePage {
                 }
             }
 
-            Components.GroupInformation { anchors.fill: parent }
+            Components.GroupInformation {
+                anchors.topMargin: {
+                    try {
+                        return rootWindow.menuBar.height
+                    } catch (error) {
+                        return 0
+                    }
+                }
+                anchors.fill: parent
+            }
         }
     }
 
