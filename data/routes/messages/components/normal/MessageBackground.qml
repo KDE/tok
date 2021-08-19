@@ -124,6 +124,15 @@ Item {
             }
         }
         QQC2.Label {
+            id: edited
+            text: messageData.data.editedTimestamp !== "" ? i18nc("small text displayed by timestamp when message has been edited", "edited") : ""
+            visible: text !== ""
+            opacity: 0.5
+
+            font.pointSize: -1
+            font.pixelSize: Kirigami.Units.gridUnit * (2/3)
+        }
+        QQC2.Label {
             id: timestamp
             text: messageData.data.timestamp
             opacity: 0.5

@@ -26,6 +26,7 @@ enum Roles {
     AuthorKind,
     Kind,
     Timestamp,
+    EditedTimestamp,
     InReplyTo,
     SendingState,
 
@@ -339,6 +340,9 @@ QVariant MessagesStore::data(const QVariant& key, int role)
         return QString::number(d->messageData[mID]->reply_to_message_id_);
     case Roles::Timestamp: {
         return QDateTime::fromTime_t(d->messageData[mID]->date_).toString("hh:mm");
+    }
+    case Roles::EditedTimestamp: {
+        return d->messageData[mID]->edit_date_ != 0 ? QDateTime::fromTime_t(d->messageData[mID]->edit_date_).toString("hh:mm") : "";
     }
     case Roles::Content: {
         auto content = d->messageData[mID]->content_.get();
@@ -820,6 +824,7 @@ QHash<int, QByteArray> MessagesStore::roleNames()
     roles[Roles::AuthorKind] = "authorKind";
     roles[Roles::Kind] = "kind";
     roles[Roles::Timestamp] = "timestamp";
+    roles[Roles::EditedTimestamp] = "editedTimestamp";
     roles[Roles::InReplyTo] = "inReplyTo";
     roles[Roles::SendingState] = "sendingState";
 
