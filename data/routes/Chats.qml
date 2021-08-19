@@ -180,13 +180,19 @@ Kirigami.Page {
         footer: RowLayout {
             z: 100
             width: parent.width
-            visible: Kirigami.Settings.isMobile
 
             Item { Layout.fillWidth: true }
+            Components.HopToEdge {
+                isDown: false
+                view: lView
+
+                Layout.margins: Kirigami.Units.gridUnit
+            }
             Components.CreateNewMenu {
                 id: createNew
             }
             QQC2.RoundButton {
+                visible: Kirigami.Settings.isMobile
                 icon.name: "list-add"
                 text: i18nc("button with menu", "Create New...")
                 onClicked: createNew.open()

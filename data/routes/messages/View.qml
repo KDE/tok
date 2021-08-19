@@ -229,6 +229,24 @@ Kirigami.ScrollablePage {
             lView.model.messagesInView(visibleItems)
         }
 
+        headerPositioning: ListView.OverlayHeader
+
+        RowLayout {
+            z: 100
+            anchors {
+                bottom: parent.bottom
+                left: parent.left
+                right: parent.right
+            }
+
+            Item { Layout.fillWidth: true }
+            GlobalComponents.HopToEdge {
+                isDown: true
+                view: lView
+                Layout.margins: Kirigami.Units.gridUnit
+            }
+        }
+
         delegate: Components.MessageDelegate {
             function add() {
                 lView.visibleItems = [...lView.visibleItems, this.mID]

@@ -21,6 +21,7 @@
         <file>components/AudioPlayer.qml</file>
         <file>components/ContactsPicker.qml</file>
         <file>components/Header.qml</file>
+        <file>components/HopToEdge.qml</file>
         <file>components/PlaintextMessage.qml</file>
         <file>components/LoaderPlus.qml</file>
         <file>components/LoaderSwitch.qml</file>
