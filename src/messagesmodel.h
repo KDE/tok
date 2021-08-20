@@ -29,7 +29,7 @@ public:
     void messageIDChange(TDApi::int53 oldID, TDApi::object_ptr<TDApi::message> msg);
     void deletedMessages(TDApi::int53 chatID, const TDApi::array<TDApi::int53>& msgIDs);
 
-    Q_INVOKABLE void format(const QVariant& key, QQuickTextDocument* doc, QQuickItem* it, bool emojiOnly);
+    Q_INVOKABLE bool format(const QVariant& key, QQuickTextDocument* doc, QQuickItem* it, bool emojiOnly);
     Q_INVOKABLE void applyFormat(const QVariant& key, QQuickTextDocument* to, QQuickItem* it, int fromChar, int toChar);
 
     QVariant data(const QVariant& key, int role = Qt::DisplayRole) override;

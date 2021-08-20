@@ -22,7 +22,9 @@ QQC2.Control {
 
     readonly property int tailSize: Kirigami.Units.largeSpacing
 
-    Layout.maximumWidth: del.recommendedSize
+    property bool isWide: false
+    Layout.maximumWidth: isWide ? -1 : del.recommendedSize
+    Layout.fillWidth: isWide
 
     background: MessageBackground {
         id: _background
@@ -183,7 +185,7 @@ QQC2.Control {
 
                 target: videoData.data
                 function onVideoCaptionChanged() {
-                    videoData.model.format(videoData.key, textEdit.textDocument, textEdit, textEdit.isEmojiOnly)
+                    videoRoot.isWide = videoData.model.format(videoData.key, textEdit.textDocument, textEdit, textEdit.isEmojiOnly)
                 }
             }
             Component.onCompleted: conns.onVideoCaptionChanged()

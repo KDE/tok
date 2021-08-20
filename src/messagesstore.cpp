@@ -15,8 +15,15 @@
 #include <QGuiApplication>
 #include <QDesktopServices>
 
+#include <QTextEdit>
+
 #include <unicode/urename.h>
 #include <unicode/uchar.h>
+
+#include <KSyntaxHighlighting/syntaxhighlighter.h>
+#include <KSyntaxHighlighting/repository.h>
+#include <KSyntaxHighlighting/theme.h>
+#include <KSyntaxHighlighting/definition.h>
 
 #include "messagesmodel_p.h"
 #include "photoutils.h"
@@ -151,10 +158,87 @@ void MessagesStore::applyFormat(const QVariant& data, QQuickTextDocument* to, QQ
     curs.setCharFormat(cfmt);
 }
 
-void MessagesStore::format(const QVariant &key, QQuickTextDocument* doc, QQuickItem *it, bool emojiOnly)
+QDebug operator<<(QDebug debug, const std::string& c)
 {
+    QDebugStateSaver saver(debug);
+
+    debug.nospace() << QString::fromStdString(c);
+
+    return debug;
+}
+
+// this function exists because qsyntaxhighlighter doesn't mutate the document,
+// only its textlayout. so we gotta copy from the textlayout into a document.
+QTextDocumentFragment copyFrom(QTextDocument* document)
+{
+    QTextCursor sourceCursor(document);
+    sourceCursor.select(QTextCursor::Document);
+
+    QTextDocument helper;
+
+    // copy the content fragment from the source document into our helper document
+    QTextCursor curs(&helper);
+    curs.insertFragment(sourceCursor.selection());
+    curs.select(QTextCursor::Document);
+
+    // not sure why, but fonts get lost. since this is for codeblocks, we can
+    // just force the mono font. anyone copying this code would probably want
+    // to fix the problem proper if it's not also for codeblocks.
+    const auto fixedFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
+
+    const int docStart = sourceCursor.selectionStart();
+    const int docEnd = helper.characterCount() - 1;
+
+    // since the copied fragment above lost the qsyntaxhighlighter stuff,
+    // we gotta go through the qtextlayout and apply those styles to the
+    // document
+    const auto end = document->findBlock(sourceCursor.selectionEnd()).next();
+    for (auto current = document->findBlock(docStart); current.isValid() && current != end; current = current.next()) {
+        const auto layout = current.layout();
+
+        // iterate through the formats, applying them to our document
+        for (const auto& span : layout->formats()) {
+            const int start = current.position() + span.start - docStart;
+            const int end = start + span.length;
+
+            curs.setPosition(qMax(start, 0));
+            curs.setPosition(qMin(end, docEnd), QTextCursor::KeepAnchor);
+
+            auto fmt = span.format;
+            fmt.setFont(fixedFont);
+
+            curs.setCharFormat(fmt);
+        }
+    }
+
+    return QTextDocumentFragment(&helper);
+}
+
+QTextDocumentFragment highlight(const QString& code, const QString& language)
+{
+    using namespace KSyntaxHighlighting;
+
+    static Repository repo;
+
+    auto theme = repo.themeForPalette(QGuiApplication::palette());
+    auto definition = repo.definitionForName(language);
+
+    QTextDocument doku(code);
+
+    QScopedPointer<SyntaxHighlighter> highlighter(new SyntaxHighlighter(&doku));
+    highlighter->setTheme(theme);
+    highlighter->setDefinition(definition);
+
+    auto copied = copyFrom(&doku);
+    return copied;
+}
+
+bool MessagesStore::format(const QVariant &key, QQuickTextDocument* doc, QQuickItem *it, bool emojiOnly)
+{
+    bool isWide = false;
+
     if (!checkKey(key)) {
-        return;
+        return isWide;
     }
 
     auto mID = fromVariant(key);
@@ -225,10 +309,18 @@ void MessagesStore::format(const QVariant &key, QQuickTextDocument* doc, QQuickI
             break;
         }
         case textEntityTypePre::ID:
-        case textEntityTypePreCode::ID:
         case textEntityTypeCode::ID: {
             const QFont fixedFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
             cfmt.setFont(fixedFont);
+            break;
+        }
+        case textEntityTypePreCode::ID: {
+            auto it = static_cast<const textEntityTypePreCode*>(ent->type_.get());
+
+            auto frag = highlight(curs.selectedText(), QString::fromStdString(it->language_));
+            curs.insertFragment(frag);
+            isWide = true;
+
             break;
         }
         case textEntityTypeMention::ID: {
@@ -247,7 +339,7 @@ void MessagesStore::format(const QVariant &key, QQuickTextDocument* doc, QQuickI
         }
         }
 
-        curs.setCharFormat(cfmt);
+        // curs.setCharFormat(cfmt);
 
         QTextBoundaryFinder finder(QTextBoundaryFinder::Grapheme, doku->toRawText());
         int pos = 0;
@@ -278,7 +370,7 @@ void MessagesStore::format(const QVariant &key, QQuickTextDocument* doc, QQuickI
 
     }
 
-    return;
+    return isWide;
 }
 
 void MessagesStore::deleteMessages(const QString &chatID, const QStringList &messageID)

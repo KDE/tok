@@ -66,7 +66,7 @@ QQC2.Control {
 
                 target: textData.data
                 function onContentChanged() {
-                    textData.model.format(textData.key, textEdit.textDocument, textEdit, textEdit.isEmojiOnly)
+                    textMessageRoot.isWide = textData.model.format(textData.key, textEdit.textDocument, textEdit, textEdit.isEmojiOnly)
                 }
             }
             Component.onCompleted: conns.onContentChanged()
@@ -112,5 +112,7 @@ QQC2.Control {
         }
     }
 
-    Layout.maximumWidth: del.recommendedSize
+    property bool isWide: false
+    Layout.maximumWidth: isWide ? -1 : del.recommendedSize
+    Layout.fillWidth: isWide
 }

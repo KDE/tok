@@ -19,7 +19,9 @@ QQC2.Control {
 
     readonly property int tailSize: Kirigami.Units.largeSpacing
 
-    Layout.maximumWidth: del.recommendedSize
+    property bool isWide: false
+    Layout.maximumWidth: isWide ? -1 : del.recommendedSize
+    Layout.fillWidth: isWide
 
     background: MessageBackground {
         id: _background
@@ -127,7 +129,7 @@ QQC2.Control {
 
                 target: gifData.data
                 function onAnimationCaptionChanged() {
-                    gifData.model.format(gifData.key, textEdit.textDocument, textEdit, textEdit.isEmojiOnly)
+                    photoRoot.isWide = gifData.model.format(gifData.key, textEdit.textDocument, textEdit, textEdit.isEmojiOnly)
                 }
             }
             Component.onCompleted: conns.onAnimationCaptionChanged()
