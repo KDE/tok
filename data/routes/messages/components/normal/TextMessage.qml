@@ -113,6 +113,6 @@ QQC2.Control {
     }
 
     property bool isWide: false
-    Layout.maximumWidth: isWide ? -1 : del.recommendedSize
+    Layout.maximumWidth: isWide ? textEdit.implicitWidth + leftPadding + rightPadding : del.recommendedSize
     Layout.fillWidth: isWide
 }
