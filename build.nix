@@ -1,7 +1,7 @@
 { mkDerivation, env, qtbase, qtdeclarative, qtmultimedia, kirigami2, ki18n
 , knotifications, kconfigwidgets, kwindowsystem, kitemmodels, mauikit
 , applet-window-buttons, pkg-config, qbs, cmake, tdlib, icu, zlib, rlottie
-, jq
+, jq, extra-cmake-modules, syntax-highlighting
 }:
 
 let
@@ -13,10 +13,10 @@ in mkDerivation {
   version = "nightly";
 
   buildInputs = [
-    icu zlib tdlib rlottie 
+    icu zlib tdlib rlottie extra-cmake-modules
     qtEnv kirigami2 ki18n knotifications
     kconfigwidgets kwindowsystem kitemmodels
-    mauikit applet-window-buttons
+    mauikit applet-window-buttons syntax-highlighting
   ];
 
   nativeBuildInputs = [ pkg-config qbs cmake jq ];
@@ -24,14 +24,14 @@ in mkDerivation {
   src = ./.;
 
   configurePhase = ''
-    qbs resolve qbs.installPrefix:/
+    qbs resolve config:release qbs.installPrefix:/
   '';
 
   buildPhase = ''
-    qbs build
+    qbs build config:release
   '';
 
   installPhase = ''
-    qbs install --install-root $out
+    qbs install --install-root $out config:release
   '';
 }
