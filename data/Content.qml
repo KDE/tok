@@ -54,9 +54,16 @@ Kirigami.PageRow {
     }
 
     function closing(event) {
-        if (Components.AudioPlayer.playbackState == Audio.PlayingState || settings.userWantsSystemTray) {
+        if (settings.userWantsSystemTray) {
+            event.accepted = false
+            rootWindow.hide()
+            return
+        }
+
+        if (Components.AudioPlayer.playbackState == Audio.PlayingState) {
             event.accepted = false
             rootWindow.showMinimized()
+            return
         }
     }
 
@@ -92,6 +99,13 @@ Kirigami.PageRow {
     SystemTrayIcon {
         visible: settings.userWantsSystemTray
         icon.name: "org.kde.Tok"
+
+        onActivated: {
+            if (reason === SystemTrayIcon.Trigger) {
+                rootWindow.show()
+                rootWindow.requestActivate()
+            }
+        }
 
         menu: Menu {
             MenuItem {
