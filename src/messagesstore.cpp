@@ -826,11 +826,11 @@ QVariant MessagesStore::data(const QVariant& key, int role)
     case Roles::AudioLargeThumbnail: {
         auto it = static_cast<TDApi::messageAudio*>(d->messageData[mID]->content_.get());
 
-        if (it->audio_->album_cover_minithumbnail_ == nullptr) {
+        if (it->audio_->album_cover_thumbnail_ == nullptr) {
             return QVariant();
         }
 
-        return QString::number(it->audio_->album_cover_thumbnail_->file_->id_);
+        return imageToURL(it->audio_->album_cover_thumbnail_->file_);
     }
     case Roles::AudioFileID: {
         auto it = static_cast<TDApi::messageAudio*>(d->messageData[mID]->content_.get());

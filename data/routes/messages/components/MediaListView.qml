@@ -23,9 +23,6 @@ required property var model
 required property Component delegate
 property bool isWide: false
 
-readonly property int cellWidth: cellView.cellWidth
-readonly property int cellHeight: cellView.cellHeight
-
 Kirigami.Theme.inherit: false
 Kirigami.Theme.colorSet: Kirigami.Theme.View
 
@@ -56,14 +53,10 @@ contentItem: ColumnLayout {
     QQC2.ScrollView {
         QQC2.ScrollBar.horizontal.policy: QQC2.ScrollBar.AlwaysOff
 
-        GridView {
+        ListView {
             id: cellView
 
             model: root.model
-
-            cellWidth: root.isWide ? width : width/3
-            cellHeight: cellWidth
-
             delegate: root.delegate
         }
 

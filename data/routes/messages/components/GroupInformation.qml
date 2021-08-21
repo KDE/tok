@@ -125,6 +125,17 @@ contentItem: ColumnLayout {
                         anchors.left: parent.left
                         anchors.right: parent.right
                     }
+
+                    Kirigami.BasicListItem {
+                        text: i18n("Music")
+                        reserveSpaceForSubtitle: true
+
+                        onClicked: {
+                            theView.push(Qt.resolvedUrl("MusicView.qml"))
+                        }
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                    }
                     Layout.fillWidth: true
                 }
 

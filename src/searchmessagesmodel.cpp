@@ -24,7 +24,7 @@ void SearchMessagesModel::fetchMore(const QModelIndex& parent)
 {
     Q_UNUSED(parent)
 
-    auto from = d->messages.empty() ? 0 : d->messages[d->messages.size()]->id_;
+    auto from = d->messages.empty() ? 0 : d->messages[d->messages.size()-1]->id_;
 
     c->call<TDApi::searchChatMessages>([this](TDApi::searchChatMessages::ReturnType r) {
         if (r->messages_.empty()) {

@@ -63,6 +63,8 @@
         <file>routes/messages/components/CompositionBar.qml</file>
         <file>routes/messages/components/GroupInformation.qml</file>
         <file>routes/messages/components/MediaView.qml</file>
+        <file>routes/messages/components/MediaListView.qml</file>
+        <file>routes/messages/components/MusicView.qml</file>
         <file>routes/messages/components/PhotosView.qml</file>
         <file>routes/messages/components/VideosView.qml</file>
         <file>routes/messages/components/WebPageBlock.qml</file>

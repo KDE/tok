@@ -10,6 +10,8 @@ SearchMessagesModel* Client::searchMessagesModel(QJsonObject params)
             return TDApi::make_object<TDApi::searchMessagesFilterPhoto>();
         } else if (params["kind"].toString() == "videos") {
             return TDApi::make_object<TDApi::searchMessagesFilterVideo>();
+        } else if (params["kind"].toString() == "audios") {
+            return TDApi::make_object<TDApi::searchMessagesFilterAudio>();
         }
         return nullptr;
     };
