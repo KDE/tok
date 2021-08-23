@@ -339,7 +339,7 @@ bool MessagesStore::format(const QVariant &key, QQuickTextDocument* doc, QQuickI
         }
         }
 
-        // curs.setCharFormat(cfmt);
+        curs.setCharFormat(cfmt);
 
         QTextBoundaryFinder finder(QTextBoundaryFinder::Grapheme, doku->toRawText());
         int pos = 0;
