@@ -67,6 +67,8 @@ enum Roles {
     FileID,
     FileIcon,
     FileSizeHuman,
+    FileMinithumbnail,
+    FileThumbnail,
 
     // AddMembers messages
     AddedMembers,
@@ -584,6 +586,32 @@ QVariant MessagesStore::data(const QVariant& key, int role)
 
         return QLocale().formattedDataSize(doku->size_ == 0 ? doku->expected_size_ : doku->size_, 1);
     }
+    case Roles::FileMinithumbnail: {
+        auto content = d->messageData[mID]->content_.get();
+        if (content->get_id() != TDApi::messageDocument::ID) {
+            return QString();
+        }
+
+        auto doku = static_cast<TDApi::messageDocument*>(content);
+        if (doku->document_->minithumbnail_ == nullptr) {
+            return QString();
+        }
+
+        QString img("data:image/jpg;base64,");
+        auto ba = QByteArray::fromStdString(doku->document_->minithumbnail_->data_);
+        img.append(QString::fromLatin1(ba.toBase64().data()));
+
+        return img;
+    }
+    case Roles::FileThumbnail: {
+        auto it = static_cast<TDApi::messageDocument*>(d->messageData[mID]->content_.get());
+
+        if (it->document_->thumbnail_ == nullptr) {
+            return QString();
+        }
+
+        return imageToURL(it->document_->thumbnail_->file_);
+    }
 
     case Roles::AuthorID: {
         const auto idFrom = [](TDApi::MessageSender* s) {
@@ -935,6 +963,8 @@ QHash<int, QByteArray> MessagesStore::roleNames()
     roles[Roles::FileID] = "fileID";
     roles[Roles::FileIcon] = "fileIcon";
     roles[Roles::FileSizeHuman] = "fileSizeHuman";
+    roles[Roles::FileMinithumbnail] = "fileMinithumbnail";
+    roles[Roles::FileThumbnail] = "fileThumbnail";
 
     roles[Roles::AddedMembers] = "addedMembers";
 

@@ -4,6 +4,7 @@
 
 import QtQuick 2.15
 import QtQuick.Layouts 1.10
+import QtGraphicalEffects 1.15
 import QtQuick.Controls 2.12 as QQC2
 import org.kde.kirigami 2.14 as Kirigami
 import org.kde.Tok 1.0 as Tok
@@ -99,6 +100,8 @@ QQC2.Control {
             required property string fileID
             required property string fileIcon
             required property string fileSizeHuman
+            required property string fileMinithumbnail
+            required property string fileThumbnail
         }
     }
 
@@ -119,8 +122,8 @@ QQC2.Control {
         }
         ReplyBlock {}
         QQC2.Control {
-            padding: Kirigami.Units.largeSpacing
-            bottomPadding: fileData.data.fileCaption !== "" ? Kirigami.Units.largeSpacing : Kirigami.Units.largeSpacing+Kirigami.Units.smallSpacing
+            padding: Kirigami.Units.smallSpacing
+            bottomPadding: fileData.data.fileCaption !== "" ? padding : padding+Kirigami.Units.smallSpacing
             contentItem: RowLayout {
                 Kirigami.Icon {
                     id: ikon
@@ -156,6 +159,36 @@ QQC2.Control {
                     Drag.supportedActions: Qt.CopyAction
                     Drag.mimeData: {
                         "text/uri-list": "file://"+downloadData.data.mLocalFilePath
+                    }
+                    Layout.preferredWidth: thumb.status === Image.Ready ? 48 : 32
+                    Layout.preferredHeight: thumb.status === Image.Ready ? 48 : 32
+
+                    Image {
+                        id: thumb
+                        source: fileData.data.fileThumbnail
+                        anchors.fill: parent
+                        fillMode: Image.PreserveAspectCrop
+                        sourceSize.width: parent.width
+                        sourceSize.height: parent.height
+
+                        Image {
+                            visible: thumb.status !== Image.Ready
+                            source: fileData.data.fileMinithumbnail
+                            anchors.fill: parent
+                            fillMode: Image.PreserveAspectCrop
+                            sourceSize.width: parent.width
+                            sourceSize.height: parent.height
+                        }
+
+                        layer.enabled: true
+                        layer.effect: OpacityMask {
+                            maskSource: Rectangle {
+                                color: "red"
+                                radius: 4
+                                width: thumb.width
+                                height: thumb.height
+                            }
+                        }
                     }
 
                     MouseArea {
