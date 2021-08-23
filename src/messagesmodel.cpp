@@ -206,7 +206,7 @@ static auto format(const QString& txt)
 static auto format(QTextDocument* doku)
 {
     auto formattedText = TDApi::make_object<TDApi::formattedText>();
-    formattedText->text_ = doku->toRawText().toStdString();
+    formattedText->text_ = doku->toPlainText().toStdString();
 
     for (int block = 0; block < doku->blockCount(); block++) {
         auto bloc = doku->findBlockByNumber(block);
@@ -262,7 +262,7 @@ static auto format(QQuickTextDocument* doku)
         return format(doc);
     }
 
-    return format(doc->toRawText());
+    return format(doc->toPlainText());
 }
 
 static TDApi::object_ptr<TDApi::InputFile> as_local_file(const QUrl& path) {
