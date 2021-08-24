@@ -27,6 +27,11 @@ void SearchMessagesModel::fetchMore(const QModelIndex& parent)
     auto from = d->messages.empty() ? 0 : d->messages[d->messages.size()]->id_;
 
     c->call<TDApi::searchChatMessages>([this](TDApi::searchChatMessages::ReturnType r) {
+        if (r->messages_.empty()) {
+            d->atEnd = true;
+            return;
+        }
+
         beginInsertRows(QModelIndex(), d->messages.size(), d->messages.size() + r->messages_.size());
         for (auto& it : r->messages_) {
             d->messages.push_back(std::move(it));
