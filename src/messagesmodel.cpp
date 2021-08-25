@@ -9,6 +9,7 @@
 #include "client.h"
 #include "chatsstore.h"
 #include "chatsstore_p.h"
+#include "album_art_extractinator.h"
 
 enum Roles {
     NextID,
@@ -380,6 +381,7 @@ void MessagesModel::send(SendData data)
     } else if (auto it = std::get_if<SendData::Audio>(&data.contents)) {
         auto message_content = TDApi::make_object<TDApi::inputMessageAudio>();
         message_content->audio_ = as_local_file(it->p);
+        message_content->album_cover_thumbnail_ = TDApi::make_object<TDApi::inputThumbnail>(as_local_file(extractinateAlbumArt(it->p)), 0, 0);
         message_content->caption_ = std::move(it->s);
 
         send_message->input_message_content_ = std::move(message_content);
