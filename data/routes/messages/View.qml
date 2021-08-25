@@ -229,6 +229,10 @@ Kirigami.ScrollablePage {
             lView.model.messagesInView(visibleItems)
         }
 
+        function hopTo(idx) {
+            lView.positionViewAtIndex(idx, ListView.Center)
+        }
+
         headerPositioning: ListView.OverlayHeader
 
         RowLayout {

@@ -20,7 +20,7 @@ QQC2.Control {
     TapHandler {
         onTapped: {
             lView.model.hopBackToMessage(replyData.data.inReplyTo).then((idx) => {
-                lView.currentIndex = idx
+                lView.hopTo(idx)
             })
         }
     }
