@@ -34,6 +34,7 @@ QQC2.Control {
 
     topPadding: settings.slimMode ? (del.separateFromPrevious ? Kirigami.Units.smallSpacing : 0) : (del.separateFromPrevious ? Kirigami.Units.largeSpacing : Kirigami.Units.smallSpacing)
     bottomPadding: 0
+    z: 10
 
     Accessible.role: Accessible.ListItem
     Accessible.name: tryit(() => __loaderSwitch.item.Accessible.name)
@@ -174,6 +175,57 @@ QQC2.Control {
             }
             TapHandler {
                 onLongPressed: __responsiveMenu.open()
+            }
+            HoverHandler {
+                id: baseH
+            }
+
+            ColumnLayout {
+                z: 1000
+                anchors.left: parent.right
+                anchors.top: parent.top
+
+                HoverHandler {
+                    id: rowH
+                }
+
+                visible: baseH.hovered || rowH.hovered
+
+                QQC2.Button {
+                    enabled: chatData.data.mCanSendMessages && del.isOwnMessage && messageData.data.kind === "messageText"
+                    QQC2.ToolTip.visible: hovered
+                    QQC2.ToolTip.text: i18nc("button", "Edit")
+                    icon.name: "document-edit"
+                    onClicked: {
+                        messagesViewRoot.interactionID = del.mID
+                        messagesViewRoot.interactionKind = "edit"
+                        del.edit()
+                    }
+                }
+                QQC2.Button {
+                    enabled: chatData.data.mCanSendMessages
+                    QQC2.ToolTip.visible: hovered
+                    QQC2.ToolTip.text: i18nc("button", "Reply")
+                    icon.name: "format-text-blockquote"
+                    onClicked: {
+                        messagesViewRoot.interactionID = del.mID
+                        messagesViewRoot.interactionKind = "reply"
+                    }
+                }
+                QQC2.Button {
+                    enabled: del.canDeleteMessage
+                    QQC2.ToolTip.visible: hovered
+                    QQC2.ToolTip.text: i18nc("button", "Delete")
+                    icon.name: "edit-delete"
+                    onClicked: {
+                        deleteDialog.chatID = del.mChatID
+                        deleteDialog.messageID = del.mID
+                        deleteDialog.canDeleteForSelf = messageData.data.canDeleteForSelf
+                        deleteDialog.canDeleteForOthers = messageData.data.canDeleteForOthers
+                        deleteDialog.title = chatData.data.mTitle
+                        deleteDialog.open()
+                    }
+                }
             }
         }
 
