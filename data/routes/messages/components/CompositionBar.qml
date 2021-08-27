@@ -104,7 +104,7 @@ QQC2.ToolBar {
                         onClicked: {
                             messagesViewRoot.interactionID = ""
                             if (messagesViewRoot.interactionKind == "edit") {
-                                txtField.text = ""
+                                txtField.clear()
                             }
                             messagesViewRoot.interactionKind = ""
                         }
@@ -124,7 +124,7 @@ QQC2.ToolBar {
                     lView.model.edit(txtField.textDocument, messagesViewRoot.interactionID)
 
                     messagesViewRoot.uploadPath = ""
-                    txtField.text = ""
+                    txtField.clear()
                     messagesViewRoot.interactionID = ""
                     messagesViewRoot.interactionKind = ""
                     return
@@ -137,13 +137,13 @@ QQC2.ToolBar {
                     }
 
                     messagesViewRoot.uploadPath = ""
-                    txtField.text = ""
+                    txtField.clear()
                     messagesViewRoot.interactionID = ""
                     messagesViewRoot.interactionKind = ""
                     return
                 }
                 lView.model.send(txtField.textDocument, messagesViewRoot.interactionID)
-                txtField.text = ""
+                txtField.clear()
                 messagesViewRoot.interactionID = ""
                 messagesViewRoot.interactionKind = ""
             }
