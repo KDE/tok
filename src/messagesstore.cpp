@@ -37,6 +37,9 @@ enum Roles {
     InReplyTo,
     SendingState,
 
+    // debug
+    DebugString,
+
     // web pages
     HasWebPage,
     WebPageURL,
@@ -862,6 +865,10 @@ QVariant MessagesStore::data(const QVariant& key, int role)
         return imageToURL(it->animation_->thumbnail_->file_);
     }
 
+    case Roles::DebugString: {
+        return QString::fromStdString(TDApi::to_string(d->messageData[mID]));
+    }
+
     }
 
     Q_UNREACHABLE();
@@ -998,6 +1005,8 @@ QHash<int, QByteArray> MessagesStore::roleNames()
     roles[Roles::WebPageTitle] = "webPageTitle";
     roles[Roles::WebPageText] = "webPageText";
     roles[Roles::HasInstantView] = "hasInstantView";
+
+    roles[Roles::DebugString] = "debugString";
 
     return roles;
 }

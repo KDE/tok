@@ -152,6 +152,21 @@ Kirigami.ScrollablePage {
                 Layout.fillHeight: true
             }
             QQC2.ToolButton {
+                Component {
+                    id: searchComponent
+
+                    Components.SearchMessages {
+                        visible: true
+                    }
+                }
+                text: i18n("Search")
+                icon.name: "search"
+                onClicked: {
+                    let foo = searchComponent.createObject(rootWindow, {chatID: messagesViewRoot.chatID})
+                    foo.visibleChanged.connect(() => { if (!foo.visible) foo.destroy() })
+                }
+            }
+            QQC2.ToolButton {
                 icon.name: settings.userWantsSidebars ? "sidebar-collapse-right" : "sidebar-expand-right"
                 onClicked: settings.userWantsSidebars = !settings.userWantsSidebars
                 visible: rootRow.shouldUseSidebars
@@ -229,6 +244,11 @@ Kirigami.ScrollablePage {
             lView.model.messagesInView(visibleItems)
         }
 
+        function hopToID(id) {
+            lView.model.hopBackToMessage(id).then((idx) => {
+                lView.hopTo(idx)
+            })
+        }
         function hopTo(idx) {
             lView.positionViewAtIndex(idx, ListView.Center)
         }
@@ -252,6 +272,8 @@ Kirigami.ScrollablePage {
         }
 
         delegate: Components.MessageDelegate {
+            menuEnabled: true
+
             function add() {
                 lView.visibleItems = [...lView.visibleItems, this.mID]
             }
