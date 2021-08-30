@@ -21,6 +21,8 @@ QQC2.Control {
     required property string mNextID
     required property string mPreviousID
 
+    required property bool menuEnabled
+
     readonly property int recommendedSize: (rootRow.shouldUseSidebars ? Math.max(del.width / 3, Kirigami.Units.gridUnit * 15) : Math.min(del.width * 0.8, Kirigami.Units.gridUnit * 15))
     readonly property int recommendedSmallSize: (rootRow.shouldUseSidebars ? Math.max(del.width / 5, Kirigami.Units.gridUnit * 10) : Math.min(del.width * 0.6, Kirigami.Units.gridUnit * 10))
 
@@ -38,6 +40,8 @@ QQC2.Control {
     Accessible.role: Accessible.ListItem
     Accessible.name: tryit(() => __loaderSwitch.item.Accessible.name)
     readonly property bool showFocusRing: true
+
+    property alias afterMessage: afterDelRow.children
 
     Kirigami.Theme.backgroundColor: {
         if (isOwnMessage)
@@ -170,12 +174,14 @@ QQC2.Control {
 
             TapHandler {
                 acceptedButtons: Qt.RightButton
-                onTapped: __responsiveMenu.open()
+                onTapped: { if (del.menuEnabled) __responsiveMenu.open() }
             }
             TapHandler {
-                onLongPressed: __responsiveMenu.open()
+                onLongPressed: { if (del.menuEnabled) __responsiveMenu.open() }
             }
         }
+
+        Row { id: afterDelRow }
 
         Item {
             Layout.fillWidth: !(del.isOwnMessage && Kirigami.Settings.isMobile)
