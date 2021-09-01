@@ -96,7 +96,7 @@ QString Extractinator::extractBody(Client* c, TDApi::message* msg)
         handleCase(messageVoiceNote, msg)
             Q_UNUSED(msg)
 
-            ret = i18nc("notification body for receiving a voice note", "Video");
+            ret = i18nc("notification body for receiving a voice note", "Voice");
         endhandle
         handleCase(messageLocation, msg)
             Q_UNUSED(msg)
