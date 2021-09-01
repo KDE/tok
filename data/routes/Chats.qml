@@ -194,7 +194,7 @@ Kirigami.Page {
             QQC2.RoundButton {
                 visible: Kirigami.Settings.isMobile
                 icon.name: "list-add"
-                text: i18nc("button with menu", "Create New...")
+                text: i18nc("button with menu", "Create New…")
                 onClicked: createNew.open()
 
                 Layout.margins: Kirigami.Units.gridUnit
