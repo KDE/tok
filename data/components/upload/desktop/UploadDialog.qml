@@ -32,7 +32,7 @@ Dialog {
     }
 
     function pick() {
-        Tok.Utils.pickFile(i18nc("Dialog title", "Upload"), "none").then((url) => {
+        Tok.Utils.pickFile(i18nc("dialog title", "Upload"), "none").then((url) => {
             _uploadDialogDesktop.source = url
             _uploadDialogDesktop.open()
         })
