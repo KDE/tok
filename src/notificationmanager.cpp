@@ -79,7 +79,7 @@ void NotificationManager::handleUpdateNotificationGroup(TDApi::object_ptr<TDApi:
                 brk:
 
                 auto reply = std::make_unique<KNotificationReplyAction>(i18nc("button action", "Reply"));
-                reply->setPlaceholderText(i18nc("placeholder text", "Reply to %1…", author));
+                reply->setPlaceholderText(i18nc("%1 is the author name of the message to reply to", "Reply to %1…", author));
                 QObject::connect(reply.get(), &KNotificationReplyAction::replied, c, [this, chatID = msg->message_->chat_id_](const QString& reply) {
                     auto send_message = TDApi::make_object<TDApi::sendMessage>();
                     send_message->chat_id_ = chatID;
