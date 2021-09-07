@@ -96,6 +96,7 @@ Window {
                             {"value": "photos", "label": i18n("Photos")},
                             {"value": "videos", "label": i18n("Videos")},
                             {"value": "audios", "label": i18n("Music")},
+                            {"value": "files", "label": i18n("Files")},
                         ]
                     }
                     textRole: "label"
