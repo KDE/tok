@@ -87,9 +87,17 @@ QQC2.Control {
             }
         }
 
-        QQC2.ToolButton {
-            visible: false // TODO: implement
+        QQC2.Button {
+            visible: webPageData.data.hasInstantView
             text: i18nc("button that opens a preview of a web page. 'instant view' is sort of like a brand name, but also sort of not? i would recommend consulting translations.telegram.org to see how instant view was translated officially.", "Instant View")
+
+            onClicked: Tok.InstantViewer.doInstantView(webPageData.data.webPageURL, tClient, coly)
+
+            Layout.fillWidth: true
+        }
+
+        ColumnLayout {
+            id: coly
 
             Layout.fillWidth: true
         }

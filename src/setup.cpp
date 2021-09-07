@@ -28,6 +28,7 @@
 #include "searchmessagesmodel.h"
 #include "chatlistmodel.h"
 #include "proxymodel.h"
+#include "instantviewer.h"
 
 #include "internallib/qquickrelationallistener.h"
 
@@ -59,6 +60,7 @@ void performSetup(QQmlEngine* eng, bool testMode)
     qRegisterMetaType<QSharedPointer<TDApi::file>>();
     qmlRegisterSingletonType<Utilities>("org.kde.Tok", 1, 0, "Utils", [](QQmlEngine*, QJSEngine*) -> QObject* { return new Utilities; });
     qmlRegisterSingletonType<ColorSchemer>("org.kde.Tok", 1, 0, "ColorSchemer", [](QQmlEngine*, QJSEngine*) -> QObject* { return new ColorSchemer; });
+    qmlRegisterSingletonType<InstantViewer>("org.kde.Tok", 1, 0, "InstantViewer", [](QQmlEngine*, QJSEngine*) -> QObject* { return new InstantViewer; });
     qmlRegisterUncreatableType<CopyInterceptor>("org.kde.Tok", 1, 0, "Clipboard", "You cannot create an instance of Clipboard.");
     qmlRegisterUncreatableType<Client>("org.kde.Tok", 1, 0, "Client", "please use the tClient singleton");
     qmlRegisterType<ChatSortModel>("org.kde.Tok", 1, 0, "ChatSortModel");
