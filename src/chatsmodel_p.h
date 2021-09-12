@@ -30,4 +30,5 @@ struct ChatsModel::Private {
     // }
 
     bool atEnd = true;
+    int numLoadedChats = 0;
 };

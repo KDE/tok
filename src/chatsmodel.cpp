@@ -31,10 +31,10 @@ ChatsModel::~ChatsModel()
 
 void ChatsModel::fetch()
 {
-    c->call<TDApi::getChats>(
-        [](TDApi::getChats::ReturnType resp) {
+    c->call<TDApi::loadChats>(
+        [](TDApi::loadChats::ReturnType resp) {
         },
-        nullptr, std::numeric_limits<std::int64_t>::max(), 0, 20
+        nullptr, d->numLoadedChats += 20
     );
 }
 

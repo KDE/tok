@@ -146,9 +146,9 @@ void ChatSortModel::setFolder(const QString& folder)
         list = TDApi::make_object<TDApi::chatListFilter>(it);
     }
 
-    _store->c->call<TDApi::getChats>(
+    _store->c->call<TDApi::loadChats>(
         nullptr,
-        std::move(list), std::numeric_limits<std::int64_t>::max(), 0, 20
+        std::move(list), 20
     );
 
     _folder = folder;
