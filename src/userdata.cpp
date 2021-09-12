@@ -8,6 +8,8 @@
 #include <KLocalizedString>
 #include <td/telegram/td_api.h>
 
+#include <unicode/reldatefmt.h>
+
 #include "userdata.h"
 #include "photoutils.h"
 
@@ -16,6 +18,7 @@ enum Roles {
     SmallAvatar,
     Bio,
     Username,
+    Status,
 };
 
 UserDataModel::UserDataModel(Client* parent)
@@ -59,6 +62,45 @@ QVariant UserDataModel::data(const QVariant& key, int role)
         return imageToURL(userData[id]->profile_photo_->small_);
     case Roles::Username:
         return QString::fromStdString(userData[id]->username_);
+    case Roles::Status:
+        match(userData[id]->status_)
+            handleCase(userStatusOnline, v)
+                Q_UNUSED(v)
+                return i18n("Online");
+            endhandle
+            handleCase(userStatusRecently, v)
+                Q_UNUSED(v)
+                return i18n("Online recently");
+            endhandle
+            handleCase(userStatusOffline, v)
+                UErrorCode status = U_ZERO_ERROR;
+                icu::UnicodeString appendTo;
+                std::string converted;
+                icu::RelativeDateTimeFormatter fmt(status);
+
+                const auto time = QDateTime::fromTime_t(v->was_online_);
+                const auto now = QDateTime::currentDateTime();
+                const auto secsTo = time.secsTo(now);
+                const auto minutesTo = secsTo / 60;
+                const auto hoursTo = secsTo / 60 / 60;
+
+                if (time.daysTo(now) > 0) {
+                    fmt.format(time.daysTo(now), UDAT_DIRECTION_LAST, UDAT_RELATIVE_DAYS, appendTo, status);
+                } else if (hoursTo > 0) {
+                    fmt.format(hoursTo, UDAT_DIRECTION_LAST, UDAT_RELATIVE_HOURS, appendTo, status);
+                } else if (minutesTo > 0) {
+                    fmt.format(minutesTo, UDAT_DIRECTION_LAST, UDAT_RELATIVE_MINUTES, appendTo, status);
+                } else {
+                    fmt.format(secsTo, UDAT_DIRECTION_LAST, UDAT_RELATIVE_MINUTES, appendTo, status);
+                }
+                appendTo.toUTF8String(converted);
+
+                return i18nc("%1 is a (translated via ICU) relative time, such as '3 seconds ago'", "Last online %1", QString::fromStdString(converted));
+            endhandle
+            default: {
+                return i18n("Unknown Status");
+            }
+        endmatch
     }
 
     Q_UNREACHABLE();
@@ -97,6 +139,7 @@ QHash<int, QByteArray> UserDataModel::roleNames()
     ret[Roles::SmallAvatar] = "smallAvatar";
     ret[Roles::Bio] = "bio";
     ret[Roles::Username] = "username";
+    ret[Roles::Status] = "status";
 
     return ret;
 }

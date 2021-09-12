@@ -161,6 +161,7 @@ contentItem: ColumnLayout {
                 bottomPadding: Kirigami.Units.largeSpacing
 
                 text: userData.data.name
+                subtitle: userData.data.status
                 reserveSpaceForSubtitle: true
 
                 Tok.RelationalListener {
@@ -171,6 +172,7 @@ contentItem: ColumnLayout {
                     shape: QtObject {
                         required property string name
                         required property string smallAvatar
+                        required property string status
                     }
                 }
             }
