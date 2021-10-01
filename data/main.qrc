@@ -69,6 +69,7 @@
         <file>routes/messages/components/VideosView.qml</file>
         <file>routes/messages/components/WebPageBlock.qml</file>
         <file>routes/messages/components/MentionBar.qml</file>
+        <file>routes/messages/components/PinnedMessages.qml</file>
         <file>routes/messages/components/SearchMessages.qml</file>
 
         <file>routes/messages/components/link_activation.mjs</file>
