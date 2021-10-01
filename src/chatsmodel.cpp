@@ -182,7 +182,7 @@ QIviPendingReplyBase ChatsModel::createChat(const QString& name, const QString& 
         return ret;
     }
 
-    TDApi::array<TDApi::int32> it;
+    TDApi::array<TDApi::int53> it;
     for (const auto& item : ids) {
         it.push_back(item.toLongLong());
     }
