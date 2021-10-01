@@ -14,6 +14,8 @@ SearchMessagesModel* Client::searchMessagesModel(QJsonObject params)
             return TDApi::make_object<TDApi::searchMessagesFilterAudio>();
         } else if (params["kind"].toString() == "files") {
             return TDApi::make_object<TDApi::searchMessagesFilterDocument>();
+        } else if (params["kind"].toString() == "pinned") {
+            return TDApi::make_object<TDApi::searchMessagesFilterPinned>();
         }
         return nullptr;
     };

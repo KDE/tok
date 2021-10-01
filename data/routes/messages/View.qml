@@ -153,6 +153,21 @@ Kirigami.ScrollablePage {
             }
             QQC2.ToolButton {
                 Component {
+                    id: pinnedMessages
+
+                    Components.PinnedMessages {
+                        visible: true
+                    }
+                }
+                text: i18n("Pinned Messages")
+                icon.name: "pin"
+                onClicked: {
+                    let foo = pinnedMessages.createObject(rootWindow, {chatID: messagesViewRoot.chatID})
+                    foo.visibleChanged.connect(() => { if (!foo.visible) foo.destroy() })
+                }
+            }
+            QQC2.ToolButton {
+                Component {
                     id: searchComponent
 
                     Components.SearchMessages {
