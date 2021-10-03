@@ -8,47 +8,27 @@ StaticLibrary {
     name: "tokInternal"
 
     Export {
-        cpp.driverLinkerFlags: mu.linkerFlags.concat(["-pthread"])
-        cpp.includePaths: mu.includeDirs.concat(["yoinked from qt automotive"])
+        cpp.driverLinkerFlags: ["-pthread"]
+        cpp.includePaths: ["yoinked from qt automotive"]
         Group {
             files: ["../data/main.qrc"]
         }
+
+        Depends { name: "kf5_configwidgets" }
+        Depends { name: "kf5_i18n" }
+        Depends { name: "kf5_kirigami2" }
+        Depends { name: "kf5_notifications" }
+        Depends { name: "kf5_syntaxhighlighting" }
+        Depends { name: "kf5_windowsystem" }
+        Depends { name: "tdlib_cmake" }
+
         Depends { name: "cpp" }
         Depends { name: "rlottieplugin" }
         Depends { name: "Qt"; submodules: ["widgets", "qml", "qml-private", "core-private", "quick", "quick-private", "concurrent", "multimedia"] }
         Depends { name: "icu-uc" }
     }
 
-    Probe {
-        id: mu
-        property string src: product.sourceDirectory
-        property var linkerFlags
-        property var includeDirs
-        configure: {
-            var proc = new Process()
-            var exitCode = proc.exec("bash", [mu.src + "/extract_flags.sh",
-                "find_package(KF5Kirigami2 REQUIRED)\n"+
-                "find_package(KF5I18n REQUIRED)\n"+
-                "find_package(KF5Notifications REQUIRED)\n"+
-                "find_package(KF5ConfigWidgets REQUIRED)\n"+
-                "find_package(KF5WindowSystem REQUIRED)\n"+
-                "find_package(KF5SyntaxHighlighting REQUIRED)\n"+
-                "find_package(Td REQUIRED)\n",
-
-                "KF5::Kirigami2 KF5::I18n KF5::Notifications KF5::ConfigWidgets KF5::WindowSystem KF5::SyntaxHighlighting Td::TdStatic",
-            ])
-            if (exitCode != 0) {
-            	console.error(proc.readStdOut())
-            	throw "extracting flags from CMake libraries failed"
-            }
-            var stdout = proc.readStdOut()
-            stdout = stdout.split("====")
-            linkerFlags = stdout[0].split("\n").filter(function(it) { return Boolean(it) && !it.contains("rpath") && (it.startsWith("/") || it.startsWith("-l")) }).map(function(it) { return it.replace("-Wl,", "") })
-            includeDirs = stdout[1].split("\n").filter(function(it) { return Boolean(it) && !it.contains("rpath") && (it.startsWith("/") || it.startsWith("-l")) }).map(function(it) { return it.replace("-Wl,", "") })
-        }
-    }
-    cpp.driverLinkerFlags: mu.linkerFlags
-    cpp.includePaths: mu.includeDirs.concat(["yoinked from qt automotive"])
+    cpp.includePaths: ["yoinked from qt automotive"]
     cpp.cxxLanguageVersion: "c++20"
 
     files: [
@@ -60,6 +40,14 @@ StaticLibrary {
         "yoinked from qt automotive/*.h",
     ]
     excludeFiles: ["main.cpp", "test_main.cpp"]
+
+    Depends { name: "kf5_configwidgets" }
+    Depends { name: "kf5_i18n" }
+    Depends { name: "kf5_kirigami2" }
+    Depends { name: "kf5_notifications" }
+    Depends { name: "kf5_syntaxhighlighting" }
+    Depends { name: "kf5_windowsystem" }
+    Depends { name: "tdlib_cmake" }
 
     Depends { name: "cpp" }
     Depends { name: "rlottieplugin" }

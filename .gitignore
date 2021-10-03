@@ -1,4 +1,5 @@
 /default
+/vendor/tdlib-android
 .vscode/
 .idea/
 *.kdev4
