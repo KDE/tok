@@ -13,6 +13,8 @@ import QtMultimedia 5.15
 import Qt.labs.settings 1.0
 import Qt.labs.platform 1.1
 
+import org.kde.sonnet 1.0 as Sonnet
+
 import "routes" as Routes
 import "routes/entry" as EntryRoutes
 import "routes/messages" as MessagesRoutes
@@ -93,6 +95,31 @@ Kirigami.PageRow {
                 settings.pageWidth = Math.max((rootRow.defaultPageWidth - rootRow.leeway),
                     rootRow.pageWidth - (_lastX - mouse.x));
             }
+        }
+    }
+
+    Sonnet.SpellcheckHighlighter {
+        id: theOneTrueSpellCheckHighlighter
+
+        readonly property Item field: (rootWindow.activeFocusItem instanceof TextEdit || rootWindow.activeFocusItem instanceof TextInput) ? rootWindow.activeFocusItem : null
+        property var suggestions_: []
+        readonly property Connections conns: Connections {
+            target: theOneTrueSpellCheckHighlighter.field
+            function onCursorPositionChanged() {
+                theOneTrueSpellCheckHighlighter.suggestions_ = theOneTrueSpellCheckHighlighter.suggestions(theOneTrueSpellCheckHighlighter.field.selectionStart)
+            }
+        }
+
+        document: field.textDocument || null
+        cursorPosition: field.cursorPosition
+        selectionStart: field.selectionStart
+        selectionEnd: field.selectionEnd
+        misspelledColor: Kirigami.Theme.negativeTextColor
+        active: field instanceof TextEdit && !field.readOnly
+
+        onChangeCursorPosition: {
+            field.cursorPosition = start
+            field.moveCursorSelection(end, TextEdit.SelectCharacters)
         }
     }
 

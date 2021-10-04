@@ -15,8 +15,8 @@ Kirigami.ApplicationWindow {
 
     title: i18nc("window title", "Preferences")
 
-    width: Kirigami.Units.gridUnit * 30
-    height: Kirigami.Units.gridUnit * 20
+    width: Kirigami.Units.gridUnit * 40
+    height: Kirigami.Units.gridUnit * 25
 
     header: Kirigami.Separator {
         anchors {
@@ -65,6 +65,18 @@ Kirigami.ApplicationWindow {
                     accessibleDescription: i18nc("sidebar item accessible text", "Open proxy settings")
                     icon.name: "preferences-system-network-proxy"
                     page: Qt.resolvedUrl("ProxySettings.qml")
+                }
+                SidebarItem {
+                    pageName: i18n("Spellchecking")
+                    accessibleDescription: i18nc("sidebar item accessible text", "Open spellchecking settings")
+                    icon.name: "tools-check-spelling"
+                    page: Qt.resolvedUrl("SpellcheckSettings.qml")
+                }
+                SidebarItem {
+                    pageName: i18n("Spellchecking Dictionary")
+                    accessibleDescription: i18nc("sidebar item accessible text", "Open spellchecking dictionary")
+                    icon.name: "accessories-dictionary"
+                    page: Qt.resolvedUrl("SpellcheckDictionary.qml")
                 }
             }
         }

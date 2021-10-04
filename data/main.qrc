@@ -41,6 +41,8 @@
         <file>routes/settings/AppearanceSettings.qml</file>
         <file>routes/settings/AccountSettings.qml</file>
         <file>routes/settings/BehaviourSettings.qml</file>
+        <file>routes/settings/SpellcheckSettings.qml</file>
+        <file>routes/settings/SpellcheckDictionary.qml</file>
         <file>routes/settings/ProxySettings.qml</file>
         <file>routes/settings/ProxyForm.qml</file>
         <file>routes/settings/Settings.qml</file>
@@ -49,6 +51,10 @@
         <file>routes/settings/mobile/AppearanceSettings.qml</file>
         <file>routes/settings/mobile/ColorSchemes.qml</file>
         <file>routes/settings/mobile/ProxySettings.qml</file>
+        <file>routes/settings/mobile/SpellcheckSettings.qml</file>
+        <file>routes/settings/mobile/SpellcheckDefault.qml</file>
+        <file>routes/settings/mobile/SpellcheckDictionary.qml</file>
+        <file>routes/settings/mobile/SpellcheckLanguageList.qml</file>
         <file>routes/settings/mobile/NewProxy.qml</file>
         <file>routes/settings/mobile/Settings.qml</file>
         

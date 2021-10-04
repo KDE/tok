@@ -48,6 +48,13 @@ Kirigami.ScrollablePage {
         }
 
         Kirigami.BasicListItem {
+            text: i18n("Spellchecking")
+            onClicked: rootRow.layers.push(Qt.resolvedUrl("SpellcheckSettings.qml"))
+
+            Layout.fillWidth: true
+        }
+
+        Kirigami.BasicListItem {
             text: i18n("Proxy")
             onClicked: rootRow.layers.push(Qt.resolvedUrl("ProxySettings.qml"))
 
