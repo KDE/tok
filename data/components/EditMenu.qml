@@ -99,4 +99,46 @@ Labs.Menu {
         }
     }
 
+    Labs.MenuSeparator {
+        visible: !editMenu.field.readOnly
+    }
+
+    Labs.Menu {
+        id: correctionsMenu
+
+        title: i18nc("text editing submenu", "Spellchecking")
+        visible: !editMenu.field.readOnly && theOneTrueSpellCheckHighlighter.active
+
+        Instantiator {
+            active: !editMenu.field.readOnly && theOneTrueSpellCheckHighlighter.active && theOneTrueSpellCheckHighlighter.wordIsMisspelled
+            model: theOneTrueSpellCheckHighlighter.suggestions_
+            delegate: Labs.MenuItem {
+                text: modelData
+                onTriggered: theOneTrueSpellCheckHighlighter.replaceWord(modelData)
+            }
+            onObjectAdded: correctionsMenu.insertItem(index, object)
+            onObjectRemoved: correctionsMenu.removeItem(object)
+        }
+
+        Labs.MenuItem {
+            visible: theOneTrueSpellCheckHighlighter.wordIsMisspelled && theOneTrueSpellCheckHighlighter.suggestions_.length === 0
+            text: i18n("No suggestions for \"%1\"", theOneTrueSpellCheckHighlighter.wordUnderMouse)
+            enabled: false
+        }
+
+        Labs.MenuSeparator {
+        }
+
+        Labs.MenuItem {
+            visible: theOneTrueSpellCheckHighlighter.wordIsMisspelled
+            text: i18n("Add \"%1\" to dictionary", theOneTrueSpellCheckHighlighter.wordUnderMouse)
+            onTriggered: theOneTrueSpellCheckHighlighter.addWordToDictionary(theOneTrueSpellCheckHighlighter.wordUnderMouse)
+        }
+
+        Labs.MenuItem {
+            visible: theOneTrueSpellCheckHighlighter.wordIsMisspelled
+            text: i18n("Ignore \"%1\"", theOneTrueSpellCheckHighlighter.wordUnderMouse)
+            onTriggered: theOneTrueSpellCheckHighlighter.ignoreWord(theOneTrueSpellCheckHighlighter.wordUnderMouse)
+        }
+    }
 }
