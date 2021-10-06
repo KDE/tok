@@ -60,6 +60,7 @@ void performSetup(QQmlEngine* eng, bool testMode)
     qmlRegisterSingletonType<Utilities>("org.kde.Tok", 1, 0, "Utils", [](QQmlEngine*, QJSEngine*) -> QObject* { return new Utilities; });
     qmlRegisterSingletonType<ColorSchemer>("org.kde.Tok", 1, 0, "ColorSchemer", [](QQmlEngine*, QJSEngine*) -> QObject* { return new ColorSchemer; });
     qmlRegisterUncreatableType<CopyInterceptor>("org.kde.Tok", 1, 0, "Clipboard", "You cannot create an instance of Clipboard.");
+    qmlRegisterUncreatableType<Client>("org.kde.Tok", 1, 0, "Client", "please use the tClient singleton");
     qmlRegisterType<ChatSortModel>("org.kde.Tok", 1, 0, "ChatSortModel");
     qmlRegisterType<UserSortModel>("org.kde.Tok", 1, 0, "UserSortModel");
     qmlRegisterType<TokQmlRelationalListener>("org.kde.Tok", 1, 0, "RelationalListener");

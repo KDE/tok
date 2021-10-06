@@ -40,6 +40,7 @@ class Client : public QObject
     Q_PROPERTY(bool online READ online WRITE setOnline NOTIFY onlineChanged)
     Q_PROPERTY(bool doNotDisturb READ doNotDisturb WRITE setDoNotDisturb NOTIFY doNotDisturbChanged)
     Q_PROPERTY(QString ownID READ ownID CONSTANT)
+    Q_PROPERTY(ConnectionState connectionState READ connectionState NOTIFY connectionStateChanged)
 
     class Private;
     std::unique_ptr<Private> d;
@@ -54,6 +55,15 @@ private:
 public:
     Client(bool testing = false);
     ~Client();
+
+    enum ConnectionState {
+        Connecting,
+        ConnectingToProxy,
+        WaitingForNetwork,
+        Ready,
+        Updating,
+    };
+    Q_ENUM(ConnectionState)
 
     template<typename Fn, typename ...Args>
     void call(std::function<void(typename Fn::ReturnType)> cb, Args ... args) {
@@ -116,6 +126,9 @@ public:
     bool doNotDisturb() const;
     void setDoNotDisturb(bool dnd);
     Q_SIGNAL void doNotDisturbChanged();
+
+    ConnectionState connectionState() const;
+    Q_SIGNAL void connectionStateChanged();
 
     Q_INVOKABLE QIviPendingReplyBase searchPublicChat(const QString& username);
     Q_INVOKABLE QIviPendingReplyBase searchEmojis(const QString& term);

@@ -360,4 +360,50 @@ Kirigami.PageRow {
         MessagesRoutes.View {}
         MessagesRoutes.NoView {}
     }
+
+    Kirigami.Heading {
+        level: 4
+
+        visible: tClient.connectionState != Tok.Client.Ready
+
+        text: {
+            switch (tClient.connectionState) {
+            case Tok.Client.Connecting:
+                return i18nc("small bubble in bottom left of window indicating current connection status", "Connecting…")
+            case Tok.Client.ConnectingToProxy:
+                return i18nc("small bubble in bottom left of window indicating current connection status", "Connecting to proxy…")
+            case Tok.Client.WaitingForNetwork:
+                return i18nc("small bubble in bottom left of window indicating current connection status", "Waiting on network…")
+            case Tok.Client.Updating:
+                return i18nc("small bubble in bottom left of window indicating current connection status", "Updating…")
+            }
+        }
+
+        padding: Kirigami.Units.smallSpacing
+        leftPadding: Kirigami.Units.largeSpacing
+        rightPadding: Kirigami.Units.largeSpacing
+
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.margins: 6
+
+        z: 99
+
+        background: Rectangle {
+            radius: height
+
+            Kirigami.Theme.colorSet: Kirigami.Theme.Window
+            color: Kirigami.Theme.backgroundColor
+
+            layer.enabled: true
+            layer.effect: DropShadow {
+                cached: true
+                horizontalOffset: 0
+                verticalOffset: 1
+                radius: 2.0
+                samples: 17
+                color: "#30000000"
+            }
+        }
+    }
 }

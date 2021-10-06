@@ -25,6 +25,7 @@ class Client::Private
     bool online;
     bool dnd = false;
     bool quitting = false;
+    Client::ConnectionState connectionState = Client::Connecting;
 
     // members
 

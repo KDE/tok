@@ -229,6 +229,16 @@ void Client::Private::handleUpdate(TDApi::object_ptr<TDApi::Object> update)
                 auto mv = TDApi::move_object_as<TDApi::Update>(update);
                 q->chatsModel()->handleUpdate(std::move(mv));
             },
+            [this](TDApi::updateConnectionState &upd) {
+                switch (upd.state_->get_id()) {
+                case TDApi::connectionStateConnecting::ID: connectionState = Client::Connecting; break;
+                case TDApi::connectionStateConnectingToProxy::ID: connectionState = Client::ConnectingToProxy; break;
+                case TDApi::connectionStateReady::ID: connectionState = Client::Ready; break;
+                case TDApi::connectionStateUpdating::ID: connectionState = Client::Updating; break;
+                case TDApi::connectionStateWaitingForNetwork::ID: connectionState = Client::WaitingForNetwork; break;
+                }
+                Q_EMIT q->connectionStateChanged();
+            },
             [](auto& update) { /* qWarning() << "unhandled private client update" << QString::fromStdString(TDApi::to_string(update)); */ }));
 }
 
