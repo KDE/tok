@@ -47,6 +47,7 @@ enum Roles {
     WebPageSiteName,
     WebPageTitle,
     WebPageText,
+    WebPagePhoto,
 
     // instant view
     HasInstantView,
@@ -656,6 +657,33 @@ QVariant MessagesStore::data(const QVariant& key, int role)
         return QString::fromStdString(it->url_);
     }
 
+    case Roles::WebPagePhoto: {
+        if (!hasWebPage()) return QString();
+
+        auto it = static_cast<TDApi::messageText*>(d->messageData[mID]->content_.get())->web_page_.get();
+
+        if (it->photo_ == nullptr) {
+            return QString();
+        }
+
+        int sz = 0;
+        int trueI = -1;
+        int i = 0;
+        for (auto& size : it->photo_->sizes_) {
+            auto thisSz = size->height_ * size->width_;
+            if (sz < thisSz) {
+                sz = thisSz;
+                trueI = i;
+            }
+            i++;
+        }
+        if (trueI == -1) {
+            return QString();
+        }
+
+        return imageToURL(it->photo_->sizes_[trueI]->photo_);
+    }
+
     case Roles::WebPageDisplay: {
         if (!hasWebPage()) return QString();
 
@@ -1004,6 +1032,7 @@ QHash<int, QByteArray> MessagesStore::roleNames()
     roles[Roles::WebPageSiteName] = "webPageSiteName";
     roles[Roles::WebPageTitle] = "webPageTitle";
     roles[Roles::WebPageText] = "webPageText";
+    roles[Roles::WebPagePhoto] = "webPagePhoto";
     roles[Roles::HasInstantView] = "hasInstantView";
 
     roles[Roles::DebugString] = "debugString";

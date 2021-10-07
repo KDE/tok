@@ -59,7 +59,7 @@ QQC2.Control {
         ReplyBlock {}
         TextEdit {
             id: textEdit
-            text: textData.data.content + _background.textPadding
+            text: textData.data.content + (web.visible ? "" : _background.textPadding)
 
             Connections {
                 id: conns

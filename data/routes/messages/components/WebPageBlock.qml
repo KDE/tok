@@ -4,6 +4,7 @@
 
 import QtQuick 2.15
 import QtQuick.Layouts 1.10
+import QtGraphicalEffects 1.15
 import QtQuick.Controls 2.12 as QQC2
 import org.kde.kirigami 2.14 as Kirigami
 import org.kde.Tok 1.0 as Tok
@@ -29,6 +30,7 @@ QQC2.Control {
             required property string webPageSiteName
             required property string webPageTitle
             required property string webPageText
+            required property string webPagePhoto
             required property bool hasInstantView
         }
     }
@@ -60,6 +62,29 @@ QQC2.Control {
             elide: Text.ElideRight
 
             Layout.fillWidth: true
+        }
+        Image {
+            id: image
+
+            source: webPageData.data.webPagePhoto
+            visible: status === Image.Ready
+            smooth: true
+            mipmap: true
+
+            readonly property real ratio: width / implicitWidth
+            Layout.preferredHeight: implicitHeight * ratio
+            Layout.fillWidth: true
+            Layout.topMargin: 4
+
+            layer.enabled: true
+            layer.effect: OpacityMask {
+                maskSource: Rectangle {
+                    color: "red"
+                    radius: 4
+                    width: image.width
+                    height: image.height
+                }
+            }
         }
 
         QQC2.ToolButton {
