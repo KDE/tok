@@ -13,6 +13,7 @@ Loader {
 
     active: false
     required property string userID
+    required property string chatID
 
     function open() {
         if (!active) {
@@ -40,6 +41,20 @@ Loader {
             }
         }
 
+        property Tok.RelationalListener mu2: Tok.RelationalListener {
+            id: chatData
+
+            model: tClient.chatsStore
+            key: __loader.chatID
+            shape: QtObject {
+                required property string mTitle
+                required property string mKind
+                required property variant mOwnStatus
+            }
+
+            readonly property bool isGroup: chatData.data.mKind === "basicGroup" || chatData.data.mKind === "superGroup"
+        }
+
         ColumnLayout {
             Kirigami.Avatar {
                 name: userData.data.name
@@ -57,13 +72,42 @@ Loader {
                 horizontalAlignment: Text.AlignHCenter
 
                 Layout.fillWidth: true
+                Layout.maximumWidth: Kirigami.Units.gridUnit * 20
             }
             QQC2.Label {
                 text: userData.data.bio
+                visible: userData.data.bio !== ""
                 wrapMode: Text.Wrap
                 horizontalAlignment: Text.AlignHCenter
 
                 Layout.fillWidth: true
+                Layout.maximumWidth: Kirigami.Units.gridUnit * 20
+            }
+
+            QQC2.Button {
+                text: i18n("Ban from \"%1\"", chatData.data.mTitle)
+                enabled: chatData.data.mOwnStatus.canRemove
+                onClicked: {
+                    tClient.chatsStore.setStatus(__loader.chatID, __loader.userID, {"status": "banned"})
+                    __overlaySheet.close()
+                }
+                visible: chatData.isGroup
+
+                Layout.fillWidth: true
+                Layout.maximumWidth: Kirigami.Units.gridUnit * 20
+            }
+
+            QQC2.Button {
+                text: i18n("Kick from \"%1\"", chatData.data.mTitle)
+                enabled: chatData.data.mOwnStatus.canRemove
+                onClicked: {
+                    tClient.chatsStore.setStatus(__loader.chatID, __loader.userID, {"status": "kicked"})
+                    __overlaySheet.close()
+                }
+                visible: chatData.isGroup
+
+                Layout.fillWidth: true
+                Layout.maximumWidth: Kirigami.Units.gridUnit * 20
             }
         }
     }
