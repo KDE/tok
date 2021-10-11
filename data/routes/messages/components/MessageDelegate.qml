@@ -132,6 +132,7 @@ QQC2.Control {
                 cursorShape: Qt.PointingHandCursor
                 onClicked: {
                     globalUserDataSheet.userID = messageData.data.authorID
+                    globalUserDataSheet.chatID = del.mChatID
                     globalUserDataSheet.open()
                 }
             }

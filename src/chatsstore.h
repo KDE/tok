@@ -17,6 +17,7 @@ class ChatsStore : public TokAbstractRelationalModel
     friend class ChatSortModel;
 
     QJsonValue prepare(TDApi::int53 chat);
+    void fetchExtended(TDApi::int53 chat);
 
 public:
 
@@ -36,4 +37,6 @@ public:
     void fetchKey(const QVariant& key) override;
 
     QHash<int, QByteArray> roleNames() override;
+
+    Q_INVOKABLE void setStatus(const QString& chatID, const QString& userID, QJsonObject params);
 };

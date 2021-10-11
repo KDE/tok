@@ -4,6 +4,7 @@
 
 #include <KLocalizedString>
 
+#include "defs.h"
 #include "messagesmodel.h"
 #include "chatsstore_p.h"
 #include "overloader.h"
@@ -27,6 +28,7 @@ enum Roles {
     CanPinMessages,
     CurrentActions,
     HeaderText,
+    OwnStatus,
 };
 
 ChatsStore::ChatsStore(Client* parent) : TokAbstractRelationalModel(parent), c(parent), d(new Private)
@@ -199,6 +201,42 @@ QVariant ChatsStore::data(const QVariant& key, int role)
         };
         return map[id];
     }
+    case Roles::OwnStatus: {
+        using namespace TDApi;
+
+        auto pData = PermsData{
+            .canRemove = false
+        };
+
+        const auto typeID = d->chatData[chatID]->type_->get_id();
+        if (typeID != chatTypeBasicGroup::ID && typeID != chatTypeSupergroup::ID) {
+            return QVariant::fromValue(pData);
+        }
+
+        if (!d->extendedData.contains(chatID)) {
+            fetchExtended(chatID);
+            return QVariant::fromValue(pData);
+        }
+
+        auto& data = d->extendedData[chatID];
+
+        object_ptr<ChatMemberStatus>& status = std::visit([](auto&& arg) -> object_ptr<ChatMemberStatus>& {
+            return arg->status_;
+        }, data);
+
+        match (status)
+            handleCase(chatMemberStatusAdministrator, admin)
+                pData.canRemove = admin->can_restrict_members_;
+            endhandle
+            handleCase(chatMemberStatusCreator, owner)
+                Q_UNUSED(owner)
+
+                pData.canRemove = true;
+            endhandle
+        endmatch
+
+        return QVariant::fromValue(pData);
+    }
     }
 
     return QVariant();
@@ -222,6 +260,32 @@ void ChatsStore::fetchKey(const QVariant& key)
     c->call<TDApi::getChat>(nullptr, from(key));
 }
 
+void ChatsStore::fetchExtended(TDApi::int53 chatID)
+{
+    using namespace TDApi;
+
+    match (d->chatData[chatID]->type_)
+        handleCase(chatTypeBasicGroup, bgroup)
+            c->call<TDApi::getBasicGroup>(
+                [this, chatID](TDApi::getBasicGroup::ReturnType r) {
+                    d->extendedData[chatID] = std::move(r);
+                    Q_EMIT keyDataChanged(to(chatID), {});
+                },
+                bgroup->basic_group_id_
+            );
+        endhandle
+        handleCase(chatTypeSupergroup, sgroup)
+            c->call<TDApi::getSupergroup>(
+                [this, chatID](TDApi::getSupergroup::ReturnType r) {
+                    d->extendedData[chatID] = std::move(r);
+                    Q_EMIT keyDataChanged(to(chatID), {});
+                },
+                sgroup->supergroup_id_
+            );
+        endhandle
+    endmatch
+}
+
 QHash<int,QByteArray> ChatsStore::roleNames()
 {
     QHash<int,QByteArray> roles;
@@ -243,6 +307,7 @@ QHash<int,QByteArray> ChatsStore::roleNames()
     roles[int(Roles::KindID)] = "mKindID";
     roles[int(Roles::CurrentActions)] = "mCurrentActions";
     roles[int(Roles::HeaderText)] = "mHeaderText";
+    roles[int(Roles::OwnStatus)] = "mOwnStatus";
 
     return roles;
 }

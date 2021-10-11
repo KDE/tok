@@ -164,6 +164,12 @@ contentItem: ColumnLayout {
                 subtitle: userData.data.status
                 reserveSpaceForSubtitle: true
 
+                onClicked: {
+                    globalUserDataSheet.userID = del.userID
+                    globalUserDataSheet.chatID = chatData.key
+                    globalUserDataSheet.open()
+                }
+
                 Tok.RelationalListener {
                     id: userData
 

@@ -263,7 +263,11 @@ Kirigami.PageRow {
     Mobile.UploadDialog {
         id: mobilePicker
     }
-    Components.UserDataSheet { id: globalUserDataSheet; userID: "" }
+    Components.UserDataSheet {
+        id: globalUserDataSheet
+        userID: ""
+        chatID: ""
+    }
 
     QQC2.Popup {
         id: deleteDialog
