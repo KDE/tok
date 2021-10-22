@@ -36,10 +36,17 @@ auto normaliseVariant(const QVariant& variant) -> QVariant
     }
 }
 
-void TokQmlRelationalListener::componentComplete()
+void TokQmlRelationalListener::newRelationalModel(TokAbstractRelationalModel* model)
 {
-    Q_ASSERT(!d_ptr->shape.isNull());
-    Q_ASSERT(d_ptr->shape->isReady());
+    if (d_ptr->relationalModel) {
+        disconnect(d_ptr->relationalModel, &TokAbstractRelationalModel::keyDataChanged, this, nullptr);
+    }
+
+    d_ptr->relationalModel = model;
+
+    if (!d_ptr->relationalModel) {
+        return;
+    }
 
     connect(d_ptr->relationalModel, &TokAbstractRelationalModel::keyDataChanged, this, [this](const QVariant& key, const QVector<int>& roles) {
         if (d_ptr->key != normaliseVariant(key)) {
@@ -48,6 +55,12 @@ void TokQmlRelationalListener::componentComplete()
 
         applyChanged(roles);
     });
+}
+
+void TokQmlRelationalListener::componentComplete()
+{
+    Q_ASSERT(!d_ptr->shape.isNull());
+    Q_ASSERT(d_ptr->shape->isReady());
 
     checkKey();
     applyChanged({});
@@ -56,6 +69,10 @@ void TokQmlRelationalListener::componentComplete()
 
 void TokQmlRelationalListener::checkKey()
 {
+    if (!d_ptr->relationalModel) return;
+    if (d_ptr->key == QVariant()) return;
+    if (!d_ptr->enabled) return;
+
     if (!d_ptr->relationalModel->checkKey(d_ptr->key)) {
         if (d_ptr->relationalModel->canFetchKey(d_ptr->key)) {
             d_ptr->relationalModel->fetchKey(d_ptr->key);
@@ -65,8 +82,31 @@ void TokQmlRelationalListener::checkKey()
     }
 }
 
+bool TokQmlRelationalListener::enabled() const
+{
+    return d_ptr->enabled;
+}
+
+void TokQmlRelationalListener::setEnabled(bool enabled)
+{
+    if (d_ptr->enabled == enabled) {
+        return;
+    }
+
+    d_ptr->enabled = enabled;
+    Q_EMIT enabledChanged();
+    checkKey();
+}
+
+void TokQmlRelationalListener::resetEnabled()
+{
+    setEnabled(false);
+}
+
 void TokQmlRelationalListener::applyChanged(const QVector<int>& roles)
 {
+    if (!d_ptr->relationalModel || !d_ptr->enabled) return;
+
     const auto roleNames = d_ptr->relationalModel->roleNames();
     QHash<QByteArray,int> invertedRoleNames;
     for (auto it : roleNames.keys()) {
@@ -100,6 +140,8 @@ void TokQmlRelationalListener::applyChanged(const QVector<int>& roles)
 
         if (!fromScratch) {
             mo->property(i).write(d_ptr->dataObject, d_ptr->relationalModel->data(d_ptr->key, role));
+        } else {
+            props[propName] = d_ptr->relationalModel->data(d_ptr->key, role);
         }
     }
 
@@ -122,8 +164,9 @@ void TokQmlRelationalListener::setModel(TokAbstractRelationalModel* setModel)
         return;
     }
 
-    d_ptr->relationalModel = setModel;
+    newRelationalModel(setModel);
     Q_EMIT modelChanged();
+    checkKey();
 }
 
 void TokQmlRelationalListener::resetModel()

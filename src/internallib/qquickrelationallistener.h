@@ -19,6 +19,7 @@ class TokQmlRelationalListener : public QObject, public QQmlParserStatus
 
     Q_PROPERTY(TokAbstractRelationalModel* model READ model WRITE setModel RESET resetModel NOTIFY modelChanged)
     Q_PROPERTY(QVariant key READ key WRITE setKey RESET resetKey NOTIFY keyChanged)
+    Q_PROPERTY(bool enabled READ enabled WRITE setEnabled RESET resetEnabled NOTIFY enabledChanged)
     Q_PROPERTY(QQmlComponent* shape READ shape WRITE setShape NOTIFY shapeChanged)
     Q_PROPERTY(QObject* data READ data NOTIFY dataChanged)
 
@@ -39,6 +40,11 @@ public:
     void resetKey();
     Q_SIGNAL void keyChanged();
 
+    bool enabled() const;
+    void setEnabled(bool enabled);
+    void resetEnabled();
+    Q_SIGNAL void enabledChanged();
+
     QQmlComponent* shape() const;
     void setShape(QQmlComponent* shape);
     Q_SIGNAL void shapeChanged();
@@ -52,5 +58,6 @@ private:
 
     void applyChanged(const QVector<int>& roles);
     void checkKey();
+    void newRelationalModel(TokAbstractRelationalModel* model);
 
 };

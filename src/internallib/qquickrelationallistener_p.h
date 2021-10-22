@@ -22,4 +22,5 @@ public:
     QVariant key = QVariant();
     QObject* dataObject = nullptr;
     bool complete = false;
+    bool enabled = true;
 };
