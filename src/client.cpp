@@ -233,6 +233,5 @@ void Client::setDoNotDisturb(bool dnd)
 
 Client::ConnectionState Client::connectionState() const
 {
-    qWarning() << d->connectionState;
     return d->connectionState;
 }

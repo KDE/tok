@@ -136,7 +136,7 @@ Kirigami.Page {
             }
             tClient.messagesModel(chatID).comingIn()
             Kirigami.PageRouter.pushFromHere({ "route": "Messages/View", "chatID": chatID })
-            Kirigami.PageRouter.router.pageStack.currentItem.doit()
+            tryit(() => Kirigami.PageRouter.router.pageStack.currentItem.doit())
         }
 
         reuseItems: true
