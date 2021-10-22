@@ -169,6 +169,7 @@ void UserDataModel::handleUpdate(TDApi::object_ptr<TDApi::Update> u)
                 }
             },
             [](auto& update) {
-                qWarning() << "unhandled userdatamodel update" << QString::fromStdString(TDApi::to_string(update));
+                qWarning() << QString::fromStdString(TDApi::to_string(update));
+                qFatal("unhandled userdatamodel update");
             }));
 }

@@ -27,3 +27,6 @@ using TObject = TDApi::object_ptr<TDApi::Object>;
 #define endhandle break; }
 
 #define getOrRet(var, thing, retValue) auto var = thing.get(); if (!var) { return retValue; };
+
+Q_DECLARE_LOGGING_CATEGORY(TokErrors)
+Q_DECLARE_LOGGING_CATEGORY(TokDebugLogs)

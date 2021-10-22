@@ -113,7 +113,10 @@ void ChatsStore::handleUpdate(TDApi::object_ptr<TDApi::Update> u)
                 d->ensure(cid)[uid] = std::move(update_user_chat_action.action_);
                 Q_EMIT keyDataChanged(to(cid), {});
             },
-            [](auto& update) { qWarning() << "unhandled chatsmodel update" << QString::fromStdString(TDApi::to_string(update)); }));
+            [](auto& update) {
+                qWarning() << QString::fromStdString(TDApi::to_string(update));
+                qFatal("unhandled chatsmodel update");
+            }));
 }
 
 QVariant ChatsStore::data(const QVariant& key, int role)

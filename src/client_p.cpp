@@ -47,7 +47,7 @@ void Client::Private::checkAuthError(TObject object)
 {
     if (object->get_id() == TDApi::error::ID) {
         auto error = td::move_tl_object_as<TDApi::error>(object);
-        qWarning() << "Error:" << QString::fromStdString(error->message_);
+        qCWarning(TokErrors) << "Error:" << QString::fromStdString(error->message_);
     }
 }
 
@@ -84,7 +84,7 @@ void Client::Private::handleAuthorizationStateUpdate(TDApi::updateAuthorizationS
                 Q_EMIT q->loggedOut();
             },
             [](TDApi::authorizationStateClosing&) {
-                qDebug() << "Closing";
+                qCDebug(TokDebugLogs) << "Closing";
             },
             [this](TDApi::authorizationStateClosed&) {
                 m_loggedIn = false;

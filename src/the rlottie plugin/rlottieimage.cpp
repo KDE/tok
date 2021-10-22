@@ -146,7 +146,6 @@ bool LottieHandler::load(QIODevice* it) const
         auto data = base+(i*512*512*4);
         rlottie::Surface surface((uint32_t*)data, 512, 512, 512*4);
 
-        qDebug() << "rendering...";
         animation->renderSync(i, surface);
         imageData << (QRgb*)data;
     }
