@@ -101,7 +101,7 @@ Kirigami.PageRow {
     Sonnet.SpellcheckHighlighter {
         id: theOneTrueSpellCheckHighlighter
 
-        readonly property Item field: (rootWindow.activeFocusItem instanceof TextEdit || rootWindow.activeFocusItem instanceof TextInput) ? rootWindow.activeFocusItem : null
+        readonly property Item field: (rootWindow.activeFocusItem instanceof TextEdit || rootWindow.activeFocusItem instanceof TextInput) && !rootWindow.activeFocusItem.readOnly ? rootWindow.activeFocusItem : null
         property var suggestions_: []
         readonly property Connections conns: Connections {
             target: theOneTrueSpellCheckHighlighter.field
