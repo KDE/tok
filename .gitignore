@@ -1,4 +1,5 @@
 /default
+/CMakeLists.txt
 .vscode/
 .idea/
 *.kdev4
