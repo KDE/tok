@@ -286,7 +286,15 @@ Client::Private::Private(Client* parent)
     m_clientID = m_clientManager->create_client_id();
 
     sendQuery(TDApi::make_object<TDApi::getOption>("version"), {});
-    connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, parent, [this](){ quitting = true; });
+    connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, parent, [this](){
+#ifdef Q_OS_LINUX
+        setUnity({
+            {"count-visible", false},
+            {"count", 0},
+        });
+#endif
+        quitting = true;
+    });
 }
 
 void Client::Private::enterPhoneNumber(const QString& phoneNumber)
