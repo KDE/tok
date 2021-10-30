@@ -59,6 +59,24 @@ modules:
       - type: git
         url: https://github.com/Samsung/rlottie.git
         commit: c0e16e571b3f2bb046bd38de65b53cd7aa9e2bbc
+# master ECM
+  - name: extra-cmake-modules
+    config-opts:
+      - -DBUILD_TESTING=OFF
+    buildsystem: cmake-ninja
+    sources:
+        - type: git
+          url: https://invent.kde.org/frameworks/extra-cmake-modules.git
+          commit: 8f7831c83f11f38c060fd0717b925b1fa28cd3d8
+# master sonnet
+  - name: sonnet
+    config-opts:
+      - -DBUILD_TESTING=OFF
+    buildsystem: cmake-ninja
+    sources:
+        - type: git
+          url: https://invent.kde.org/frameworks/sonnet.git
+          commit: 89f03fdce7c23f72e1225012655cc53d2b216d4e
 # the app
   - name: tok
     buildsystem: simple
