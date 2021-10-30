@@ -83,6 +83,8 @@ QQC2.Control {
             selectionColor: Kirigami.Theme.highlightColor
 
             function clamp() {
+                if (web.visible) return
+
                 const l = length - _background.textPadding.length
                 if (selectionEnd >= l && selectionStart >= l) {
                     select(0, 0)
