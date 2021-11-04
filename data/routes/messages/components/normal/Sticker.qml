@@ -29,7 +29,7 @@ AnimatedImage {
         shape: QtObject {
             required property string stickerURL
             onStickerURLChanged: {
-                tClient.fileMangler.downloadFile(stickerData.data.stickerURL).then((url) => {
+                tClient.fileMangler.downloadFile(this.stickerURL).then((url) => {
                     image.source = "file://"+url
                 })
             }
