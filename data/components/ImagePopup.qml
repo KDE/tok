@@ -26,7 +26,9 @@ QQC2.Popup {
 		}
 	}
 
-	background: Item {
+	background: Rectangle {
+		color: Qt.rgba(0, 0, 0, 0.6)
+
 		TapHandler {
 			target: imagePopup.QQC2.Overlay.overlay
 			onTapped: imagePopup.close()
