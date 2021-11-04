@@ -14,8 +14,6 @@ import org.kde.sonnet 1.0 as Sonnet
 import org.kde.kitemmodels 1.0
 
 Item {
-    readonly property bool noMargin: true
-
     Sonnet.Settings {
         id: settings
         onModifiedChanged: if (modified) save()
@@ -24,10 +22,9 @@ Item {
         id: form
 
         anchors.fill: parent
-        spacing: 0
+        spacing: Kirigami.Units.smallSpacing
 
         ColumnLayout {
-            Layout.margins: Kirigami.Units.smallSpacing
             QQC2.CheckBox {
                 text: i18n("Enable automatic spellchecking")
                 checked: settings.skipUppercase
@@ -60,26 +57,27 @@ Item {
         Kirigami.Heading {
             level: 4
             text: i18n("Languages for spellchecking")
-            Layout.margins: Kirigami.Units.smallSpacing
         }
         QQC2.CheckBox {
             text: i18n("Detect language to spellcheck automatically from below list")
             checked: settings.autodetectLanguage
             onToggled: settings.autodetectLanguage = checked
-            Layout.margins: Kirigami.Units.smallSpacing
-        }
-        Kirigami.Separator {
-            Layout.fillWidth: true
         }
         QQC2.ScrollView {
             Layout.fillWidth: true
             Layout.fillHeight: true
 
+            clip: false
+
             Kirigami.Theme.colorSet: Kirigami.Theme.View
             QQC2.ScrollBar.horizontal.policy: QQC2.ScrollBar.AlwaysOff
 
             background: Rectangle {
-                color: Kirigami.Theme.backgroundColor
+                border.width: 1
+                border.color: Kirigami.ColorUtils.linearInterpolation(Kirigami.Theme.backgroundColor, Kirigami.Theme.textColor, 0.3)
+                radius: 3
+                anchors.fill: parent
+                anchors.margins: -1
             }
 
             ListView {
