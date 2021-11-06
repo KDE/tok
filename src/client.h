@@ -154,6 +154,7 @@ public:
         return membersModel(s.toLongLong(), kind);
     }
 
+    Q_INVOKABLE void goAuthBack();
     Q_INVOKABLE void enterPhoneNumber(const QString& phoneNumber);
     Q_INVOKABLE void enterCode(const QString& code);
     Q_INVOKABLE void enterPassword(const QString& password);

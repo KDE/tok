@@ -311,3 +311,8 @@ void Client::Private::enterPassword(const QString& password)
 {
     sendQuery(TDApi::make_object<TDApi::checkAuthenticationPassword>(password.toStdString()), createAuthQueryHandler());
 }
+
+void Client::Private::goAuthBack()
+{
+
+}

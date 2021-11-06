@@ -65,6 +65,7 @@ class Client::Private
     void handleUpdate(TDApi::object_ptr<TDApi::Object> update);
     void handleResponse(TD::ClientManager::Response response);
 
+    void goAuthBack();
     void enterPhoneNumber(const QString& phoneNumber);
     void enterCode(const QString& code);
     void enterPassword(const QString& password);

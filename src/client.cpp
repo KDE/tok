@@ -71,6 +71,11 @@ void Client::enterPhoneNumber(const QString& phoneNumber)
     d->enterPhoneNumber(phoneNumber);
 }
 
+void Client::goAuthBack()
+{
+    d->goAuthBack();
+}
+
 QIviPendingReplyBase Client::searchEmojis(const QString& emoji)
 {
     QIviPendingReply<QStringList> data;
