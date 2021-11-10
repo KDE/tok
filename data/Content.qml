@@ -229,6 +229,17 @@ Kirigami.PageRow {
         property bool userWantsSystemTray: false
         property int pageWidth: -1
 
+        property string goUpShortcut: "Alt+Up"
+        property string goDownShortcut: "Alt+Downl"
+        property string quickSwitcherShortcut: "Ctrl+K"
+
+        property string boldShortcut: "Ctrl+B"
+        property string italicShortcut: "Ctrl+I"
+        property string underlineShortcut: "Ctrl+U"
+        property string strikethroughShortcut: "Ctrl+Shift+X"
+        property string monospaceShortcut: "Ctrl+Shift+M"
+        property string normalShortcut: "Ctrl+Shift+N"
+
         onTransparentChanged: {
             Tok.Utils.setBlur(rootRow, transparent)
         }

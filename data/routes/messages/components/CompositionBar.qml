@@ -200,42 +200,42 @@ QQC2.ToolBar {
                 }
 
                 Shortcut {
-                    sequence: "Ctrl+B"
+                    sequence: settings.boldShortcut
                     context: Qt.ApplicationShortcut
                     onActivated: {
                         tClient.messagesStore.applyFormat("bold", txtField.textDocument, txtField, txtField.selectionStart, txtField.selectionEnd)
                     }
                 }
                 Shortcut {
-                    sequence: "Ctrl+I"
+                    sequence: settings.italicShortcut
                     context: Qt.ApplicationShortcut
                     onActivated: {
                         tClient.messagesStore.applyFormat("italic", txtField.textDocument, txtField, txtField.selectionStart, txtField.selectionEnd)
                     }
                 }
                 Shortcut {
-                    sequence: "Ctrl+U"
+                    sequence: settings.underlineShortcut
                     context: Qt.ApplicationShortcut
                     onActivated: {
                         tClient.messagesStore.applyFormat("underline", txtField.textDocument, txtField, txtField.selectionStart, txtField.selectionEnd)
                     }
                 }
                 Shortcut {
-                    sequence: "Ctrl+Shift+X"
+                    sequence: settings.strikethroughShortcut
                     context: Qt.ApplicationShortcut
                     onActivated: {
                         tClient.messagesStore.applyFormat("strikethrough", txtField.textDocument, txtField, txtField.selectionStart, txtField.selectionEnd)
                     }
                 }
                 Shortcut {
-                    sequence: "Ctrl+Shift+M"
+                    sequence: settings.monospaceShortcut
                     context: Qt.ApplicationShortcut
                     onActivated: {
                         tClient.messagesStore.applyFormat("monospace", txtField.textDocument, txtField, txtField.selectionStart, txtField.selectionEnd)
                     }
                 }
                 Shortcut {
-                    sequence: "Ctrl+Shift+N"
+                    sequence: settings.normalShortcut
                     context: Qt.ApplicationShortcut
                     onActivated: {
                         tClient.messagesStore.applyFormat("normal", txtField.textDocument, txtField, txtField.selectionStart, txtField.selectionEnd)

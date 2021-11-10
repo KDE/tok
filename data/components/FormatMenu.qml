@@ -19,35 +19,35 @@ Labs.Menu {
     Labs.MenuItem {
         enabled: formatMenu.field !== null && formatMenu.field.selectedText !== ""
         text: i18nc("text editing menu action; applies format", "Bold")
-        shortcut: "Ctrl+B"
+        shortcut: settings.boldShortcut
         onTriggered: tClient.messagesStore.applyFormat("bold", formatMenu.field.textDocument, formatMenu.field, formatMenu.field.selectionStart, formatMenu.field.selectionEnd)
     }
 
     Labs.MenuItem {
         enabled: formatMenu.field !== null && formatMenu.field.selectedText !== ""
         text: i18nc("text editing menu action; applies format", "Italic")
-        shortcut: "Ctrl+I"
+        shortcut: settings.italicShortcut
         onTriggered: tClient.messagesStore.applyFormat("italic", formatMenu.field.textDocument, formatMenu.field, formatMenu.field.selectionStart, formatMenu.field.selectionEnd)
     }
 
     Labs.MenuItem {
         enabled: formatMenu.field !== null && formatMenu.field.selectedText !== ""
         text: i18nc("text editing menu action; applies format", "Underline")
-        shortcut: "Ctrl+U"
+        shortcut: settings.underlineShortcut
         onTriggered: tClient.messagesStore.applyFormat("underline", formatMenu.field.textDocument, formatMenu.field, formatMenu.field.selectionStart, formatMenu.field.selectionEnd)
     }
 
     Labs.MenuItem {
         enabled: formatMenu.field !== null && formatMenu.field.selectedText !== ""
         text: i18nc("text editing menu action; applies format", "Strikethrough")
-        shortcut: "Ctrl+Shift+X"
+        shortcut: settings.strikethroughShortcut
         onTriggered: tClient.messagesStore.applyFormat("strikethrough", formatMenu.field.textDocument, formatMenu.field, formatMenu.field.selectionStart, formatMenu.field.selectionEnd)
     }
 
     Labs.MenuItem {
         enabled: formatMenu.field !== null && formatMenu.field.selectedText !== ""
         text: i18nc("text editing menu action; applies format", "Monospace")
-        shortcut: "Ctrl+Shift+M"
+        shortcut: settings.monospaceShortcut
         onTriggered: tClient.messagesStore.applyFormat("monospace", formatMenu.field.textDocument, formatMenu.field, formatMenu.field.selectionStart, formatMenu.field.selectionEnd)
     }
 
@@ -57,7 +57,7 @@ Labs.Menu {
     Labs.MenuItem {
         enabled: formatMenu.field !== null && formatMenu.field.selectedText !== ""
         text: i18nc("text editing menu action; applies format", "Normal")
-        shortcut: "Ctrl+Shift+N"
+        shortcut: settings.normalShortcut
         onTriggered: tClient.messagesStore.applyFormat("normal", formatMenu.field.textDocument, formatMenu.field, formatMenu.field.selectionStart, formatMenu.field.selectionEnd)
     }
 }
