@@ -116,11 +116,6 @@ Kirigami.PageRow {
         selectionEnd: field.selectionEnd
         misspelledColor: Kirigami.Theme.negativeTextColor
         active: field instanceof TextEdit && !field.readOnly
-
-        onChangeCursorPosition: {
-            field.cursorPosition = start
-            field.moveCursorSelection(end, TextEdit.SelectCharacters)
-        }
     }
 
     SystemTrayIcon {
