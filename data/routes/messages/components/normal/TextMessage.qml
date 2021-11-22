@@ -9,7 +9,7 @@ import QtQuick.Controls 2.12 as QQC2
 import org.kde.kirigami 2.14 as Kirigami
 import org.kde.Tok 1.0 as Tok
 
-import "../" as Shared
+import "../shared" as Shared
 import "../link_activation.mjs" as LinkActivation
 
 QQC2.Control {
@@ -56,7 +56,7 @@ QQC2.Control {
 
             Layout.fillWidth: true
         }
-        ReplyBlock {}
+        Shared.ReplyBlock {}
         TextEdit {
             id: textEdit
             text: textData.data.content + (web.visible ? "" : _background.textPadding)

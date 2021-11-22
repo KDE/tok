@@ -164,7 +164,7 @@ QQC2.Control {
                 "messagePhoto": Qt.resolvedUrl((settings.thinMode ? "thin/" : "normal/") + "PhotoMessage.qml"),
                 "messageDocument": Qt.resolvedUrl((settings.thinMode ? "thin/" : "normal/") + "FileMessage.qml"),
                 "messageChatAddMembers": Qt.resolvedUrl((settings.thinMode ? "thin/" : "normal/") + "UserAddMessage.qml"),
-                "messageSticker": Qt.resolvedUrl((settings.thinMode ? "thin/" : "normal/") + "Sticker.qml"),
+                "messageSticker": Qt.resolvedUrl("shared/Sticker.qml"),
                 "messageAudio": Qt.resolvedUrl((settings.thinMode ? "thin/" : "normal/") + "AudioMessage.qml"),
                 "messageVideo": Qt.resolvedUrl((settings.thinMode ? "thin/" : "normal/") + "VideoMessage.qml"),
                 "messageAnimation": Qt.resolvedUrl((settings.thinMode ? "thin/" : "normal/") + "GifMessage.qml"),

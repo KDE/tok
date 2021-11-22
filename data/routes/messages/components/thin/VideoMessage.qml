@@ -8,10 +8,12 @@ import org.kde.Tok 1.0 as Tok
 import "qrc:/components" as Components
 import "../link_activation.mjs" as LinkActivation
 
+import "../shared" as Shared
+
 ColumnLayout {
     Layout.leftMargin: Kirigami.Units.largeSpacing
 
-    ReplyBlock {}
+    Shared.ReplyBlock {}
     Image {
         id: video
 

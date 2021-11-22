@@ -12,6 +12,8 @@ import org.kde.Tok 1.0 as Tok
 import "qrc:/components" as Components
 import "../link_activation.mjs" as LinkActivation
 
+import "../shared" as Shared
+
 QQC2.Control {
     id: videoRoot
 
@@ -34,7 +36,7 @@ QQC2.Control {
     }
 
     contentItem: ColumnLayout {
-        ReplyBlock {
+        Shared.ReplyBlock {
             Layout.topMargin: Kirigami.Units.smallSpacing
             Layout.bottomMargin: Kirigami.Units.smallSpacing
             Layout.leftMargin: Kirigami.Units.largeSpacing

@@ -12,6 +12,8 @@ import QtMultimedia 5.15
 
 import "qrc:/components" as Components
 
+import "../shared" as Shared
+
 QQC2.Control {
     id: audioMessageRoot
 
@@ -57,7 +59,7 @@ QQC2.Control {
 
             Layout.fillWidth: true
         }
-        ReplyBlock {}
+        Shared.ReplyBlock {}
         QQC2.Control {
             padding: Kirigami.Units.largeSpacing
             contentItem: RowLayout {

@@ -9,6 +9,8 @@ import QtQuick.Controls 2.12 as QQC2
 import org.kde.kirigami 2.14 as Kirigami
 import org.kde.Tok 1.0 as Tok
 
+import "../shared" as Shared
+
 QQC2.Control {
     id: fileMessageRoot
 
@@ -120,7 +122,7 @@ QQC2.Control {
 
             Layout.fillWidth: true
         }
-        ReplyBlock {}
+        Shared.ReplyBlock {}
         QQC2.Control {
             padding: Kirigami.Units.smallSpacing
             bottomPadding: fileData.data.fileCaption !== "" ? padding : padding+Kirigami.Units.smallSpacing

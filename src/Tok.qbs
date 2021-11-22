@@ -9,5 +9,6 @@ QtApplication {
     files: [
         "main.cpp",
     ]
+    Qt.quick.useCompiler: true
     Depends { name: "tokInternal" }
 }

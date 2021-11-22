@@ -7,6 +7,7 @@ import QtMultimedia 5.15
 import org.kde.Tok 1.0 as Tok
 
 import "qrc:/components" as Components
+import "../shared" as Shared
 import "../link_activation.mjs" as LinkActivation
 
 ColumnLayout {
@@ -14,7 +15,7 @@ ColumnLayout {
 
     Layout.leftMargin: Kirigami.Units.largeSpacing
 
-    ReplyBlock {}
+    Shared.ReplyBlock {}
     Tok.RelationalListener {
         id: gifData
 

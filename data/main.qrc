@@ -73,7 +73,6 @@
         <file>routes/messages/components/MusicView.qml</file>
         <file>routes/messages/components/PhotosView.qml</file>
         <file>routes/messages/components/VideosView.qml</file>
-        <file>routes/messages/components/WebPageBlock.qml</file>
         <file>routes/messages/components/MentionBar.qml</file>
         <file>routes/messages/components/PinnedMessages.qml</file>
         <file>routes/messages/components/SearchMessages.qml</file>
@@ -85,14 +84,14 @@
 
         <file>routes/messages/components/normal/MessageBackground.qml</file>
 
-        <file>routes/messages/components/normal/ReplyBlock.qml</file>
-        <file alias="routes/messages/components/thin/ReplyBlock.qml">routes/messages/components/normal/ReplyBlock.qml</file>
+        <file>routes/messages/components/shared/WebPageBlock.qml</file>
+        <file>routes/messages/components/shared/ReplyBlock.qml</file>
+        <file>routes/messages/components/shared/Sticker.qml</file>
 
         <file>routes/messages/components/normal/TextMessage.qml</file>
         <file>routes/messages/components/normal/FileMessage.qml</file>
         <file>routes/messages/components/normal/PhotoMessage.qml</file>
         <file>routes/messages/components/normal/UserAddMessage.qml</file>
-        <file>routes/messages/components/normal/Sticker.qml</file>
         <file>routes/messages/components/normal/VideoMessage.qml</file>
         <file>routes/messages/components/normal/AudioMessage.qml</file>
         <file>routes/messages/components/normal/GifMessage.qml</file>
@@ -103,7 +102,6 @@
         <file>routes/messages/components/thin/FileMessage.qml</file>
         <file>routes/messages/components/thin/PhotoMessage.qml</file>
         <file>routes/messages/components/thin/UserAddMessage.qml</file>
-        <file alias="routes/messages/components/thin/Sticker.qml">routes/messages/components/normal/Sticker.qml</file>
         <file>routes/messages/components/thin/VideoMessage.qml</file>
         <file>routes/messages/components/thin/AudioMessage.qml</file>
         <file>routes/messages/components/thin/GifMessage.qml</file>
