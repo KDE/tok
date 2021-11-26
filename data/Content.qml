@@ -354,6 +354,57 @@ Kirigami.PageRow {
         }
     }
 
+    QQC2.Popup {
+        id: areYouSure
+
+        modal: true
+        parent: rootRow.QQC2.Overlay.overlay
+        x: Math.round((QQC2.Overlay.overlay.width / 2) - (this.width / 2))
+        y: Math.round((QQC2.Overlay.overlay.height / 2) - (this.height / 2))
+
+        function exec(txt) {
+            theText.text = txt
+            return new Promise((resolve, reject) => {
+                areYouSure.open()
+                const sigRej = btnCancel.clicked.connect(ev => {
+                    btnCancel.clicked.disconnect(sigRej)
+                    btnOkay.clicked.disconnect(sigRes)
+                    resolve()
+                })
+                const sigRes = btnCancel.clicked.connect(ev => {
+                    btnCancel.clicked.disconnect(sigRej)
+                    btnOkay.clicked.disconnect(sigRes)
+                    reject()
+                })
+            })
+        }
+
+        padding: Kirigami.Units.gridUnit
+
+        contentItem: ColumnLayout {
+            Kirigami.Heading {
+                id: theText
+
+                level: 4
+
+                Layout.bottomMargin: Kirigami.Units.gridUnit
+            }
+            RowLayout {
+                Layout.topMargin: Kirigami.Units.gridUnit
+
+                Item { Layout.fillWidth: true }
+                QQC2.Button {
+                    id: btnCancel
+                    text: i18n("Cancel")
+                }
+                QQC2.Button {
+                    id: btnOkay
+                    text: i18n("OK")
+                }
+            }
+        }
+    }
+
     Kirigami.PageRouter {
         id: rootRouter
         pageStack: rootRow.columnView

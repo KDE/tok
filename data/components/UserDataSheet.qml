@@ -101,8 +101,9 @@ Loader {
                 text: i18n("Kick from \"%1\"", chatData.data.mTitle)
                 enabled: chatData.data.mOwnStatus.canRemove
                 onClicked: {
-                    tClient.chatsStore.setStatus(__loader.chatID, __loader.userID, {"status": "kicked"})
-                    __overlaySheet.close()
+                    areYouSure.exec("Are you sure you want to die?")
+                    // tClient.chatsStore.setStatus(__loader.chatID, __loader.userID, {"status": "kicked"})
+                    // __overlaySheet.close()
                 }
                 visible: chatData.isGroup
 
