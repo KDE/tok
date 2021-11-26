@@ -38,7 +38,7 @@ modules:
     sources:
       - type: git
         url: https://code.qt.io/qbs/qbs.git
-        branch: "1.19"
+        commit: 4afb8f1f37ca4f197375b5303ff21284069852cf
 # td
   - name: td
     buildsystem: cmake-ninja
