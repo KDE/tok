@@ -42,8 +42,6 @@ Kirigami.Page {
         }
 
         RowLayout {
-            layoutDirection: Qt.application.layoutDirection
-
             QQC2.TextField {
                 id: field
                 placeholderText: i18n("Code")

@@ -61,8 +61,6 @@ Kirigami.Page {
         Item { implicitHeight: Kirigami.Units.largeSpacing }
 
         RowLayout {
-            layoutDirection: Qt.application.layoutDirection
-
             QQC2.TextField {
                 id: field
 

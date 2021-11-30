@@ -55,6 +55,8 @@ Window {
                 columns: 1
                 rows: 3
 
+            LayoutMirroring.enabled: Qt.application.layoutDirection === Qt.RightToLeft
+
             GlobalComponents.Header {
                 visible: Kirigami.Settings.isMobile
 

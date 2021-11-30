@@ -14,7 +14,8 @@ Item {
     Column {
         id: form
 
-        anchors.fill: parent
+        anchors.left: parent.left
+        anchors.top: parent.top
         spacing: Kirigami.Units.smallSpacing
 
         QQC2.CheckBox {

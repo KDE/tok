@@ -96,8 +96,8 @@ contentItem: QQC2.Control {
 
                     verticalAlignment: Text.AlignVCenter
                     Layout.fillHeight: true
+                    Layout.fillWidth: true
                 }
-                Item { Layout.fillWidth: true }
             }
             QQC2.CheckBox {
                 id: compressionBox
@@ -135,8 +135,8 @@ contentItem: QQC2.Control {
 
                     verticalAlignment: Text.AlignVCenter
                     Layout.fillHeight: true
+                    Layout.fillWidth: true
                 }
-                Item { Layout.fillWidth: true }
                 QQC2.Label {
                     text: Tok.Utils.humanSize(_uploadDialogDesktop.sourceData.size)
 

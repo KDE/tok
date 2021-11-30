@@ -42,8 +42,6 @@ Kirigami.Page {
         }
 
         RowLayout {
-            layoutDirection: Qt.application.layoutDirection
-
             Kirigami.PasswordField {
                 id: field
                 onAccepted: tClient.enterPassword(text)

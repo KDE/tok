@@ -182,7 +182,8 @@ Kirigami.ScrollablePage {
                 }
             }
             QQC2.ToolButton {
-                icon.name: settings.userWantsSidebars ? "sidebar-collapse-right" : "sidebar-expand-right"
+                readonly property string suffix: Qt.applicationLayout == Qt.LeftToRight ? "-right" : "-left"
+                icon.name: (settings.userWantsSidebars ? "sidebar-collapse" : "sidebar-expand") + suffix
                 onClicked: settings.userWantsSidebars = !settings.userWantsSidebars
                 visible: rootRow.shouldUseSidebars
             }
@@ -217,7 +218,9 @@ Kirigami.ScrollablePage {
             modal: false
             interactive: false
             position: 1
-            edge: Qt.RightEdge
+            edge: Qt.application.layoutDirection == Qt.LeftToRight ?
+                    Qt.RightEdge :
+                    Qt.LeftEdge
 
             background: Item {
                 Kirigami.Separator {
