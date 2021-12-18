@@ -18,6 +18,7 @@ enum Roles {
     Kind,
     KindID,
     IsChannel,
+    IsSaved,
     CanSendMessages,
     CanSendMedia, // True, if the user can send audio files, documents, photos, videos, video notes, and voice notes. Implies can_send_messages permissions.
     CanSendPolls,
@@ -124,10 +125,21 @@ QVariant ChatsStore::data(const QVariant& key, int role)
 
     auto chatID = from(key);
 
+    const auto isSaved = [=]() {
+        using namespace TDApi;
+        if (d->chatData[chatID]->type_->get_id() != chatTypePrivate::ID) {
+            return false;
+        }
+        return static_cast<chatTypePrivate*>(d->chatData[chatID]->type_.get())->user_id_ == c->ownID().toULongLong();
+    };
+
     auto r = Roles(role);
 
     switch (r) {
     case Roles::Title: {
+        if (isSaved()) {
+            return i18nc("title for a chat consisting of saved messages", "Saved Messages");
+        }
         return QString::fromStdString(d->chatData[chatID]->title_);
     }
     case Roles::Photo: {
@@ -200,6 +212,10 @@ QVariant ChatsStore::data(const QVariant& key, int role)
             {chatTypeSupergroup::ID, i18n("Group")},
         };
         return map[id];
+    }
+    case Roles::IsSaved: {
+        using namespace TDApi;
+        return isSaved();
     }
     case Roles::OwnStatus: {
         using namespace TDApi;
@@ -295,6 +311,7 @@ QHash<int,QByteArray> ChatsStore::roleNames()
     roles[int(Roles::LastMessageID)] = "mLastMessageID";
     roles[int(Roles::UnreadCount)] = "mUnreadCount";
     roles[int(Roles::IsChannel)] = "mIsChannel";
+    roles[int(Roles::IsSaved)] = "mIsSaved";
     roles[int(Roles::CanSendMessages)] = "mCanSendMessages";
     roles[int(Roles::CanSendMedia)] = "mCanSendMedia";
     roles[int(Roles::CanSendPolls)] = "mCanSendPolls";

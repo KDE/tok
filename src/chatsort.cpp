@@ -86,7 +86,9 @@ ok:
         return true;
     }
 
-    return QString::fromStdString(_store->d->chatData[id]->title_).toLower().contains(_filter.toLower());
+    const auto title = _store->data(QString::number(id), Qt::UserRole).toString();
+
+    return title.toLower().contains(_filter.toLower());
 }
 
 ChatsStore* ChatSortModel::store()

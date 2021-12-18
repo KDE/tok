@@ -224,6 +224,7 @@ Kirigami.Page {
                     required property string mLastMessageID
                     required property string mPhoto
                     required property string mKind
+                    required property bool   mIsSaved
                     required property var    mCurrentActions
                     required property int    mUnreadCount
                 }
@@ -286,6 +287,13 @@ Kirigami.Page {
                 Kirigami.Avatar {
                     name: chatData.data.mTitle
                     source: chatData.data.mPhoto
+                    imageMode: chatData.data.mIsSaved ?
+                        Kirigami.Avatar.ImageMode.AlwaysShowInitials :
+                        Kirigami.Avatar.ImageMode.AdaptiveImageOrInitals
+                    initialsMode: chatData.data.mIsSaved ?
+                        Kirigami.Avatar.ImageMode.UseIcon :
+                        Kirigami.Avatar.ImageMode.UseInitials
+                    iconSource: "bookmarks"
 
                     Layout.preferredHeight: Math.round(Kirigami.Units.gridUnit * 2.5)
                     Layout.preferredWidth: Layout.preferredHeight
