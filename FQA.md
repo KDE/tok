@@ -69,7 +69,26 @@ You can consider these the "officially supported platforms" of Tok.
 I'll make sure that Tok always works on these, but you can run Tok on other platforms.
 If there's a portability issue, please contact me in the Tok group and we can talk about it.
 
-At some point, I intend to "officially support" Android, Windows, and macOS.
+Note that due to Linux having frequent downstream-induced issues and out-of-date packages with distros,
+I can only try to help with issues on the following variants of the few thousand packages that make up what
+we call "desktop Linux":
+
+- Fedora (obviously)
+- nixpkgs (also obviously)
+- Neon
+- Arch (this does not include derivatives)
+- The latest Freedesktop & KDE Flatpak runtimes
+- Gentoo
+- Any self-built system consisting of mostly intact Qt and KF5
+
+Others may try to help you, though.
+
+As far as bugs are concerned, bugs from Linux distros not in this list will be insta-closed
+due to me not having the manpower to figure out each distro's indidual way of screwing stuff
+up and seeing whether or not it's a downstream or an upstream issue. Please try and reproduce
+bugs on known-good distros.
+
+At some point, I intend to "officially support" Android, Windows, and macOS. Maybe Haiku. Haiku is cool.
 
 ### 2.6: What does Tok not run on?
 
