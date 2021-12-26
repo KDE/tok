@@ -633,13 +633,13 @@ QVariant MessagesStore::data(const QVariant& key, int role)
 
             return QString();
         };
-        return idFrom(d->messageData[mID]->sender_.get());
+        return idFrom(d->messageData[mID]->sender_id_.get());
     }
 
     case Roles::AuthorKind: {
         using namespace TDApi;
 
-        switch (d->messageData[mID]->sender_->get_id()) {
+        switch (d->messageData[mID]->sender_id_->get_id()) {
         case messageSenderChat::ID: return QString("chat");
         case messageSenderUser::ID: return QString("user");
         }
@@ -741,9 +741,9 @@ QVariant MessagesStore::data(const QVariant& key, int role)
         case TDApi::messagePoll::ID: return QString("messagePoll");
         case TDApi::messageInvoice::ID: return QString("messageInvoice");
         case TDApi::messageCall::ID: return QString("messageCall");
-        case TDApi::messageVoiceChatStarted::ID: return QString("messageVoiceChatStarted");
-        case TDApi::messageVoiceChatEnded::ID: return QString("messageVoiceChatEnded");
-        case TDApi::messageInviteVoiceChatParticipants::ID: return QString("messageInviteVoiceChatParticipants");
+        case TDApi::messageVideoChatStarted::ID: return QString("messageVoiceChatStarted");
+        case TDApi::messageVideoChatEnded::ID: return QString("messageVoiceChatEnded");
+        case TDApi::messageInviteVideoChatParticipants::ID: return QString("messageInviteVoiceChatParticipants");
         case TDApi::messageBasicGroupChatCreate::ID: return QString("messageBasicGroupChatCreate");
         case TDApi::messageSupergroupChatCreate::ID: return QString("messageSupergroupChatCreate");
         case TDApi::messageChatChangeTitle::ID: return QString("messageChatChangeTitle");

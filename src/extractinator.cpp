@@ -12,7 +12,7 @@ QString Extractinator::extractAuthor(Client* c, TDApi::message* msg)
 {
     using namespace TDApi;
 
-    match (msg->sender_)
+    match (msg->sender_id_)
         handleCase(messageSenderUser, user)
             getOrRet(data, c->userDataModel()->userData[user->user_id_], i18nc("we know that this person is a human, but we don't know their name", "Unknown Sender"));
 

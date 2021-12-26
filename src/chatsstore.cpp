@@ -103,9 +103,13 @@ void ChatsStore::handleUpdate(TDApi::object_ptr<TDApi::Update> u)
 
                 Q_EMIT keyDataChanged(to(id), {});
             },
-            [this](TDApi::updateUserChatAction &update_user_chat_action) {
+            [this](TDApi::updateChatAction &update_user_chat_action) {
                 auto cid = update_user_chat_action.chat_id_;
-                auto uid = update_user_chat_action.user_id_;
+                auto& suid = update_user_chat_action.sender_id_;
+                if (suid->get_id() != TDApi::messageSenderUser::ID)
+                    return;
+
+                auto uid = static_cast<TDApi::messageSenderUser*>(suid.get())->user_id_;
 
                 if (update_user_chat_action.action_->get_id() == TDApi::chatActionCancel::ID) {
                     d->ensure(cid).erase(uid);
