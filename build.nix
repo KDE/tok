@@ -54,14 +54,16 @@ in mkDerivation {
   src = ./.;
 
   configurePhase = ''
-    qbs resolve config:release qbs.installPrefix:/
+    qbs setup-qt --settings-dir . ${qtEnv}/bin/qmake myqt
+    qbs config --settings-dir . defaultProfile myqt
+    qbs resolve --settings-dir . config:release qbs.installPrefix:/
   '';
 
   buildPhase = ''
-    qbs build config:release
+    qbs build --settings-dir . config:release
   '';
 
   installPhase = ''
-    qbs install --install-root $out config:release
+    qbs install --settings-dir . --install-root $out config:release
   '';
 }
