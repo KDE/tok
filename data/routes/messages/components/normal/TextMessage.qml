@@ -110,7 +110,7 @@ QQC2.Control {
 
         Shared.WebPageBlock {
             id: web
-            Layout.bottomMargin: _background.timestamp.height
+            Layout.bottomMargin: _background.inlineFooter.height
         }
     }
 
