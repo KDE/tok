@@ -69,6 +69,7 @@ void Client::Private::handleAuthorizationStateUpdate(TDApi::updateAuthorizationS
                 m_loggedIn = true;
 
                 m_chatsModel->fetch();
+                q->call<TDApi::getInstalledStickerSets>(nullptr, false);
                 q->call<TDApi::getOption>([this](TDApi::getOption::ReturnType ret) {
                     m_ownID = static_cast<TDApi::optionValueInteger*>(ret.get())->value_;
 
@@ -181,6 +182,14 @@ void Client::Private::handleUpdate(TDApi::object_ptr<TDApi::Object> update)
             [this, &update](TDApi::updateChatAction &update_user_chat_action) {
                 auto mv = TDApi::move_object_as<TDApi::Update>(update);
                 q->chatsModel()->handleUpdate(std::move(mv));
+            },
+            [this, &update](TDApi::updateInstalledStickerSets &update_sticker_sets) {
+                auto mv = TDApi::move_object_as<TDApi::updateInstalledStickerSets>(update);
+                q->stickerSetsModel()->handleUpdate(std::move(mv));
+            },
+            [this, &update](TDApi::updateStickerSet &update_sticker_set) {
+                auto mv = TDApi::move_object_as<TDApi::updateStickerSet>(update);
+                q->stickerSetsStore()->handleUpdate(std::move(mv));
             },
 #ifdef Q_OS_LINUX
             [](TDApi::updateUnreadMessageCount& it) {

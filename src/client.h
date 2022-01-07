@@ -25,6 +25,8 @@ class SearchMessagesModel;
 class ChatListModel;
 class ContactsModel;
 class ProxyModel;
+class StickerSetsModel;
+class StickerSetsStore;
 
 class Client : public QObject
 {
@@ -36,6 +38,8 @@ class Client : public QObject
     Q_PROPERTY(MessagesStore* messagesStore READ messagesStore CONSTANT)
     Q_PROPERTY(FileMangler* fileMangler READ fileMangler CONSTANT)
     Q_PROPERTY(ChatListModel* chatListModel READ chatListModel CONSTANT)
+    Q_PROPERTY(StickerSetsModel* stickerSetsModel READ stickerSetsModel CONSTANT)
+    Q_PROPERTY(StickerSetsStore* stickerSetsStore READ stickerSetsStore CONSTANT)
     Q_PROPERTY(ProxyModel* proxyModel READ proxyModel CONSTANT)
     Q_PROPERTY(bool online READ online WRITE setOnline NOTIFY onlineChanged)
     Q_PROPERTY(bool doNotDisturb READ doNotDisturb WRITE setDoNotDisturb NOTIFY doNotDisturbChanged)
@@ -116,6 +120,8 @@ public:
     FileMangler* fileMangler() const;
     ChatListModel* chatListModel() const;
     ProxyModel* proxyModel() const;
+    StickerSetsModel* stickerSetsModel() const;
+    StickerSetsStore* stickerSetsStore() const;
     Q_INVOKABLE ContactsModel* newContactsModel();
     QString ownID() const;
 

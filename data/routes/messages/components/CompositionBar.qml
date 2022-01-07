@@ -357,6 +357,93 @@ QQC2.ToolBar {
                 }
                 Layout.fillWidth: true
             }
+
+            QQC2.Popup {
+                id: mald
+
+                modal: true
+                padding: Kirigami.Units.gridUnit
+
+                parent: rootRow.QQC2.Overlay.overlay
+                x: (QQC2.Overlay.overlay.width / 2) - (this.width / 2)
+                y: (QQC2.Overlay.overlay.height / 2) - (this.height / 2)
+
+                contentItem: QQC2.Control {
+                    implicitWidth: Kirigami.Units.gridUnit * 20
+                    implicitHeight: Kirigami.Units.gridUnit * 30
+
+                    contentItem: QQC2.ScrollView {
+                        id: stickersScrollView
+
+                        QQC2.ScrollBar.horizontal.policy: QQC2.ScrollBar.AlwaysOff
+                        QQC2.ScrollBar.vertical.policy: QQC2.ScrollBar.AlwaysOn
+
+                        ColumnLayout {
+                            Repeater {
+                                model: tClient.stickerSetsModel
+                                delegate: ColumnLayout {
+                                    id: del
+                                    required property string packID
+
+                                    Layout.fillWidth: true
+
+                                    Kirigami.Heading {
+                                        text: tryit(() => setListener.data.name, "")
+
+                                        Tok.RelationalListener {
+                                            id: setListener
+                                            model: tClient.stickerSetsStore
+                                            key: del.packID
+                                            shape: QtObject {
+                                                required property string name
+                                                required property var stickers
+                                            }
+                                        }
+                                    }
+
+                                    GridLayout {
+                                        id: stickerGrid
+
+                                        columns: Math.floor(stickersScrollView.availableWidth / stickerSize)
+                                        readonly property int stickerSize: 100
+
+                                        Layout.fillWidth: true
+
+                                        Repeater {
+                                            model: tryit(() => setListener.data.stickers, [])
+                                            delegate: AnimatedImage {
+                                                id: stickerImage
+
+                                                required property var modelData
+                                                onModelDataChanged: {
+                                                    tClient.fileMangler.downloadFile(this.modelData.stickerURL).then((url) => {
+                                                        stickerImage.actualSource = "file://"+url
+                                                    })
+                                                }
+
+                                                readonly property real ratio: stickerGrid.stickerSize / modelData.width
+                                                Layout.preferredHeight: modelData.height * ratio
+                                                Layout.preferredWidth: stickerGrid.stickerSize
+
+                                                paused: true
+                                                playing: false
+                                                smooth: true
+                                                mipmap: true
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            QQC2.ToolButton {
+                icon.name: "stickers"
+                onClicked: mald.open()
+            }
+
             QQC2.Button {
                 Accessible.name: i18n("Send message")
                 icon.name: "document-send"

@@ -146,12 +146,21 @@ bool LottieHandler::load(QIODevice* it) const
         auto data = base+(i*512*512*4);
         rlottie::Surface surface((uint32_t*)data, 512, 512, 512*4);
 
-        qDebug() << "rendering...";
-        animation->renderSync(i, surface);
-        imageData << (QRgb*)data;
+        imageData.push_back(LazyImageData { i, const_cast<LottieHandler*>(this), (QRgb*)data, false });
     }
 
     return true;
+}
+
+QRgb* LazyImageData::data()
+{
+    if (_rendered)
+        return _data;
+
+    rlottie::Surface surface((uint32_t*)_data, 512, 512, 512*4);
+
+    _parent->animation->renderSync(_frame, surface);
+    return _data;
 }
 
 bool LottieHandler::read(QImage *image)
@@ -168,7 +177,9 @@ bool LottieHandler::read(QImage *image)
         currentFrame = 0;
     }
 
-    QImage out((uchar*)imageData[currentFrame], 512, 512, QImage::Format_ARGB32_Premultiplied);
+    auto& future = imageData[currentFrame];
+
+    QImage out((uchar*)future.data(), 512, 512, QImage::Format_ARGB32_Premultiplied);
     *image = out;
 
     return true;

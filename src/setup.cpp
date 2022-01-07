@@ -28,6 +28,8 @@
 #include "searchmessagesmodel.h"
 #include "chatlistmodel.h"
 #include "proxymodel.h"
+#include "stickersetsmodel.h"
+#include "stickersetsstore.h"
 
 #include "internallib/qquickrelationallistener.h"
 
@@ -56,6 +58,9 @@ void performSetup(QQmlEngine* eng, bool testMode)
     qRegisterMetaType<SearchMessagesModel*>();
     qRegisterMetaType<ChatListModel*>();
     qRegisterMetaType<ContactsModel*>();
+    qRegisterMetaType<Sticker>();
+    qRegisterMetaType<StickerSetsModel*>();
+    qRegisterMetaType<StickerSetsStore*>();
     qRegisterMetaType<QSharedPointer<TDApi::file>>();
     qmlRegisterSingletonType<Utilities>("org.kde.Tok", 1, 0, "Utils", [](QQmlEngine*, QJSEngine*) -> QObject* { return new Utilities; });
     qmlRegisterSingletonType<ColorSchemer>("org.kde.Tok", 1, 0, "ColorSchemer", [](QQmlEngine*, QJSEngine*) -> QObject* { return new ColorSchemer; });

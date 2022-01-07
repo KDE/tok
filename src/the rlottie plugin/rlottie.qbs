@@ -17,5 +17,5 @@ StaticLibrary {
     Depends { name: "cpp" }
     Depends { name: "rlottie" }
     Depends { name: "zlib" }
-    Depends { name: "Qt"; submodules: ["core", "gui"] }
+    Depends { name: "Qt"; submodules: ["core", "gui", "concurrent"] }
 }

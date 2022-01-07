@@ -26,6 +26,8 @@ Client::Client(bool testing)
     d->m_fileMangler.reset(new FileMangler(this));
     d->m_chatListModel.reset(new ChatListModel(this));
     d->m_proxyModel.reset(new ProxyModel(this));
+    d->m_stickerSetsModel.reset(new StickerSetsModel(this));
+    d->m_stickerSetsStore.reset(new StickerSetsStore(this));
 
     d->poll();
 
@@ -182,6 +184,16 @@ ChatListModel* Client::chatListModel() const
 ProxyModel* Client::proxyModel() const
 {
     return d->m_proxyModel.get();
+}
+
+StickerSetsModel* Client::stickerSetsModel() const
+{
+    return d->m_stickerSetsModel.get();
+}
+
+StickerSetsStore* Client::stickerSetsStore() const
+{
+    return d->m_stickerSetsStore.get();
 }
 
 bool Client::online() const

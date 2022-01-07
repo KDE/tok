@@ -16,6 +16,8 @@
 #include "searchmessagesmodel.h"
 #include "contactsmodel.h"
 #include "proxymodel.h"
+#include "stickersetsmodel.h"
+#include "stickersetsstore.h"
 
 class Client::Private
 {
@@ -44,6 +46,8 @@ class Client::Private
     std::unique_ptr<ChatsModel> m_chatsModel;
     std::unique_ptr<ChatListModel> m_chatListModel;
     std::unique_ptr<ChatsStore> m_chatsStore;
+    std::unique_ptr<StickerSetsModel> m_stickerSetsModel;
+    std::unique_ptr<StickerSetsStore> m_stickerSetsStore;
     std::unique_ptr<UserDataModel> m_userDataModel;
     std::unique_ptr<MessagesStore> m_messagesStore;
     std::unique_ptr<FileMangler> m_fileMangler;

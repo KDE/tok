@@ -11,6 +11,18 @@
 
 #include "rlottie.h"
 
+class LottieHandler;
+
+struct LazyImageData
+{
+    int _frame;
+    LottieHandler* _parent;
+    QRgb* _data;
+    bool _rendered;
+
+    QRgb* data();
+};
+
 class LottieHandler : public QImageIOHandler
 {
 
@@ -18,9 +30,11 @@ class LottieHandler : public QImageIOHandler
 
     mutable bool loaded = false;
     mutable QScopedPointer<rlottie::Animation> animation;
-    mutable QList<QRgb*> imageData;
+    mutable QList<LazyImageData> imageData;
     mutable QTemporaryFile mmappedFile;
     mutable int currentFrame = -1;
+
+    friend struct LazyImageData;
 
 public:
     LottieHandler();
