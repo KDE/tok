@@ -13,6 +13,8 @@ import org.kde.kirigami 2.14 as Kirigami
 import org.kde.sonnet 1.0 as Sonnet
 import org.kde.kitemmodels 1.0
 
+import "qrc:/components" as GlobalComponents
+
 Item {
     readonly property bool noMargin: true
 
@@ -61,7 +63,7 @@ Item {
                     width: tryit(() => parent.width, 0)
                     position: QQC2.ToolBar.Footer
                     contentItem: RowLayout {
-                        Kirigami.SearchField {
+                        GlobalComponents.SearchField {
                             onTextChanged: dictModel.filterString = text
 
                             Layout.fillWidth: true

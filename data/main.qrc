@@ -29,6 +29,7 @@
         <file>components/UserDataSheet.qml</file>
         <file>components/ResponsiveMenu.qml</file>
         <file>components/ResponsiveMenuItem.qml</file>
+        <file>components/SearchField.qml</file>
         <file>components/Sheet.qml</file>
 
         <file>components/upload/RichTextArea.qml</file>

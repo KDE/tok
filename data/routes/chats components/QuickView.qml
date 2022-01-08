@@ -27,13 +27,8 @@ QQC2.Popup {
     contentItem: ColumnLayout {
         spacing: Kirigami.Units.largeSpacing * 2
 
-        Kirigami.SearchField {
+        Components.SearchField {
             id: quickSearch
-
-            // TODO: get this broken property removed/disabled by default in Kirigami,
-            // we used to be able to expect that the text field wouldn't attempt to
-            // perform a mini-DDOS attack using signals.
-            autoAccept: false
 
             Layout.preferredWidth: 400
             Keys.onLeftPressed: cView.decrementCurrentIndex()

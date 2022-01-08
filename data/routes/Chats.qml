@@ -35,7 +35,7 @@ Kirigami.Page {
                 onClicked: rootRow.layers.push(Qt.resolvedUrl("qrc:/routes/settings/mobile/Settings.qml"))
             }
 
-            Kirigami.SearchField {
+            Components.SearchField {
                 id: searchField
 
                 Layout.fillWidth: true

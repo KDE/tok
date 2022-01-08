@@ -82,7 +82,7 @@ Window {
             RowLayout {
                 Layout.row: Kirigami.Settings.isMobile ? 2 : 1
                 Layout.margins: Kirigami.Units.smallSpacing
-                Kirigami.SearchField {
+                GlobalComponents.SearchField {
                     id: field
 
                     property string actualText

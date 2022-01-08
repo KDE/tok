@@ -12,6 +12,8 @@ import org.kde.Tok 1.0 as Tok
 import org.kde.sonnet 1.0 as Sonnet
 import org.kde.kitemmodels 1.0
 
+import "qrc:/components" as GlobalComponents
+
 Kirigami.ScrollablePage {
     topPadding: 0
     leftPadding: 0
@@ -52,7 +54,7 @@ Kirigami.ScrollablePage {
             width: tryit(() => parent.width, 0)
             position: QQC2.ToolBar.Footer
             contentItem: RowLayout {
-                Kirigami.SearchField {
+                GlobalComponents.SearchField {
                     onTextChanged: dictModel.filterString = text
 
                     Layout.fillWidth: true
