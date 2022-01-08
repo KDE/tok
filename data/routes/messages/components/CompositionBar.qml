@@ -8,6 +8,7 @@ import QtQuick.Controls 2.12 as QQC2
 import org.kde.kirigami 2.15 as Kirigami
 import org.kde.Tok 1.0 as Tok
 import QtGraphicalEffects 1.15
+import QtQuick.Controls.Material 2.12
 
 import "qrc:/components" as GlobalComponents
 
@@ -15,6 +16,8 @@ QQC2.ToolBar {
     id: composeBar
 
     property alias text: txtField.text
+
+    Material.background: Kirigami.Theme.backgroundColor
 
     Loader {
         id: autoCompleteThing
@@ -358,6 +361,7 @@ QQC2.ToolBar {
                 Layout.fillWidth: true
             }
             QQC2.Button {
+                flat: tStyleName === "Material"
                 Accessible.name: i18n("Send message")
                 icon.name: "document-send"
                 onClicked: composeRow.send()

@@ -7,6 +7,7 @@
 #include <QQmlEngine>
 #include <QQmlContext>
 #include <QQuickWindow>
+#include <QQuickStyle>
 
 #include <KLocalizedContext>
 
@@ -71,5 +72,6 @@ void performSetup(QQmlEngine* eng, bool testMode)
 
     eng->rootContext()->setContextObject(new KLocalizedContext(eng));
     eng->rootContext()->setContextProperty("tClient", c);
+    eng->rootContext()->setContextProperty("tStyleName", QQuickStyle::name());
     eng->addImageProvider("telegram", new TelegramImageProvider(c));
 }
