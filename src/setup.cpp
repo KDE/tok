@@ -43,6 +43,8 @@ void performSetup(QQmlEngine* eng, bool testMode)
 {
     Executor::instance();
 
+    QQuickStyle::setFallbackStyle("Material");
+
     qRegisterMetaType<ChatsModel*>();
     qRegisterMetaType<Span>();
     qRegisterMetaType<MessagesModel*>();
