@@ -75,6 +75,7 @@ Item {
             QQC2.ScrollBar.horizontal.policy: QQC2.ScrollBar.AlwaysOff
 
             background: Rectangle {
+                color: Kirigami.Theme.backgroundColor
                 border.width: 1
                 border.color: Kirigami.ColorUtils.linearInterpolation(Kirigami.Theme.backgroundColor, Kirigami.Theme.textColor, 0.3)
                 radius: 3
