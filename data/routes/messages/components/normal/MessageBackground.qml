@@ -19,7 +19,7 @@ KQCC.ChatBubble {
     tailVisible: del.showAvatar
     readonly property string textPadding: " ".repeat(Math.ceil(inlineFooter.width / dummy.implicitWidth)) + "⠀"
 
-    inlineFooterContent: [
+    inlineFooter.data: [
         KQCC.Timestamp {
             text: messageData.data.timestamp
             edited: messageData.data.editedTimestamp !== ""
