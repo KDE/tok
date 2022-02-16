@@ -43,7 +43,9 @@ void performSetup(QQmlEngine* eng, bool testMode)
 {
     Executor::instance();
 
-    QQuickStyle::setFallbackStyle("Material");
+    if (!(QQuickStyle::name() == "org.kde.desktop" || QQuickStyle::name() == "org.kde.breeze")) {
+        QQuickStyle::setFallbackStyle("Material");
+    }
 
     qRegisterMetaType<ChatsModel*>();
     qRegisterMetaType<Span>();
