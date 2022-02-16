@@ -9,6 +9,6 @@ QtApplication {
     files: [
         "main.cpp",
     ]
-    Qt.quick.useCompiler: true
+    Qt.quick.useCompiler: qbs.buildVariant == "release"
     Depends { name: "tokInternal" }
 }
