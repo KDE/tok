@@ -72,3 +72,4 @@ GenericName[sv]=Direktmeddelande
 GenericName[uk]=Миттєвий обмін повідомленнями
 GenericName[x-test]=xxInstant Messagingxx
 Icon=org.kde.Tok
+SingleMainWindow=true

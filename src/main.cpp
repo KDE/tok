@@ -10,8 +10,11 @@
 #include <QQmlContext>
 #include <QQmlProperty>
 #include <QMediaPlayer>
+#include <QWindow>
 
 #include <KLocalizedString>
+#include <KDBusService>
+#include <KWindowSystem>
 
 #include "setup.h"
 #include "mprissetup.h"
@@ -25,6 +28,8 @@ int main(int argc, char* argv[])
     QApplication app(argc, argv);
     app.setDesktopFileName("org.kde.Tok.desktop");
     KLocalizedString::setApplicationDomain("tok");
+
+    KDBusService service(KDBusService::Unique);
 
     QQmlApplicationEngine engine;
 
@@ -45,7 +50,15 @@ int main(int argc, char* argv[])
 
     auto aplayer = engine.rootObjects()[0]->property("aplayer").value<QObject*>();
     auto it = aplayer->property("mediaObject").value<QMediaPlayer*>();
+    auto window = qobject_cast<QWindow*>(engine.rootObjects()[0]);
     setupMPRIS(&app, aplayer, it);
+
+    QObject::connect(&service, &KDBusService::activateRequested, [=]() {
+        window->show();
+        KWindowSystem::updateStartupId(window);
+        window->raise();
+        KWindowSystem::activateWindow(window);
+    });
 
     return QApplication::exec();
 }
