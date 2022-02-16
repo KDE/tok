@@ -99,21 +99,12 @@ QQC2.Menu {
     QQC2.Menu {
         id: correctionsMenu
 
-        property var suggestions: []
-
-        Connections {
-            target: editMenu.field
-            function onCursorPositionChanged() {
-                correctionsMenu.suggestions = theOneTrueSpellCheckHighlighter.suggestions(editMenu.field.cursorPosition)
-            }
-        }
-
         title: i18nc("text editing submenu", "Spellchecking")
         visible: !editMenu.field.readOnly && theOneTrueSpellCheckHighlighter.active
 
         Instantiator {
             active: !editMenu.field.readOnly && theOneTrueSpellCheckHighlighter.active && theOneTrueSpellCheckHighlighter.wordIsMisspelled
-            model: correctionsMenu.suggestions
+            model: theOneTrueSpellCheckHighlighter.suggestions_
             delegate: QQC2.MenuItem {
                 text: modelData
                 onTriggered: theOneTrueSpellCheckHighlighter.replaceWord(modelData)
@@ -123,8 +114,8 @@ QQC2.Menu {
         }
 
         QQC2.MenuItem {
-            visible: theOneTrueSpellCheckHighlighter.wordIsMisspelled && correctionsMenu.suggestions.length === 0
-            text: i18n("No suggestions for \"%1\"", theOneTrueSpellCheckHighlighter.wordUnderMouse)
+            visible: theOneTrueSpellCheckHighlighter.wordIsMisspelled && theOneTrueSpellCheckHighlighter.suggestions_.length === 0
+            text: theOneTrueSpellCheckHighlighter.wordUnderMouse ? i18n("No suggestions for \"%1\"", theOneTrueSpellCheckHighlighter.wordUnderMouse) : ""
             enabled: false
         }
 
@@ -133,13 +124,13 @@ QQC2.Menu {
 
         QQC2.MenuItem {
             visible: theOneTrueSpellCheckHighlighter.wordIsMisspelled
-            text: i18n("Add \"%1\" to dictionary", theOneTrueSpellCheckHighlighter.wordUnderMouse)
+            text: theOneTrueSpellCheckHighlighter.wordUnderMouse ? i18n("Add \"%1\" to dictionary", theOneTrueSpellCheckHighlighter.wordUnderMouse) : ""
             onTriggered: theOneTrueSpellCheckHighlighter.addWordToDictionary(theOneTrueSpellCheckHighlighter.wordUnderMouse)
         }
 
         QQC2.MenuItem {
             visible: theOneTrueSpellCheckHighlighter.wordIsMisspelled
-            text: i18n("Ignore \"%1\"", theOneTrueSpellCheckHighlighter.wordUnderMouse)
+            text: theOneTrueSpellCheckHighlighter.wordUnderMouse ? i18n("Ignore \"%1\"", theOneTrueSpellCheckHighlighter.wordUnderMouse) : ""
             onTriggered: theOneTrueSpellCheckHighlighter.ignoreWord(theOneTrueSpellCheckHighlighter.wordUnderMouse)
         }
     }

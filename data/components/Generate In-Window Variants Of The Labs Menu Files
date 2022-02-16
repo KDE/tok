@@ -1,6 +1,6 @@
 #!/usr/bin/env elvish
 
-items = [
+var items = [
     CreateNewMenu
     EditMenu
     FormatMenu

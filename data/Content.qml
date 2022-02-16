@@ -299,9 +299,9 @@ Kirigami.PageRow {
         x: (QQC2.Overlay.overlay.width / 2) - (this.width / 2)
         y: (QQC2.Overlay.overlay.height / 2) - (this.height / 2)
 
-        property string title
-        property string chatID
-        property string messageID
+        property string title: "."
+        property string chatID: ""
+        property string messageID: ""
         property bool canDeleteForSelf: false
         property bool canDeleteForOthers: false
 

@@ -288,11 +288,11 @@ Kirigami.Page {
                     name: chatData.data.mTitle
                     source: chatData.data.mPhoto
                     imageMode: chatData.data.mIsSaved ?
-                        Kirigami.Avatar.ImageMode.AlwaysShowInitials :
-                        Kirigami.Avatar.ImageMode.AdaptiveImageOrInitals
+                        Kirigami.Avatar.AlwaysShowInitials :
+                        Kirigami.Avatar.AdaptiveImageOrInitals
                     initialsMode: chatData.data.mIsSaved ?
-                        Kirigami.Avatar.ImageMode.UseIcon :
-                        Kirigami.Avatar.ImageMode.UseInitials
+                        Kirigami.Avatar.UseIcon :
+                        Kirigami.Avatar.UseInitials
                     iconSource: "bookmarks"
 
                     Layout.preferredHeight: Math.round(Kirigami.Units.gridUnit * 2.5)

@@ -122,7 +122,7 @@ Labs.Menu {
 
         Labs.MenuItem {
             visible: theOneTrueSpellCheckHighlighter.wordIsMisspelled && theOneTrueSpellCheckHighlighter.suggestions_.length === 0
-            text: i18n("No suggestions for \"%1\"", theOneTrueSpellCheckHighlighter.wordUnderMouse)
+            text: theOneTrueSpellCheckHighlighter.wordUnderMouse ? i18n("No suggestions for \"%1\"", theOneTrueSpellCheckHighlighter.wordUnderMouse) : ""
             enabled: false
         }
 
@@ -131,13 +131,13 @@ Labs.Menu {
 
         Labs.MenuItem {
             visible: theOneTrueSpellCheckHighlighter.wordIsMisspelled
-            text: i18n("Add \"%1\" to dictionary", theOneTrueSpellCheckHighlighter.wordUnderMouse)
+            text: theOneTrueSpellCheckHighlighter.wordUnderMouse ? i18n("Add \"%1\" to dictionary", theOneTrueSpellCheckHighlighter.wordUnderMouse) : ""
             onTriggered: theOneTrueSpellCheckHighlighter.addWordToDictionary(theOneTrueSpellCheckHighlighter.wordUnderMouse)
         }
 
         Labs.MenuItem {
             visible: theOneTrueSpellCheckHighlighter.wordIsMisspelled
-            text: i18n("Ignore \"%1\"", theOneTrueSpellCheckHighlighter.wordUnderMouse)
+            text: theOneTrueSpellCheckHighlighter.wordUnderMouse ? i18n("Ignore \"%1\"", theOneTrueSpellCheckHighlighter.wordUnderMouse) : ""
             onTriggered: theOneTrueSpellCheckHighlighter.ignoreWord(theOneTrueSpellCheckHighlighter.wordUnderMouse)
         }
     }

@@ -21,7 +21,7 @@ QtObject {
     readonly property bool isOwn: tClient.ownID == universalData.data.authorID
 
     readonly property string authorName: tClient.ownID == universalData.data.authorID ? i18n("You") : authorData.data.name
-    readonly property string onelinePlaintext: this.plaintext.split("\n")[0]
+    readonly property string onelinePlaintext: this.plaintext.split("\n")[0] || "..."
     readonly property string plaintext: {
         switch ([universalData.data.kind, universalData.dummy][0]) {
         case "messageText":
