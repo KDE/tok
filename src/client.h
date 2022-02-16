@@ -25,6 +25,7 @@ class SearchMessagesModel;
 class ChatListModel;
 class ContactsModel;
 class ProxyModel;
+class BackgroundsModel;
 
 class Client : public QObject
 {
@@ -117,6 +118,7 @@ public:
     ChatListModel* chatListModel() const;
     ProxyModel* proxyModel() const;
     Q_INVOKABLE ContactsModel* newContactsModel();
+    Q_INVOKABLE BackgroundsModel* newBackgroundsModel();
     QString ownID() const;
 
     bool online() const;

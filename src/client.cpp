@@ -10,6 +10,7 @@
 #include "messagesmodel.h"
 #include "keys.h"
 #include "userdata.h"
+#include "backgrounds_model.h"
 
 Client* gC = nullptr;
 
@@ -203,6 +204,11 @@ MembersModel* Client::membersModel(qint64 number, const QString& kind)
 ContactsModel* Client::newContactsModel()
 {
     return new ContactsModel(this);
+}
+
+BackgroundsModel* Client::newBackgroundsModel()
+{
+    return new BackgroundsModel(this);
 }
 
 void Client::setOnline(bool online)

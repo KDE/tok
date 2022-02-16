@@ -20,6 +20,7 @@ Kirigami.Page {
     leftPadding: 0
     rightPadding: 0
     bottomPadding: 0
+    property var rjienrlwey: tClient.newBackgroundsModel()
 
     header: Components.Header {
         RowLayout {

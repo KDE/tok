@@ -29,6 +29,7 @@
 #include "searchmessagesmodel.h"
 #include "chatlistmodel.h"
 #include "proxymodel.h"
+#include "backgrounds_model.h"
 
 #include "internallib/qquickrelationallistener.h"
 
@@ -48,6 +49,7 @@ void performSetup(QQmlEngine* eng, bool testMode)
     }
 
     qRegisterMetaType<ChatsModel*>();
+    qRegisterMetaType<BackgroundsModel*>();
     qRegisterMetaType<Span>();
     qRegisterMetaType<MessagesModel*>();
     qRegisterMetaType<MessagesStore*>();

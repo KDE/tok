@@ -239,6 +239,9 @@ void Client::Private::handleUpdate(TDApi::object_ptr<TDApi::Object> update)
                 }
                 Q_EMIT q->connectionStateChanged();
             },
+            [this](TDApi::updateSelectedBackground &bg) {
+                qWarning() << "bogo" << QString::fromStdString(TDApi::to_string(bg));
+            },
             [](auto& update) { /* qWarning() << "unhandled private client update" << QString::fromStdString(TDApi::to_string(update)); */ }));
 }
 
