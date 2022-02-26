@@ -18,6 +18,7 @@ class ChatsStore : public TokAbstractRelationalModel
 
     QJsonValue prepare(TDApi::int53 chat);
     void fetchExtended(TDApi::int53 chat);
+    void fetchExtendedFull(TDApi::int53 chat);
 
 public:
 

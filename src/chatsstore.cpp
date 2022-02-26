@@ -30,6 +30,7 @@ enum Roles {
     CurrentActions,
     HeaderText,
     OwnStatus,
+    Description,
 };
 
 ChatsStore::ChatsStore(Client* parent) : TokAbstractRelationalModel(parent), c(parent), d(new Private)
@@ -257,6 +258,27 @@ QVariant ChatsStore::data(const QVariant& key, int role)
 
         return QVariant::fromValue(pData);
     }
+    case Roles::Description: {
+        using namespace TDApi;
+
+        const auto typeID = d->chatData[chatID]->type_->get_id();
+        if (typeID != chatTypeBasicGroup::ID && typeID != chatTypeSupergroup::ID) {
+            return QString();
+        }
+
+        if (!d->extendedFullData.contains(chatID)) {
+            fetchExtendedFull(chatID);
+            return QString();
+        }
+
+        const auto& data = d->extendedFullData[chatID];
+
+        TDApi::string description = std::visit([](auto&& arg) -> TDApi::string {
+            return arg->description_;
+        }, data);
+
+        return QString::fromStdString(description);
+    }
     }
 
     return QVariant();
@@ -306,6 +328,32 @@ void ChatsStore::fetchExtended(TDApi::int53 chatID)
     endmatch
 }
 
+void ChatsStore::fetchExtendedFull(TDApi::int53 chatID)
+{
+    using namespace TDApi;
+
+    match (d->chatData[chatID]->type_)
+        handleCase(chatTypeBasicGroup, bgroup)
+            c->call<TDApi::getBasicGroupFullInfo>(
+                [this, chatID](TDApi::getBasicGroupFullInfo::ReturnType r) {
+                    d->extendedFullData[chatID] = std::move(r);
+                    Q_EMIT keyDataChanged(to(chatID), {});
+                },
+                bgroup->basic_group_id_
+            );
+        endhandle
+        handleCase(chatTypeSupergroup, sgroup)
+            c->call<TDApi::getSupergroupFullInfo>(
+                [this, chatID](TDApi::getSupergroupFullInfo::ReturnType r) {
+                    d->extendedFullData[chatID] = std::move(r);
+                    Q_EMIT keyDataChanged(to(chatID), {});
+                },
+                sgroup->supergroup_id_
+            );
+        endhandle
+    endmatch
+}
+
 QHash<int,QByteArray> ChatsStore::roleNames()
 {
     QHash<int,QByteArray> roles;
@@ -329,6 +377,7 @@ QHash<int,QByteArray> ChatsStore::roleNames()
     roles[int(Roles::CurrentActions)] = "mCurrentActions";
     roles[int(Roles::HeaderText)] = "mHeaderText";
     roles[int(Roles::OwnStatus)] = "mOwnStatus";
+    roles[int(Roles::Description)] = "mDescription";
 
     return roles;
 }

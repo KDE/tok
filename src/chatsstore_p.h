@@ -18,6 +18,7 @@ public:
 struct ChatsStore::Private {
     std::map<TDApi::int53, TDApi::object_ptr<TDApi::chat>> chatData;
     std::map<TDApi::int53, std::variant<TDApi::object_ptr<TDApi::basicGroup>, TDApi::object_ptr<TDApi::supergroup>>> extendedData;
+    std::map<TDApi::int53, std::variant<TDApi::object_ptr<TDApi::basicGroupFullInfo>, TDApi::object_ptr<TDApi::supergroupFullInfo>>> extendedFullData;
     std::map<TDApi::int53, std::map<TDApi::int53,TDApi::object_ptr<TDApi::ChatAction>>> chatActions;
     std::map<TDApi::int53,TDApi::object_ptr<TDApi::ChatAction>>& ensure(TDApi::int53 cid) {
         if (!chatActions.contains(cid)) {

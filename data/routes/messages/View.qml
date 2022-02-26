@@ -43,6 +43,7 @@ Kirigami.ScrollablePage {
         shape: QtObject {
             required property string mPhoto
             required property string mTitle
+            required property string mDescription
             required property string mKind
             required property string mKindID
             required property string mHeaderText

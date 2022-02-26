@@ -11,6 +11,7 @@ import org.kde.Tok 1.0 as Tok
 import QtQuick.Dialogs 1.0 as Dialogues
 
 import "qrc:/components" as GlobalComponents
+import "link_activation.mjs" as LinkActivation
 
 QQC2.StackView {
 
@@ -101,6 +102,41 @@ contentItem: ColumnLayout {
                     Layout.rightMargin: Kirigami.Units.largeSpacing
                     Layout.bottomMargin: Kirigami.Units.largeSpacing
                     Layout.fillWidth: true
+                }
+
+                QQC2.Label {
+                    font: Kirigami.Theme.smallFont
+                    text: i18n("Description")
+                    visible: chatData.data.mDescription !== ""
+                    wrapMode: Text.Wrap
+
+                    Layout.fillWidth: true
+                    Layout.leftMargin: Kirigami.Units.largeSpacing
+                    Layout.rightMargin: Kirigami.Units.largeSpacing
+                }
+                TextEdit {
+                    text: chatData.data.mDescription
+                    visible: chatData.data.mDescription !== ""
+
+                    readOnly: true
+                    selectByMouse: !Kirigami.Settings.isMobile
+                    wrapMode: Text.Wrap
+
+                    color: Kirigami.Theme.textColor
+                    selectedTextColor: Kirigami.Theme.highlightedTextColor
+                    selectionColor: Kirigami.Theme.highlightColor
+
+                    onLinkActivated: (mu) => LinkActivation.handle(mu, globalUserDataSheet, tClient)
+
+                    HoverHandler {
+                        acceptedButtons: Qt.NoButton
+                        cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.IBeamCursor
+                    }
+
+                    Layout.fillWidth: true
+                    Layout.leftMargin: Kirigami.Units.largeSpacing
+                    Layout.rightMargin: Kirigami.Units.largeSpacing
+                    Layout.bottomMargin: Kirigami.Units.largeSpacing
                 }
 
                 Column {
