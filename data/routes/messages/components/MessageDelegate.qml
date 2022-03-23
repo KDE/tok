@@ -43,6 +43,7 @@ QQC2.Control {
 
     property alias afterMessage: afterDelRow.children
 
+    visible: !userData.data.isBlocked
     Kirigami.Theme.backgroundColor: {
         if (isOwnMessage)
             return Kirigami.ColorUtils.tintWithAlpha(messagesViewRoot.Kirigami.Theme.backgroundColor, messagesViewRoot.Kirigami.Theme.focusColor, 0.2)
@@ -158,6 +159,7 @@ QQC2.Control {
         GlobalComponents.LoaderSwitch {
             id: __loaderSwitch
 
+            active: !userData.data.isBlocked
             value: messageData.data.kind
             cases: {
                 "messageText": Qt.resolvedUrl((settings.thinMode ? "thin/" : "normal/") + "TextMessage.qml"),
@@ -234,6 +236,7 @@ QQC2.Control {
         shape: QtObject {
             required property string name
             required property string smallAvatar
+            required property bool isBlocked
         }
     }
 }

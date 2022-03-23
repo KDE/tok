@@ -19,6 +19,7 @@ enum Roles {
     Bio,
     Username,
     Status,
+    IsBlocked,
 };
 
 UserDataModel::UserDataModel(Client* parent)
@@ -53,6 +54,18 @@ QVariant UserDataModel::data(const QVariant& key, int role)
             return i18n("Loading…");
         }
         return QString::fromStdString(fullUserData[id]->bio_);
+    case Roles::IsBlocked:
+        if (!fullUserData.contains(id)) {
+            c->call<getUserFullInfo>(
+                [this, id = id](getUserFullInfo::ReturnType ret) {
+                    fullUserData[id] = std::move(ret);
+                    Q_EMIT keyAdded(QString::number(id));
+                },
+                id);
+            return false;
+        }
+        qWarning() << QString::fromStdString(userData[id]->first_name_ + " " + userData[id]->last_name_).trimmed() << "is blocked?" << fullUserData[id]->is_blocked_;
+        return fullUserData[id]->is_blocked_;
     case Roles::Name:
         return QString::fromStdString(userData[id]->first_name_ + " " + userData[id]->last_name_).trimmed();
     case Roles::SmallAvatar:
@@ -140,6 +153,7 @@ QHash<int, QByteArray> UserDataModel::roleNames()
     ret[Roles::Bio] = "bio";
     ret[Roles::Username] = "username";
     ret[Roles::Status] = "status";
+    ret[Roles::IsBlocked] = "isBlocked";
 
     return ret;
 }
