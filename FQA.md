@@ -42,7 +42,7 @@ It's also one letter removed from "toki" in *toki pona*, where it also means "la
 
 Anyone that wants to use it.
 
-Except Nazis, antisemites, transphobes, homophobes, islamophobes, biphobes, and all other kinds of bigots that want to use it.
+Except all kinds of bigots that want to use it.
 You're allowed to use it, but please fuck off, read the KDE Code of Conduct, and become a not-asshole before coming into community areas.
 Thanks in advance.
 
